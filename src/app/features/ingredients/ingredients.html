@@ -1,0 +1,81 @@
+<div class="generate-page">
+  <app-navbar variant="dark" />
+
+  <main class="generate" id="generate-section">
+    <header class="generate__header">
+      <h1 class="generate__title">Generate recipe</h1>
+      <p class="generate__desc">
+        Got random stuff in your kitchen? Pop it in—we've got the perfect recipe waiting.
+      </p>
+    </header>
+
+    <div class="generate__workspace">
+      <div class="generate__input-panel" id="input-panel">
+        <div class="generate__input-row">
+          <div class="generate__field">
+            <label for="ingredient-name" class="generate__label">Ingredient</label>
+            <input id="ingredient-name" type="text" class="generate__text-input" placeholder="e.g. Tomato"
+              [ngModel]="ingredientName()" (ngModelChange)="ingredientName.set($event)" (keydown)="onKeydown($event)" />
+          </div>
+
+          <div class="generate__field generate__field--serving">
+            <label for="serving-size" class="generate__label">Serving size</label>
+            <div class="generate__serving-row">
+              <input id="serving-size" type="number" class="generate__number-input" min="1"
+                [ngModel]="ingredientAmount()" (ngModelChange)="ingredientAmount.set($event)"
+                (keydown)="onKeydown($event)" />
+              <select id="unit-select" class="generate__unit-select" [ngModel]="ingredientUnit()"
+                (ngModelChange)="ingredientUnit.set($event)">
+                @for (unit of units; track unit) {
+                <option [value]="unit">{{ unit }}</option>
+                }
+              </select>
+            </div>
+          </div>
+
+          <button class="generate__add-btn" id="btn-add-ingredient" (click)="addIngredient()"
+            [disabled]="!ingredientName()" aria-label="Add ingredient">
+            <img src="/assets/Property 1=default.svg" alt="Add" class="generate__add-icon" />
+          </button>
+        </div>
+      </div>
+
+      <div class="generate__list-panel" id="list-panel">
+        <h2 class="generate__list-title">List of your Ingredients</h2>
+
+        @if (hasIngredients()) {
+        <ul class="generate__list" id="ingredient-list">
+          @for (item of ingredients(); track $index) {
+          <li class="generate__list-item">
+            <span class="generate__chip">
+              <span class="generate__chip-text">
+                {{ item.name }}
+                <span class="generate__chip-amount">{{ item.amount }}{{ item.unit }}</span>
+              </span>
+              <button class="generate__chip-delete" (click)="removeIngredient($index)"
+                [attr.aria-label]="'Remove ' + item.name">
+                <img src="/assets/delete.svg" alt="" class="generate__delete-icon" />
+              </button>
+            </span>
+          </li>
+          }
+        </ul>
+        } @else {
+        <p class="generate__empty">Add ingredients to get started...</p>
+        }
+      </div>
+    </div>
+
+    @if (hasIngredients()) {
+    <div class="generate__action">
+      <button class="generate__submit-btn" id="btn-generate-recipe">
+        <span>Generate Recipe</span>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M13.5 4.5L21 12M21 12L13.5 19.5M21 12H3" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </button>
+    </div>
+    }
+  </main>
+</div>

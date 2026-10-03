@@ -1,0 +1,24 @@
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-lg) var(--space-2xl);
+  position: relative;
+  z-index: 10;
+
+  &__logo {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    transition: opacity var(--transition-fast);
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+
+  &__logo-img {
+    height: 52px;
+    width: auto;
+  }
+}

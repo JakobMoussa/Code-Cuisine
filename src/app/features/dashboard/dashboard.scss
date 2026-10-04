@@ -3,8 +3,8 @@
 }
 
 .hero {
-  min-height: 140vh;
-  background-color: var(--color-green-deep);
+  min-height: 100vh;
+  background-color: var(--color-background-green);
   display: flex;
   flex-direction: column;
   position: relative;
@@ -13,22 +13,22 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    flex: 1;
+    min-height: 100vh;
+    min-height: 100dvh;
     padding: 0 var(--space-2xl);
     gap: var(--space-2xl);
+    box-sizing: border-box;
   }
 
   &__text {
     flex: 1;
-    max-width: 520px;
-    padding-left: var(--space-xl);
   }
 
   &__subtitle {
     font-family: var(--font-primary);
-    font-size: 1.35rem;
+    font-size: 48px;
     font-weight: 500;
-    color: var(--color-cream);
+    color: var(--color-cream-dark);
     margin-bottom: var(--space-sm);
     opacity: 0;
     animation: fadeSlideUp 0.7s ease forwards;
@@ -37,7 +37,7 @@
 
   &__title {
     font-family: var(--font-brand);
-    font-size: clamp(2.8rem, 5vw, 4.2rem);
+    font-size: 104px;
     font-weight: 700;
     color: var(--color-cream);
     line-height: 1.1;
@@ -50,12 +50,11 @@
   &__cta {
     display: inline-block;
     font-family: var(--font-primary);
-    font-size: 1rem;
+    font-size: 20px;
     font-weight: 600;
     color: var(--color-green-deep);
-    background-color: var(--color-cream);
+    background-color: var(--color-cream-light);
     padding: 12px 28px;
-    border: 2px solid var(--color-cream);
     transition:
       background-color var(--transition-base),
       color var(--transition-base),
@@ -66,9 +65,9 @@
     animation-delay: 0.6s;
 
     &:hover {
-      background-color: transparent;
-      color: var(--color-cream);
-      transform: translateY(-2px);
+      font-weight: bold;
+      background-color: var(--color-cream);
+      transform: translateY(5px);
       box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
     }
 
@@ -81,16 +80,20 @@
     position: absolute;
     top: 0;
     right: 0;
+    height: 100%;
     max-width: 55%;
     opacity: 0;
     animation: fadeIn 1s ease forwards;
     animation-delay: 0.5s;
+    pointer-events: none;
+    display: flex;
+    align-items: flex-start;
+    margin-right: 30px;
   }
 
   &__plates {
     width: 480px;
-    height: 1145px;
-    object-fit: contain;
+    height: 100%;
     filter: drop-shadow(0 8px 40px rgba(0, 0, 0, 0.2));
   }
 
@@ -98,8 +101,7 @@
     display: flex;
     align-items: center;
     gap: var(--space-lg);
-    margin-top: auto;
-    padding: var(--space-lg) var(--space-2xl) var(--space-xl);
+    padding: var(--space-2xl) var(--space-2xl) var(--space-3xl);
     padding-left: calc(var(--space-2xl) + var(--space-xl));
     opacity: 0;
     animation: fadeSlideUp 0.7s ease forwards;
@@ -108,7 +110,7 @@
 
   &__footer-text {
     font-family: var(--font-primary);
-    font-size: 1.2rem;
+    font-size: 32px;
     font-weight: 700;
     color: var(--color-cream);
   }
@@ -118,12 +120,10 @@
     align-items: center;
     gap: var(--space-sm);
     font-family: var(--font-primary);
-    font-size: 0.9rem;
+    font-size: 20px;
     font-weight: 500;
     color: var(--color-cream);
     padding: 8px 20px;
-    border: 1.5px solid rgba(250, 240, 230, 0.5);
-    border-radius: var(--radius-sm);
     transition:
       background-color var(--transition-base),
       border-color var(--transition-base),
@@ -197,7 +197,7 @@
     }
 
     &__title {
-      font-size: 2.5rem;
+      font-size: 20px;
     }
   }
 }
@@ -209,11 +209,11 @@
     }
 
     &__title {
-      font-size: 2rem;
+      font-size: 20px;
     }
 
     &__subtitle {
-      font-size: 1.1rem;
+      font-size: 20px;
     }
   }
 }

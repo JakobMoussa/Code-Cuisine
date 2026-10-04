@@ -24,18 +24,29 @@
               <input id="serving-size" type="number" class="generate__number-input" min="1"
                 [ngModel]="ingredientAmount()" (ngModelChange)="ingredientAmount.set($event)"
                 (keydown)="onKeydown($event)" />
-              <select id="unit-select" class="generate__unit-select" [ngModel]="ingredientUnit()"
-                (ngModelChange)="ingredientUnit.set($event)">
-                @for (unit of units; track unit) {
-                <option [value]="unit">{{ unit }}</option>
+              <div class="generate__custom-select" [class.is-open]="isOpen()">
+                <button type="button" class="generate__select-trigger" (click)="toggleDropdown()"
+                  aria-label="Select unit">
+                  <span>{{ ingredientUnit() }}</span>
+                  <img src="/assets/arrow_drop_down.svg" alt="" class="generate__select-arrow" />
+                </button>
+                @if (isOpen()) {
+                <div class="generate__select-options">
+                  @for (unit of units; track unit) {
+                  <div class="generate__select-option" [class.selected]="unit === ingredientUnit()"
+                    (click)="selectUnit(unit)">
+                    {{ unit }}
+                  </div>
+                  }
+                </div>
                 }
-              </select>
+              </div>
             </div>
           </div>
 
           <button class="generate__add-btn" id="btn-add-ingredient" (click)="addIngredient()"
             [disabled]="!ingredientName()" aria-label="Add ingredient">
-            <img src="/assets/Property 1=default.svg" alt="Add" class="generate__add-icon" />
+            <img src="/assets/add-btn.svg" alt="Add" class="generate__add-icon" />
           </button>
         </div>
       </div>
@@ -48,20 +59,20 @@
           @for (item of ingredients(); track $index) {
           <li class="generate__list-item">
             <span class="generate__chip">
-              <span class="generate__chip-text">
-                {{ item.name }}
-                <span class="generate__chip-amount">{{ item.amount }}{{ item.unit }}</span>
-              </span>
+              <div class="generate__chip-left">
+                <img src="/assets/point.svg" alt="Point" class="generate__list_point" />
+                <span class="generate__chip-amount">{{ item.amount }}{{ unitDisplay(item.unit) }}</span>
+                <span class="generate__chip-text">{{ item.name }}</span>
+              </div>
               <button class="generate__chip-delete" (click)="removeIngredient($index)"
                 [attr.aria-label]="'Remove ' + item.name">
-                <img src="/assets/delete.svg" alt="" class="generate__delete-icon" />
+                <img src="/assets/edit.svg" alt="Edit" class="generate__edit-icon" />
+                <img src="/assets/delete.svg" alt="Delete" class="generate__delete-icon" />
               </button>
             </span>
           </li>
           }
         </ul>
-        } @else {
-        <p class="generate__empty">Add ingredients to get started...</p>
         }
       </div>
     </div>
@@ -69,11 +80,7 @@
     @if (hasIngredients()) {
     <div class="generate__action">
       <button class="generate__submit-btn" id="btn-generate-recipe">
-        <span>Generate Recipe</span>
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M13.5 4.5L21 12M21 12L13.5 19.5M21 12H3" stroke="currentColor" stroke-width="2"
-            stroke-linecap="round" stroke-linejoin="round" />
-        </svg>
+        <span>Next Step</span>
       </button>
     </div>
     }

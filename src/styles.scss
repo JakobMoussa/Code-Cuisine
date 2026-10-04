@@ -48,12 +48,14 @@
 
 :root {
 
-  --color-green-deep: #396039;
+  --color-background-green: #396039;
+  --color-green-deep: #1E5515;
+  --color-dark-green: #10310B;
+  --color-green-bright: #3960394D;
   --color-sage-light: #C8D3C2;
-  --color-sage-bg: #D7DFD7;
-  --color-sage-input: #D4DCD0;
-  --color-cream: #FAF0E6;
-  --color-cream-dark: #F5E6D0;
+  --color-cream: #FAE0C6;
+  --color-cream-light: #FAF0E6;
+  --color-cream-dark: #F5F5DC;
   --color-white: #FFFFFF;
   --color-off-white: #FAFAFA;
   --color-black: #1A1A1A;
@@ -61,14 +63,13 @@
   --font-primary: 'Quicksand', sans-serif;
   --font-brand: 'Ubuntu', sans-serif;
 
-  --space-xs: 4px;
-  --space-sm: 8px;
+
   --space-md: 16px;
   --space-lg: 24px;
   --space-xl: 32px;
   --space-2xl: 48px;
   --space-3xl: 64px;
-  --space-4xl: 96px;
+
 
   --radius-sm: 6px;
   --radius-md: 12px;
@@ -103,7 +104,7 @@ html {
 body {
   font-family: var(--font-primary);
   font-weight: 500;
-  color: var(--color-green-deep);
+  color: var(--color-background-green) !important;
   background-color: var(--color-white);
   line-height: 1.6;
   min-height: 100vh;
@@ -147,7 +148,6 @@ ol {
   list-style: none;
 }
 
-/* --- Scrollbar --- */
 ::-webkit-scrollbar {
   width: 6px;
 }

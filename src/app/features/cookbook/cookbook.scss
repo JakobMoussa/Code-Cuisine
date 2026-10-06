@@ -1,0 +1,275 @@
+.cookbook-page {
+  min-height: 100vh;
+  background-color: var(--color-white, #ffffff);
+  padding: 32px 48px 64px 48px;
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+.cookbook-header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 28px;
+
+  &__logo-link {
+    display: inline-block;
+  }
+
+  &__logo {
+    height: 44px;
+    width: auto;
+  }
+
+  &__back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #1E5515;
+    font-size: 16px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+
+    &:hover {
+      opacity: 0.9;
+      transform: translateX(-3px);
+    }
+  }
+
+  &__back-arrow {
+    width: 20px;
+    line-height: 1;
+  }
+}
+
+
+.cookbook-hero {
+  background-color: #f4f7f3;
+  border-radius: 28px;
+  padding: 40px 25px;
+  display: grid;
+  grid-template-columns: 1fr 1.9fr;
+  align-items: center;
+  margin-bottom: 48px;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: 1fr;
+    padding: 32px 24px;
+    gap: 32px;
+  }
+
+  &__left {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  &__title {
+    font-family: 'Quicksand';
+    font-size: 64px;
+    font-weight: 700;
+    color: #1E5515;
+    line-height: 1.1;
+    margin-bottom: 20px;
+  }
+
+  &__description {
+    font-size: 24px;
+    line-height: 1.1;
+    color: #10310B;
+    max-width: 440px;
+    font-weight: 500;
+  }
+
+  &__right {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  &__recipes-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  &__recipes-title {
+    font-size: 24px;
+    font-weight: 600;
+    color: #1E5515;
+  }
+
+  &__heart-icon {
+    width: 28px;
+    height: 26px;
+  }
+
+  &__cards-scroll {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: thin;
+    scrollbar-color: #ccd7c8 transparent;
+
+    &::-webkit-scrollbar {
+      height: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: #ccd7c8;
+      border-radius: 999px;
+    }
+  }
+}
+
+.recipe-card {
+  flex: 0 0 370px;
+  scroll-snap-align: start;
+  background-color: #e3ece1;
+  border-radius: 18px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 130px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+  }
+
+  &__meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  &__time {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 16px;
+    color: #4a6348;
+    font-weight: 500;
+  }
+
+  &__time-icon {
+    width: 16px;
+    height: 16px;
+    opacity: 0.8;
+  }
+
+  &__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    color: #10310B;
+    background-color: #3960394D;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 999px;
+  }
+
+  &__heart-icon {
+    width: 16px;
+    height: 14px;
+  }
+
+  &__title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--color-dark-green, #10310b);
+    line-height: 1.35;
+    margin: 0;
+  }
+}
+
+.cookbook-cuisines {
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+
+    @media (max-width: 1024px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (max-width: 640px) {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
+.cuisine-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  &__title {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--color-dark-green, #10310b);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+  }
+
+  &__emoji {
+    font-size: 22px;
+  }
+
+  &__image-wrapper {
+    overflow: hidden;
+  }
+
+  &__image {
+    width: 400px;
+    height: 400px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+
+    &:hover {
+      transform: scale(1.03);
+    }
+  }
+}
+
+.footer {
+  &__section {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: 50px;
+    gap: 8px;
+    margin-right: 40px;
+  }
+
+  &__text {
+    font-size: 20px;
+    cursor: pointer;
+  }
+
+  &__back-arrow {
+    transform: rotate(180deg);
+    cursor: pointer;
+
+    &:hover {
+      opacity: 0.9;
+      transform: translateX(-10px);
+      transform: rotate(180deg);
+    }
+  }
+}

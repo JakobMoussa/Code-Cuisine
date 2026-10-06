@@ -11,4 +11,9 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./features/ingredients/ingredients').then((m) => m.Ingredients),
   },
+  {
+    path: 'cookbook',
+    loadComponent: () =>
+      import('./features/cookbook/cookbook').then((m) => m.Cookbook),
+  },
 ];

@@ -1,0 +1,71 @@
+<div class="cookbook-page">
+    <header class="cookbook-header">
+        <a routerLink="/" class="cookbook-header__logo-link" id="cookbook-logo">
+            <img src="/assets/logo-green.svg" alt="Code à Cuisine Logo" class="cookbook-header__logo" />
+        </a>
+        <a routerLink="/" class="cookbook-header__back-btn" id="cookbook-back-btn">
+            <span class="cookbook-header__back-arrow"><img class="back-arrow" src="/assets/back-arrow.svg"
+                    alt="arrow"></span>
+            <span class="cookbook-header__back-text">Back</span>
+        </a>
+    </header>
+
+    <main class="cookbook-main">
+        <section class="cookbook-hero" id="cookbook-hero-section">
+            <div class="cookbook-hero__left">
+                <h1 class="cookbook-hero__title">Cookbook</h1>
+                <p class="cookbook-hero__description">
+                    From quick bites to gourmet delights, explore them all in our ultimate
+                    cookbook and get inspired for your next culinary adventure.
+                </p>
+            </div>
+
+            <div class="cookbook-hero__right">
+                <div class="cookbook-hero__recipes-header">
+                    <h2 class="cookbook-hero__recipes-title">Most liked recipes</h2>
+                    <img class="cookbook-hero__heart-icon" src="/assets/heart.svg">
+                </div>
+
+                <div class="cookbook-hero__cards-scroll" id="cookbook-cards-scroll">
+                    @for (recipe of mostLikedRecipes; track recipe.id) {
+                    <article class="recipe-card">
+                        <div class="recipe-card__meta">
+                            <div class="recipe-card__time">
+                                <img src="/assets/schedule.svg" alt="Clock" class="recipe-card__time-icon" />
+                                <span>Cooking time: {{ recipe.cookingTime }}</span>
+                            </div>
+                            <div class="recipe-card__badge">
+                                <img class="recipe-card__heart-icon" src="/assets/smallheart.svg" alt="Heart">
+                                <span>{{ recipe.likes }}</span>
+                            </div>
+                        </div>
+                        <h3 class="recipe-card__title">{{ recipe.title }}</h3>
+                    </article>
+                    }
+                </div>
+            </div>
+        </section>
+
+        <section class="cookbook-cuisines" id="cookbook-cuisines-section">
+            <div class="cookbook-cuisines__grid">
+                @for (cuisine of cuisines; track cuisine.id) {
+                <article class="cuisine-card">
+                    <h2 class="cuisine-card__title">
+                        {{ cuisine.name }}
+                        <span class="cuisine-card__emoji">{{ cuisine.emoji }}</span>
+                    </h2>
+                    <div class="cuisine-card__image-wrapper">
+                        <img [src]="cuisine.image" [alt]="cuisine.name" class="cuisine-card__image" />
+                    </div>
+                </article>
+                }
+            </div>
+        </section>
+        <footer>
+            <div class="footer__section">
+                <span class="footer__text">Generate new recipie</span>
+                <img class="footer__back-arrow" src="/assets/back-arrow.svg" alt="Back Arrow">
+            </div>
+        </footer>
+    </main>
+</div>

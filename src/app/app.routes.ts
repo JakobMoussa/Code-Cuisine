@@ -21,4 +21,9 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./features/cookbook/cookbook').then((m) => m.Cookbook),
   },
+  {
+    path: 'loading',
+    loadComponent: () =>
+      import('./features/loading/loading').then((m) => m.Loading),
+  },
 ];

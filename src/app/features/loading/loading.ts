@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef, inject } from '@angular/core';
+import { Router } from '@angular/router';
 import { Navbar } from '../../shared/navbar/navbar';
 
 @Component({
@@ -10,6 +11,7 @@ import { Navbar } from '../../shared/navbar/navbar';
 export class Loading implements OnInit, OnDestroy {
 
     private cdr = inject(ChangeDetectorRef);
+    private router = inject(Router);
 
     currentFrame = 0;
     totalFrames = 316;
@@ -32,7 +34,8 @@ export class Loading implements OnInit, OnDestroy {
             if (this.currentFrame < this.totalFrames - 1) {
                 this.currentFrame++;
             } else {
-                this.currentFrame = 0;
+                this.stopAnimation();
+                this.router.navigate(['/results']);
             }
             this.cdr.markForCheck();
         }, 1000 / this.fps);

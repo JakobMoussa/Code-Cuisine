@@ -1,0 +1,58 @@
+<div class="results-page">
+    <app-navbar variant="light" />
+
+    <main class="results">
+        <div class="results__container">
+
+            <section class="results__hero">
+                <div class="results__hero-content">
+                    <h1 class="results__title">The recipe results</h1>
+                    <p class="results__subtitle">
+                        We took what you have and let our AI do the thinking.<br />
+                        Here are 3 easy recipes you can make right now!
+                    </p>
+                    <div class="results__tags">
+                        <span class="results__tag">Italian</span>
+                        <span class="results__tag">Quick</span>
+                    </div>
+                </div>
+
+                <div class="results__hero-image-wrapper">
+                    <img src="/assets/finish.png" alt="Finished dish" class="results__hero-image" />
+                </div>
+            </section>
+
+            <section class="results__cards">
+                @for (recipe of recipes; track recipe.id) {
+                <article class="results__card">
+                    <div class="results__card-top">
+                        <div class="results__card-header">
+                            <img class="results__cloche-icon" src="/assets/icon.svg">
+                            <span class="results__card-label">{{ recipe.label }}</span>
+                        </div>
+
+                        <h2 class="results__card-title">{{ recipe.title }}</h2>
+
+                        <div class="results__card-time">
+                            <img src="/assets/clock.svg" alt="Clock" class="results__time-icon" />
+                            <span>Cooking time: {{ recipe.cookingTime }}</span>
+                        </div>
+                    </div>
+
+                    <div class="results__card-bottom">
+                        <a routerLink="/cookbook" class="results__view-btn">View</a>
+                    </div>
+                </article>
+                }
+            </section>
+
+            <footer class="results__footer">
+                <a routerLink="/generate" class="results__generate-link">
+                    Generate new recipe
+                    <img src="/assets/arrow.svg" class="results__arrow-icon" alt="Arrow">
+                </a>
+            </footer>
+
+        </div>
+    </main>
+</div>

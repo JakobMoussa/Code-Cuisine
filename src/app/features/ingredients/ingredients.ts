@@ -1,5 +1,6 @@
 import { Component, signal, computed } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import { Navbar } from '../../shared/navbar/navbar';
 
 export interface Ingredient {
@@ -10,7 +11,7 @@ export interface Ingredient {
 
 @Component({
   selector: 'app-ingredients',
-  imports: [FormsModule, Navbar],
+  imports: [FormsModule, Navbar, RouterLink],
   templateUrl: './ingredients.html',
   styleUrl: './ingredients.scss',
 })

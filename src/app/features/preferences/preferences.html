@@ -1,0 +1,109 @@
+<div class="preferences-page">
+  <app-navbar variant="dark" />
+
+  <div class="preferences__top-nav">
+    <a routerLink="/generate" class="preferences__back-btn" id="btn-back-to-ingredients">
+      <img src="/assets/back-arrow.svg" alt="Back-Button" class="preferences__back-icon" />
+      <span>Ingredients</span>
+    </a>
+  </div>
+
+  <main class="preferences">
+    <header class="preferences__header">
+      <h1 class="preferences__title">Choose your preferences</h1>
+    </header>
+
+    <div class="preferences__steppers">
+      <div class="preferences__stepper-group">
+        <label class="preferences__stepper-label">How many portions you need?</label>
+        <div class="preferences__stepper-control">
+          <button type="button" class="preferences__stepper-btn" (click)="decrementPortions()"
+            aria-label="Decrease portions">
+            <img src="/assets/minus-box.svg" alt="Minus" class="preferences__stepper-icon" />
+          </button>
+          <div class="preferences__stepper-value">
+            <span class="preferences__stepper-num">{{ portions() }}</span>
+            <span class="preferences__stepper-text">Portions</span>
+          </div>
+          <button type="button" class="preferences__stepper-btn" (click)="incrementPortions()"
+            aria-label="Increase portions">
+            <img src="/assets/plus-box.svg" alt="Plus" class="preferences__stepper-icon" />
+          </button>
+        </div>
+      </div>
+
+      <div class="preferences__stepper-group">
+        <label class="preferences__stepper-label">How many are cooking?</label>
+        <div class="preferences__stepper-control">
+          <button type="button" class="preferences__stepper-btn" (click)="decrementPersons()"
+            aria-label="Decrease cooking persons">
+            <img src="/assets/minus-box.svg" alt="Minus" class="preferences__stepper-icon" />
+          </button>
+          <div class="preferences__stepper-value">
+            <span class="preferences__stepper-num">{{ persons() }}</span>
+            <span class="preferences__stepper-text">{{ persons() === 1 ? 'Person' : 'Persons' }}</span>
+          </div>
+          <button type="button" class="preferences__stepper-btn" (click)="incrementPersons()"
+            aria-label="Increase cooking persons">
+            <img src="/assets/plus-box.svg" alt="Plus" class="preferences__stepper-icon" />
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="preferences__card">
+      <section class="preferences__section">
+        <div class="preferences__section-header">
+          <img src="/assets/clock.svg" alt="clock" class="preferences__section-icon" />
+          <h2 class="preferences__section-title">Cooking time:</h2>
+        </div>
+        <div class="preferences__pills">
+          @for (time of cookingTimes; track time.id) {
+          <div class="preferences__time-item" (click)="selectTime(time.id)">
+            <button type="button" class="preferences__pill" [class.selected]="selectedTime() === time.id">
+              <span class="preferences__pill-title">{{ time.label }}</span>
+            </button>
+            <span class="preferences__pill-subtitle">{{ time.subtitle }}</span>
+          </div>
+          }
+        </div>
+      </section>
+
+      <section class="preferences__section">
+        <div class="preferences__section-header">
+          <img src="/assets/public.svg" alt="public">
+          <h2 class="preferences__section-title">Cuisine</h2>
+        </div>
+        <div class="preferences__pills">
+          @for (item of cuisines; track item) {
+          <button type="button" class="preferences__pill" [class.selected]="selectedCuisine() === item"
+            (click)="selectCuisine(item)">
+            <span>{{ item }}</span>
+          </button>
+          }
+        </div>
+      </section>
+
+      <section class="preferences__section">
+        <div class="preferences__section-header">
+          <img src="/assets/fork_spoon.svg" alt="fork_spoon">
+          <h2 class="preferences__section-title">Diet preferences</h2>
+        </div>
+        <div class="preferences__pills">
+          @for (item of dietPreferences; track item) {
+          <button type="button" class="preferences__pill" [class.selected]="selectedDiet() === item"
+            (click)="selectDiet(item)">
+            <span>{{ item }}</span>
+          </button>
+          }
+        </div>
+      </section>
+    </div>
+
+    <div class="preferences__action">
+      <a routerLink="/recipes" class="preferences__submit-btn" id="btn-generate-final-recipe">
+        <span>Generate Recipe</span>
+      </a>
+    </div>
+  </main>
+</div>

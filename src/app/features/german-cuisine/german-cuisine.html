@@ -1,0 +1,64 @@
+<div class="german-page">
+    <header class="german-header">
+        <div class="german-header__left">
+            <a routerLink="/" class="german-header__logo-link" id="german-logo">
+                <img src="/assets/logo-green.svg" alt="Code à Cuisine Logo" class="german-header__logo" />
+            </a>
+            <a routerLink="/cookbook" class="german-header__back-btn" id="german-back-btn">
+                <span class="german-header__back-arrow">
+                    <img class="back-arrow" src="/assets/back-arrow.svg" alt="arrow">
+                </span>
+                <span class="german-header__back-text">Cookbook</span>
+            </a>
+        </div>
+    </header>
+    <div class="german-header__right">
+        <a routerLink="/generate" class="german-header__generate-btn" id="german-generate-btn">
+            Generate a recipe
+        </a>
+    </div>
+
+    <main class="german-main">
+        <section class="german-banner" id="german-banner-section">
+            <img src="/assets/German-food.png" alt="German food banner" class="german-banner__image" />
+            <h1 class="german-banner__title">German cuisine</h1>
+        </section>
+
+        <section class="german-recipes" id="german-recipes-section">
+            @for (recipe of recipes; track recipe.number) {
+            <article class="recipe-row" [routerLink]="['/recipe', recipe.id]">
+                <div class="recipe-row__left">
+                    <div class="recipe-row__time">
+                        <img src="/assets/schedule.svg" alt="Clock" class="recipe-row__time-icon" />
+                        <span>Cooking time: {{ recipe.cookingTime }}</span>
+                    </div>
+                    <div class="recipe-row__title-group">
+                        <span class="recipe-row__number">{{ recipe.number }}.</span>
+                        <h2 class="recipe-row__title">{{ recipe.title }}</h2>
+                    </div>
+                </div>
+
+                <div class="recipe-row__right">
+                    @for (tag of recipe.tags; track tag) {
+                    <span class="recipe-row__tag">{{ tag }}</span>
+                    }
+                    <span class="recipe-row__likes">
+                        <img src="/assets/smallheart.svg" alt="Heart" class="recipe-row__heart-icon" />
+                        <span>{{ recipe.likes }}</span>
+                    </span>
+                </div>
+            </article>
+            }
+        </section>
+
+        <nav class="german-pagination" aria-label="Recipes pagination">
+            <span class="german-pagination__arrow german-pagination__arrow--disabled">&lt;</span>
+            <span class="german-pagination__item german-pagination__item--active">1</span>
+            <span class="german-pagination__item">2</span>
+            <span class="german-pagination__item">3</span>
+            <span class="german-pagination__ellipsis">...</span>
+            <span class="german-pagination__item">8</span>
+            <span class="german-pagination__arrow">&gt;</span>
+        </nav>
+    </main>
+</div>

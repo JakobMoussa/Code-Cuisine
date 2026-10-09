@@ -75,7 +75,7 @@ export class Cookbook {
       image: '/assets/4.recipe.png',
     },
     {
-      id: 'Indian',
+      id: 'indian',
       name: 'Indian cuisine',
       emoji: '🍱',
       image: '/assets/5.recipe.png',

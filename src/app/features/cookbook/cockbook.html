@@ -55,7 +55,9 @@
                         <span class="cuisine-card__emoji">{{ cuisine.emoji }}</span>
                     </h2>
                     <div class="cuisine-card__image-wrapper">
-                        <img [src]="cuisine.image" [alt]="cuisine.name" class="cuisine-card__image" />
+                        <img [src]="cuisine.image" [alt]="cuisine.name" class="cuisine-card__image"
+                            [routerLink]="['/cuisine', cuisine.id.toLowerCase()]"
+                            style="cursor: pointer;" />
                     </div>
                 </article>
                 }

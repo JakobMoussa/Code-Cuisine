@@ -1,0 +1,64 @@
+<div class="japanese-page">
+    <header class="japanese-header">
+        <div class="japanese-header__left">
+            <a routerLink="/" class="japanese-header__logo-link" id="japanese-logo">
+                <img src="/assets/logo-green.svg" alt="Code à Cuisine Logo" class="japanese-header__logo" />
+            </a>
+            <a routerLink="/cookbook" class="japanese-header__back-btn" id="japanese-back-btn">
+                <span class="japanese-header__back-arrow">
+                    <img class="back-arrow" src="/assets/back-arrow.svg" alt="arrow">
+                </span>
+                <span class="japanese-header__back-text">Cookbook</span>
+            </a>
+        </div>
+    </header>
+    <div class="japanese-header__right">
+        <a routerLink="/generate" class="japanese-header__generate-btn" id="japanese-generate-btn">
+            Generate a recipe
+        </a>
+    </div>
+
+    <main class="japanese-main">
+        <section class="japanese-banner" id="japanese-banner-section">
+            <img src="/assets/Japanese-food.png" alt="Japanese food banner" class="japanese-banner__image" />
+            <h1 class="japanese-banner__title">Japanese cuisine</h1>
+        </section>
+
+        <section class="japanese-recipes" id="japanese-recipes-section">
+            @for (recipe of recipes; track recipe.number) {
+            <article class="recipe-row" [routerLink]="['/recipe', recipe.id]">
+                <div class="recipe-row__left">
+                    <div class="recipe-row__time">
+                        <img src="/assets/schedule.svg" alt="Clock" class="recipe-row__time-icon" />
+                        <span>Cooking time: {{ recipe.cookingTime }}</span>
+                    </div>
+                    <div class="recipe-row__title-group">
+                        <span class="recipe-row__number">{{ recipe.number }}.</span>
+                        <h2 class="recipe-row__title">{{ recipe.title }}</h2>
+                    </div>
+                </div>
+
+                <div class="recipe-row__right">
+                    @for (tag of recipe.tags; track tag) {
+                    <span class="recipe-row__tag">{{ tag }}</span>
+                    }
+                    <span class="recipe-row__likes">
+                        <img src="/assets/smallheart.svg" alt="Heart" class="recipe-row__heart-icon" />
+                        <span>{{ recipe.likes }}</span>
+                    </span>
+                </div>
+            </article>
+            }
+        </section>
+
+        <nav class="japanese-pagination" aria-label="Recipes pagination">
+            <span class="japanese-pagination__arrow japanese-pagination__arrow--disabled">&lt;</span>
+            <span class="japanese-pagination__item japanese-pagination__item--active">1</span>
+            <span class="japanese-pagination__item">2</span>
+            <span class="japanese-pagination__item">3</span>
+            <span class="japanese-pagination__ellipsis">...</span>
+            <span class="japanese-pagination__item">8</span>
+            <span class="japanese-pagination__arrow">&gt;</span>
+        </nav>
+    </main>
+</div>

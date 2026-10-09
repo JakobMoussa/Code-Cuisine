@@ -1,0 +1,64 @@
+<div class="fusion-page">
+    <header class="fusion-header">
+        <div class="fusion-header__left">
+            <a routerLink="/" class="fusion-header__logo-link" id="fusion-logo">
+                <img src="/assets/logo-green.svg" alt="Code à Cuisine Logo" class="fusion-header__logo" />
+            </a>
+            <a routerLink="/cookbook" class="fusion-header__back-btn" id="fusion-back-btn">
+                <span class="fusion-header__back-arrow">
+                    <img class="back-arrow" src="/assets/back-arrow.svg" alt="arrow">
+                </span>
+                <span class="fusion-header__back-text">Cookbook</span>
+            </a>
+        </div>
+    </header>
+    <div class="fusion-header__right">
+        <a routerLink="/generate" class="fusion-header__generate-btn" id="fusion-generate-btn">
+            Generate a recipe
+        </a>
+    </div>
+
+    <main class="fusion-main">
+        <section class="fusion-banner" id="fusion-banner-section">
+            <img src="/assets/Fusion-food.png" alt="Fusion food banner" class="fusion-banner__image" />
+            <h1 class="fusion-banner__title">Fusion cuisine</h1>
+        </section>
+
+        <section class="fusion-recipes" id="fusion-recipes-section">
+            @for (recipe of recipes; track recipe.number) {
+            <article class="recipe-row" [routerLink]="['/recipe', recipe.id]">
+                <div class="recipe-row__left">
+                    <div class="recipe-row__time">
+                        <img src="/assets/schedule.svg" alt="Clock" class="recipe-row__time-icon" />
+                        <span>Cooking time: {{ recipe.cookingTime }}</span>
+                    </div>
+                    <div class="recipe-row__title-group">
+                        <span class="recipe-row__number">{{ recipe.number }}.</span>
+                        <h2 class="recipe-row__title">{{ recipe.title }}</h2>
+                    </div>
+                </div>
+
+                <div class="recipe-row__right">
+                    @for (tag of recipe.tags; track tag) {
+                    <span class="recipe-row__tag">{{ tag }}</span>
+                    }
+                    <span class="recipe-row__likes">
+                        <img src="/assets/smallheart.svg" alt="Heart" class="recipe-row__heart-icon" />
+                        <span>{{ recipe.likes }}</span>
+                    </span>
+                </div>
+            </article>
+            }
+        </section>
+
+        <nav class="fusion-pagination" aria-label="Recipes pagination">
+            <span class="fusion-pagination__arrow fusion-pagination__arrow--disabled">&lt;</span>
+            <span class="fusion-pagination__item fusion-pagination__item--active">1</span>
+            <span class="fusion-pagination__item">2</span>
+            <span class="fusion-pagination__item">3</span>
+            <span class="fusion-pagination__ellipsis">...</span>
+            <span class="fusion-pagination__item">8</span>
+            <span class="fusion-pagination__arrow">&gt;</span>
+        </nav>
+    </main>
+</div>

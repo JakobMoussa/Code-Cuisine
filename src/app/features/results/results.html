@@ -40,7 +40,7 @@
                     </div>
 
                     <div class="results__card-bottom">
-                        <a routerLink="/cookbook" class="results__view-btn">View</a>
+                        <a [routerLink]="['/recipe', recipe.id]" class="results__view-btn">View</a>
                     </div>
                 </article>
                 }

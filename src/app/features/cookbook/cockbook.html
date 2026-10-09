@@ -28,7 +28,7 @@
 
                 <div class="cookbook-hero__cards-scroll" id="cookbook-cards-scroll">
                     @for (recipe of mostLikedRecipes; track recipe.id) {
-                    <article class="recipe-card">
+                    <article class="recipe-card" [routerLink]="['/recipe', recipe.id]" style="cursor: pointer;">
                         <div class="recipe-card__meta">
                             <div class="recipe-card__time">
                                 <img src="/assets/schedule.svg" alt="Clock" class="recipe-card__time-icon" />

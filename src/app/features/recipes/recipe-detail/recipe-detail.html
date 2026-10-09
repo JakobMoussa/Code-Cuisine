@@ -1,1 +1,170 @@
-<p>recipe-detail works!</p>
+<div class="recipe-detail-page">
+  <header class="recipe-detail__navbar">
+    <div class="recipe-detail__header-container">
+      <a routerLink="/" class="recipe-detail__logo-link">
+        <img src="/assets/logo-green.svg" alt="Code à Cuisine Logo" class="recipe-detail__logo" />
+      </a>
+      <a routerLink="/results" class="recipe-detail__back-link">
+        <img src="/assets/back-arrow.svg" alt="Back" class="recipe-detail__back-icon" />
+        <span>Recipe results</span>
+      </a>
+    </div>
+  </header>
+
+  @if (recipe) {
+  <main class="recipe-detail">
+    <div class="recipe-detail__outer-card">
+
+      <div class="recipe-detail__hero-card">
+        <div class="recipe-detail__hero-left">
+          <div class="recipe-detail__time-row">
+            <img src="/assets/clock.svg" alt="Clock" class="recipe-detail__clock-icon" />
+            <span>Coocking time: {{ recipe.cookingTime }}</span>
+          </div>
+
+          <h1 class="recipe-detail__title">{{ recipe.title }}</h1>
+
+          <div class="recipe-detail__person-row">
+            <span class="recipe-detail__person-label">Coocking person: {{ recipe.cookingPersons }}</span>
+            <span class="recipe-detail__chef-pill chef-1">
+              <img src="/assets/koch.svg" alt="Chef 1" class="recipe-detail__chef-icon" />
+              Chef 1
+            </span>
+            <span class="recipe-detail__chef-pill chef-2">
+              <img src="/assets/cook.svg" alt="Chef 2" class="recipe-detail__chef-icon" />
+              Chef 2
+            </span>
+          </div>
+        </div>
+
+        <div class="recipe-detail__hero-right">
+          <div class="recipe-detail__tags">
+            @for (tag of recipe.tags; track tag) {
+            <span class="recipe-detail__tag">{{ tag }}</span>
+            }
+            <button type="button" class="recipe-detail__like-btn" (click)="toggleFavorite()">
+              <img [src]="isFavorite ? '/assets/green-heart.svg' : '/assets/heart.svg'" alt="Heart"
+                class="recipe-detail__like-icon" />
+              <span>{{ recipe.likes }}</span>
+            </button>
+          </div>
+
+          <div class="recipe-detail__nutrition">
+            <h3 class="recipe-detail__nutrition-title">Nutritional information</h3>
+            <div class="recipe-detail__nutrition-grid">
+              <div class="recipe-detail__nutrition-col">
+                <span class="recipe-detail__nutrition-label">Energie</span>
+                <span class="recipe-detail__nutrition-value">{{ recipe.nutrition.calories }}</span>
+              </div>
+              <div class="recipe-detail__nutrition-col">
+                <span class="recipe-detail__nutrition-label">Protein</span>
+                <span class="recipe-detail__nutrition-value">{{ recipe.nutrition.protein }}</span>
+              </div>
+              <div class="recipe-detail__nutrition-col">
+                <span class="recipe-detail__nutrition-label">Fat</span>
+                <span class="recipe-detail__nutrition-value">{{ recipe.nutrition.fat }}</span>
+              </div>
+              <div class="recipe-detail__nutrition-col">
+                <span class="recipe-detail__nutrition-label">Carbs</span>
+                <span class="recipe-detail__nutrition-value">{{ recipe.nutrition.carbs }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <section class="recipe-detail__section">
+        <div class="recipe-detail__section-banner">
+          <div class="recipe-detail__banner-deco deco-right">
+            <img src="/assets/Hero Directions.png" alt="Directions deco" class="deco-right" />
+            <h2 class="recipe-detail__section-title">Ingredients</h2>
+          </div>
+        </div>
+
+        <div class="recipe-detail__ingredients-grid">
+          <div class="recipe-detail__ingredients-col">
+            <h3 class="recipe-detail__group-title">Your ingredients</h3>
+            <ul class="recipe-detail__list">
+              @for (item of recipe.yourIngredients; track item.name) {
+              <li class="recipe-detail__list-item">
+                <span class="recipe-detail__bullet">•</span>
+                <span class="recipe-detail__amount">{{ item.amount }}</span>
+                <span class="recipe-detail__name">{{ item.name }}</span>
+              </li>
+              }
+            </ul>
+          </div>
+
+          <div class="recipe-detail__ingredients-col">
+            <h3 class="recipe-detail__group-title">Extra ingredients</h3>
+            <ul class="recipe-detail__list">
+              @for (item of recipe.extraIngredients; track item.name) {
+              <li class="recipe-detail__list-item">
+                <span class="recipe-detail__bullet">•</span>
+                <span class="recipe-detail__amount">{{ item.amount }}</span>
+                <span class="recipe-detail__name">{{ item.name }}</span>
+              </li>
+              }
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="recipe-detail__section">
+        <div class="recipe-detail__section-banner">
+          <div class="recipe-detail__banner-deco deco-right">
+            <img src="/assets/Hero Ingredients.png" alt="Ingredients deco" class="deco-right" />
+            <h2 class="recipe-detail__section-title">Directions</h2>
+          </div>
+        </div>
+
+        <div class="recipe-detail__steps-grid">
+          @for (step of recipe.steps; track step.number) {
+          <div class="recipe-detail__step-card">
+            <div class="recipe-detail__step-header">
+              <h3 class="recipe-detail__step-title">
+                <span class="recipe-detail__step-number">{{ step.number }}.</span>
+                {{ step.title }}
+              </h3>
+              <span class="recipe-detail__chef-pill" [class.chef-1]="step.chef === 'Chef 1'"
+                [class.chef-2]="step.chef === 'Chef 2'">
+                @if (step.chef === 'Chef 1') {
+                <img src="/assets/koch.svg" alt="Chef 1" class="recipe-detail__chef-icon" />
+                } @else {
+                <img src="/assets/cook.svg" alt="Chef 2" class="recipe-detail__chef-icon" />
+                }
+                {{ step.chef }}
+              </span>
+            </div>
+            <p class="recipe-detail__step-desc">{{ step.description }}</p>
+          </div>
+          }
+        </div>
+      </section>
+
+      <div class="recipe-detail__finish-prompt">
+        <span>Just finished this meal?</span>
+        <span class="recipe-detail__finish-sub">Give it a heart, so that the others know this is delicious.</span>
+        <button type="button" class="recipe-detail__heart-action-btn" (click)="toggleFavorite()">
+          <img [src]="isFavorite ? '/assets/green-heart.svg' : '/assets/heart.svg'" alt="Heart"
+            class="recipe-detail__large-heart" />
+        </button>
+      </div>
+
+    </div>
+
+    <div class="recipe-detail__cookbook-promo">
+      <span class="recipe-detail__promo-text">Find inspiration for your next culinary adventure!</span>
+      <a routerLink="/cookbook" class="recipe-detail__promo-btn">Cookbook</a>
+    </div>
+
+    <footer class="recipe-detail__footer">
+      <a routerLink="/generate" class="recipe-detail__generate-link">
+        Generate new recipie
+        <img src="/assets/back-arrow.svg" alt="Arrow" class="recipe-detail__arrow-icon" />
+      </a>
+    </footer>
+
+  </main>
+  }
+</div>

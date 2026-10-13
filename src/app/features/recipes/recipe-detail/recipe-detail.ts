@@ -1,26 +1,34 @@
-import { Component, OnInit, inject } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
-import { Navbar } from '../../../shared/navbar/navbar';
+import { ChangeDetectorRef, Component, DestroyRef, OnInit, inject } from '@angular/core';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RecipeService, RecipeDetails } from '../../../core/services/recipe.service';
 
 @Component({
   selector: 'app-recipe-detail',
   standalone: true,
-  imports: [Navbar, RouterLink],
+  imports: [RouterLink],
   templateUrl: './recipe-detail.html',
   styleUrl: './recipe-detail.scss',
 })
 export class RecipeDetail implements OnInit {
+  private cdr = inject(ChangeDetectorRef);
+  private destroyRef = inject(DestroyRef);
+  private router = inject(Router);
   private route = inject(ActivatedRoute);
   private recipeService = inject(RecipeService);
 
   recipe?: RecipeDetails;
+  chefs: number[] = [];
   isFavorite = false;
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe((params) => {
+    this.route.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
       const id = params.get('id') || '1';
       this.recipe = this.recipeService.getRecipeById(id);
+      this.chefs = Array.from({ length: this.recipe?.cookingPersons ?? 0 }, (_, index) => index + 1);
+      this.isFavorite = false;
+      this.cdr.markForCheck();
+      if (!this.recipe) void this.router.navigate(['/generate'], { replaceUrl: true });
     });
   }
 

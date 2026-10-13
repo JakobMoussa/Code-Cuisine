@@ -26,14 +26,12 @@
 
           <div class="recipe-detail__person-row">
             <span class="recipe-detail__person-label">Coocking person: {{ recipe.cookingPersons }}</span>
-            <span class="recipe-detail__chef-pill chef-1">
-              <img src="/assets/koch.svg" alt="Chef 1" class="recipe-detail__chef-icon" />
-              Chef 1
+            @for (chef of chefs; track chef) {
+            <span class="recipe-detail__chef-pill" [class.chef-1]="chef === 1" [class.chef-2]="chef !== 1">
+              <img [src]="chef === 1 ? '/assets/koch.svg' : '/assets/cook.svg'" [alt]="'Chef ' + chef" class="recipe-detail__chef-icon" />
+              Chef {{ chef }}
             </span>
-            <span class="recipe-detail__chef-pill chef-2">
-              <img src="/assets/cook.svg" alt="Chef 2" class="recipe-detail__chef-icon" />
-              Chef 2
-            </span>
+            }
           </div>
         </div>
 
@@ -85,7 +83,7 @@
           <div class="recipe-detail__ingredients-col">
             <h3 class="recipe-detail__group-title">Your ingredients</h3>
             <ul class="recipe-detail__list">
-              @for (item of recipe.yourIngredients; track item.name) {
+              @for (item of recipe.yourIngredients; track $index) {
               <li class="recipe-detail__list-item">
                 <span class="recipe-detail__bullet">•</span>
                 <span class="recipe-detail__amount">{{ item.amount }}</span>
@@ -98,7 +96,7 @@
           <div class="recipe-detail__ingredients-col">
             <h3 class="recipe-detail__group-title">Extra ingredients</h3>
             <ul class="recipe-detail__list">
-              @for (item of recipe.extraIngredients; track item.name) {
+              @for (item of recipe.extraIngredients; track $index) {
               <li class="recipe-detail__list-item">
                 <span class="recipe-detail__bullet">•</span>
                 <span class="recipe-detail__amount">{{ item.amount }}</span>
@@ -127,11 +125,11 @@
                 {{ step.title }}
               </h3>
               <span class="recipe-detail__chef-pill" [class.chef-1]="step.chef === 'Chef 1'"
-                [class.chef-2]="step.chef === 'Chef 2'">
+                [class.chef-2]="step.chef !== 'Chef 1'">
                 @if (step.chef === 'Chef 1') {
-                <img src="/assets/koch.svg" alt="Chef 1" class="recipe-detail__chef-icon" />
+                <img src="/assets/koch.svg" [alt]="step.chef" class="recipe-detail__chef-icon" />
                 } @else {
-                <img src="/assets/cook.svg" alt="Chef 2" class="recipe-detail__chef-icon" />
+                <img src="/assets/cook.svg" [alt]="step.chef" class="recipe-detail__chef-icon" />
                 }
                 {{ step.chef }}
               </span>

@@ -7,6 +7,21 @@
                 <img [src]="currentImage" alt="Loading animation" class="loading__image" />
             </div>
         </div>
+
+        @if (errorMessage()) {
+        <div class="loading__error-container" role="alert">
+            <span class="loading__error-text">{{ errorMessage() }}</span>
+            <div class="loading__error-actions">
+                <button type="button" class="loading__retry-btn" (click)="retryGeneration()">
+                    Retry
+                </button>
+                <a routerLink="/preferences" class="loading__back-btn">
+                    Back to preferences
+                </a>
+            </div>
+        </div>
+        } @else {
         <span class="loading__text">Generating ...</span>
+        }
     </main>
 </div>

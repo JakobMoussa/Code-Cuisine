@@ -14,8 +14,8 @@
         <div class="generate__input-row">
           <div class="generate__field">
             <label for="ingredient-name" class="generate__label">Ingredient</label>
-            <input id="ingredient-name" type="text" class="generate__text-input" placeholder="e.g. Tomato"
-              [ngModel]="ingredientName()" (ngModelChange)="ingredientName.set($event)" (keydown)="onKeydown($event)" />
+            <input id="ingredient-name" type="text" class="generate__text-input" [ngModel]="ingredientName()"
+              (ngModelChange)="ingredientName.set($event)" (keydown)="onKeydown($event)" />
           </div>
 
           <div class="generate__field generate__field--serving">
@@ -58,18 +58,65 @@
         <ul class="generate__list" id="ingredient-list">
           @for (item of ingredients(); track $index) {
           <li class="generate__list-item">
+            @if (editingIndex() === $index) {
+            <span class="generate__chip generate__chip--editing">
+              <div class="generate__chip-left">
+                <img src="/assets/point.svg" alt="Point" class="generate__list_point" />
+                <input type="number" class="generate__number-input generate__number-input--chip" min="1"
+                  [ngModel]="editAmount()" (ngModelChange)="editAmount.set($event)"
+                  (keydown)="onEditKeydown($event, $index)" />
+
+                <div class="generate__custom-select generate__custom-select--chip" [class.is-open]="editDropdownOpen()">
+                  <button type="button" class="generate__select-trigger generate__select-trigger--chip"
+                    (click)="toggleEditDropdown()" aria-label="Select unit">
+                    <span>{{ editUnit() }}</span>
+                    <img src="/assets/arrow_drop_down.svg" alt="" class="generate__select-arrow" />
+                  </button>
+                  @if (editDropdownOpen()) {
+                  <div class="generate__select-options generate__select-options--chip">
+                    @for (unit of units; track unit) {
+                    <div class="generate__select-option generate__select-option--chip" [class.selected]="unit === editUnit()"
+                      (click)="selectEditUnit(unit)">
+                      {{ unit }}
+                    </div>
+                    }
+                  </div>
+                  }
+                </div>
+
+                <span class="generate__chip-text">{{ item.name }}</span>
+              </div>
+
+              <div class="generate__chip-actions">
+                <button type="button" class="generate__chip-btn generate__chip-btn--save" (click)="saveEdit($index)"
+                  aria-label="Save changes">
+                  <img src="/assets/check.svg" alt="Check" class="generate__chip-btn-icon" />
+                </button>
+                <button type="button" class="generate__chip-btn" (click)="removeIngredient($index)"
+                  [attr.aria-label]="'Remove ' + item.name">
+                  <img src="/assets/delete.svg" alt="Delete" class="generate__delete-icon" />
+                </button>
+              </div>
+            </span>
+            } @else {
             <span class="generate__chip">
               <div class="generate__chip-left">
                 <img src="/assets/point.svg" alt="Point" class="generate__list_point" />
                 <span class="generate__chip-amount">{{ item.amount }}{{ unitDisplay(item.unit) }}</span>
                 <span class="generate__chip-text">{{ item.name }}</span>
               </div>
-              <button class="generate__chip-delete" (click)="removeIngredient($index)"
-                [attr.aria-label]="'Remove ' + item.name">
-                <img src="/assets/edit.svg" alt="Edit" class="generate__edit-icon" />
-                <img src="/assets/delete.svg" alt="Delete" class="generate__delete-icon" />
-              </button>
+              <div class="generate__chip-actions">
+                <button type="button" class="generate__chip-btn" (click)="startEdit($index)"
+                  [attr.aria-label]="'Edit ' + item.name">
+                  <img src="/assets/edit.svg" alt="Edit" class="generate__edit-icon" />
+                </button>
+                <button type="button" class="generate__chip-btn" (click)="removeIngredient($index)"
+                  [attr.aria-label]="'Remove ' + item.name">
+                  <img src="/assets/delete.svg" alt="Delete" class="generate__delete-icon" />
+                </button>
+              </div>
             </span>
+            }
           </li>
           }
         </ul>

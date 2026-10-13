@@ -12,8 +12,9 @@
                         Here are 3 easy recipes you can make right now!
                     </p>
                     <div class="results__tags">
-                        <span class="results__tag">Italian</span>
-                        <span class="results__tag">Quick</span>
+                        @for (tag of tags(); track tag) {
+                        <span class="results__tag">{{ tag }}</span>
+                        }
                     </div>
                 </div>
 
@@ -23,7 +24,7 @@
             </section>
 
             <section class="results__cards">
-                @for (recipe of recipes; track recipe.id) {
+                @for (recipe of recipes(); track recipe.id) {
                 <article class="results__card">
                     <div class="results__card-top">
                         <div class="results__card-header">

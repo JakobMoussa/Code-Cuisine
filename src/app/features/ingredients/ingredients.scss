@@ -260,7 +260,7 @@
     border-radius: var(--radius-sm);
     transition: background-color var(--transition-fast);
 
-    &:hover {
+    &:hover:not(.generate__chip--editing) {
       background-color: var(--color-cream-light);
     }
   }
@@ -286,11 +286,101 @@
     color: var(--color-dark-green);
   }
 
-  &__chip-delete {
+  &__chip-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  &__chip-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 12px;
+    padding: 4px;
+    border-radius: var(--radius-sm, 4px);
+    transition: background-color var(--transition-fast, 0.15s ease);
+
+    &:hover {
+      background-color: rgba(16, 49, 11, 0.1);
+    }
+
+    &--save {
+      color: var(--color-dark-green);
+      font-weight: 700;
+      font-size: 16px;
+    }
+
+    &--cancel {
+      color: rgba(16, 49, 11, 0.6);
+      font-weight: 700;
+      font-size: 16px;
+    }
+  }
+
+  &__chip--editing {
+    align-items: flex-start;
+    padding: 6px 8px;
+
+    &:hover {
+      background-color: transparent;
+    }
+
+    .generate__chip-left {
+      align-items: flex-start;
+    }
+
+    .generate__list_point {
+      margin-top: 15px;
+    }
+
+    .generate__chip-text {
+      line-height: 38px;
+    }
+
+    .generate__chip-actions {
+      align-self: flex-start;
+      margin-top: 8px;
+    }
+  }
+
+  &__custom-select--chip {
+    display: inline-flex;
+    flex-direction: column;
+    position: relative;
+    margin: 0 4px;
+
+    .generate__select-trigger--chip {
+      padding: 10px 14px;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--color-dark-green);
+      background-color: var(--color-cream-light);
+      border-radius: var(--radius-pill);
+      gap: 4px;
+
+      &:hover {
+        background-color: var(--color-cream-dark);
+      }
+    }
+
+    .generate__select-options--chip {
+      position: static;
+      padding: 2px 0;
+      width: 100%;
+    }
+
+    .generate__select-option--chip {
+      font-size: 14px;
+      padding: 0px 10px;
+    }
+  }
+
+  &__chip-btn-icon {
+    width: 12px;
+    height: 12px;
   }
 
   &__delete-icon {
@@ -298,19 +388,9 @@
     height: 12px;
   }
 
-  &__delete-icon:hover {
-    background-color: var(--color-background-green);
-    border-radius: 3px;
-  }
-
   &__edit-icon {
     width: 12px;
     height: 12px;
-  }
-
-  &__edit-icon:hover {
-    background-color: var(--color-background-green);
-    border-radius: 3px;
   }
 
   &__empty {

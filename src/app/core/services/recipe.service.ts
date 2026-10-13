@@ -1,42 +1,36 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject, computed } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Observable, TimeoutError, defer, throwError } from 'rxjs';
+import { catchError, finalize, tap } from 'rxjs/operators';
+import { RecipeGeneratorService } from './recipe-generator.service';
+import {
+  RecipeStateService,
+  Ingredient,
+  UserPreferences,
+  RecipeDetails,
+  RecipeResult,
+} from './recipe-state.service';
 
-export interface IngredientItem {
-  amount: string;
-  name: string;
-}
+export type {
+  Ingredient, UserPreferences, IngredientItem, RecipeStep, RecipeNutrition,
+  RecipeDetails, RecipeResult, GenerateRecipeRequest,
+} from './recipe-state.service';
 
-export interface RecipeStep {
-  number: number;
-  title: string;
-  chef: string;
-  description: string;
-}
-
-export interface RecipeDetails {
-  id: string;
-  title: string;
-  cookingTime: string;
-  cookingPersons: number;
-  tags: string[];
-  likes: number;
-  nutrition: {
-    calories: string;
-    protein: string;
-    fat: string;
-    carbs: string;
-  };
-  yourIngredients: IngredientItem[];
-  extraIngredients: IngredientItem[];
-  steps: RecipeStep[];
-}
-
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class RecipeService {
-  private recipes: RecipeDetails[] = [
+  private readonly state = inject(RecipeStateService);
+  private readonly generator = inject(RecipeGeneratorService);
+
+  readonly ingredients = this.state.ingredients;
+  readonly preferences = this.state.preferences;
+  readonly generatedRecipes = this.state.recipes;
+  readonly isLoading = this.state.loading;
+  readonly errorMessage = this.state.error;
+
+  private readonly defaultRecipes: RecipeDetails[] = [
     {
       id: '1',
+      label: 'Recipe 1',
       title: 'Pasta with spinach and cherry tomatoes',
       cookingTime: '20min',
       cookingPersons: 2,
@@ -92,6 +86,7 @@ export class RecipeService {
     },
     {
       id: '2',
+      label: 'Recipe 2',
       title: 'Creamy garlic shrimp pasta',
       cookingTime: '22min',
       cookingPersons: 2,
@@ -140,6 +135,7 @@ export class RecipeService {
     },
     {
       id: '3',
+      label: 'Recipe 3',
       title: 'Pasta alla Trapanese (Sicilian Tomato Pesto)',
       cookingTime: '20min',
       cookingPersons: 4,
@@ -181,11 +177,103 @@ export class RecipeService {
     },
   ];
 
-  getRecipeById(id: string): RecipeDetails {
-    return this.recipes.find((r) => r.id === id) || this.recipes[0];
+  readonly recipes = computed(() =>
+    this.generatedRecipes().length ? this.generatedRecipes() : this.defaultRecipes
+  );
+
+  readonly resultsCards = computed<RecipeResult[]>(() => {
+    return this.generatedRecipes().map((r, index) => ({
+      id: r.id,
+      label: r.label || `Recipe ${index + 1}`,
+      title: r.title,
+      cookingTime: r.cookingTime,
+    }));
+  });
+
+  readonly resultTags = computed<string[]>(() => {
+    const prefs = this.state.generatedPreferences() ?? this.preferences();
+    const tags: string[] = [];
+    if (prefs.cuisine) tags.push(prefs.cuisine);
+    if (prefs.cookingTime) {
+      const timeLabel =
+        prefs.cookingTime === 'quick'
+          ? 'Quick'
+          : prefs.cookingTime === 'medium'
+            ? 'Medium'
+            : prefs.cookingTime === 'complex'
+              ? 'Complex'
+              : prefs.cookingTime;
+      tags.push(timeLabel);
+    }
+    if (prefs.diet && prefs.diet !== 'No preferences') {
+      tags.push(prefs.diet);
+    }
+    return tags.length > 0 ? tags : ['Italian', 'Quick'];
+  });
+
+  setPreferences(pref: Partial<UserPreferences>): void {
+    this.preferences.update((current) => ({
+      ...current,
+      ...pref,
+    }));
+  }
+
+  setIngredients(list: Ingredient[]): void {
+    this.ingredients.set(list);
+  }
+
+  addIngredient(item: Ingredient): void {
+    this.ingredients.update((list) => [...list, item]);
+  }
+
+  removeIngredient(index: number): void {
+    this.ingredients.update((list) => list.filter((_, i) => i !== index));
+  }
+
+  getRecipeById(id: string): RecipeDetails | undefined {
+    return this.generatedRecipes().find((recipe) => recipe.id === id)
+      ?? this.defaultRecipes.find((recipe) => recipe.id === id);
   }
 
   getAllRecipes(): RecipeDetails[] {
-    return this.recipes;
+    return this.recipes();
+  }
+
+  generateRecipes(): Observable<RecipeDetails[]> {
+    return defer(() => {
+      this.isLoading.set(true);
+      this.errorMessage.set(null);
+      this.generatedRecipes.set([]);
+      this.state.generatedPreferences.set(null);
+
+      const request = {
+        ingredients: this.ingredients().map((ingredient) => ({ ...ingredient })),
+        preferences: { ...this.preferences() },
+      };
+      return this.generator.generateRecipes(request).pipe(
+        tap((recipes) => {
+          this.generatedRecipes.set(recipes);
+          this.state.generatedPreferences.set(request.preferences);
+        }),
+      );
+    }).pipe(
+      catchError((error: unknown) => {
+        let message = 'Could not generate recipes. Please try again.';
+        if (error instanceof TimeoutError) {
+          message = 'Recipe generation took too long. Please try again.';
+        } else if (error instanceof HttpErrorResponse) {
+          message = error.status === 0 || error.status >= 500
+            ? 'The recipe service is unavailable. Please try again shortly.'
+            : error.status === 404
+              ? 'The recipe service could not be found. Please try again shortly.'
+              : 'The recipe request failed. Please try again.';
+        } else if (error instanceof Error) {
+          message = error.message;
+        }
+        this.errorMessage.set(message);
+        return throwError(() => new Error(message));
+      }),
+      finalize(() => this.isLoading.set(false)),
+    );
   }
 }

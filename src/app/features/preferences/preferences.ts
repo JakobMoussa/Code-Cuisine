@@ -1,6 +1,7 @@
-import { Component, signal } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Navbar } from '../../shared/navbar/navbar';
+import { RecipeStateService } from '../../core/services/recipe-state.service';
 
 export interface TimeOption {
   id: string;
@@ -15,15 +16,17 @@ export interface TimeOption {
   styleUrl: './preferences.scss',
 })
 export class Preferences {
-  readonly portions = signal(2);
-  readonly persons = signal(1);
+  private readonly state = inject(RecipeStateService);
+
+  readonly portions = computed(() => this.state.preferences().portions);
+  readonly persons = computed(() => this.state.preferences().cookingPersons);
 
   readonly cookingTimes: TimeOption[] = [
     { id: 'quick', label: 'Quick', subtitle: 'ab to 20min' },
     { id: 'medium', label: 'Medium', subtitle: '25-40min' },
     { id: 'complex', label: 'Complex', subtitle: 'over 45min' },
   ];
-  readonly selectedTime = signal<string>('quick');
+  readonly selectedTime = computed(() => this.state.preferences().cookingTime);
 
   readonly cuisines: string[] = [
     'German',
@@ -33,7 +36,7 @@ export class Preferences {
     'Gourmet',
     'Fusion',
   ];
-  readonly selectedCuisine = signal<string>('German');
+  readonly selectedCuisine = computed(() => this.state.preferences().cuisine);
 
   readonly dietPreferences: string[] = [
     'Vegetarian',
@@ -41,33 +44,33 @@ export class Preferences {
     'Keto',
     'No preferences',
   ];
-  readonly selectedDiet = signal<string>('No preferences');
+  readonly selectedDiet = computed(() => this.state.preferences().diet);
 
   incrementPortions(): void {
-    this.portions.update((v) => v + 1);
+    this.state.setPreferences({ portions: this.portions() + 1 });
   }
 
   decrementPortions(): void {
-    this.portions.update((v) => (v > 1 ? v - 1 : 1));
+    this.state.setPreferences({ portions: Math.max(1, this.portions() - 1) });
   }
 
   incrementPersons(): void {
-    this.persons.update((v) => v + 1);
+    this.state.setPreferences({ cookingPersons: this.persons() + 1 });
   }
 
   decrementPersons(): void {
-    this.persons.update((v) => (v > 1 ? v - 1 : 1));
+    this.state.setPreferences({ cookingPersons: Math.max(1, this.persons() - 1) });
   }
 
-  selectTime(id: string): void {
-    this.selectedTime.set(id);
+  selectTime(cookingTime: string): void {
+    this.state.setPreferences({ cookingTime });
   }
 
   selectCuisine(cuisine: string): void {
-    this.selectedCuisine.set(cuisine);
+    this.state.setPreferences({ cuisine });
   }
 
   selectDiet(diet: string): void {
-    this.selectedDiet.set(diet);
+    this.state.setPreferences({ diet });
   }
 }

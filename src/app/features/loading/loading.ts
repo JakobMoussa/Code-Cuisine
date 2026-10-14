@@ -4,6 +4,8 @@ import {
   OnDestroy,
   ChangeDetectorRef,
   inject,
+  signal,
+  HostListener,
 } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -22,6 +24,7 @@ export class Loading implements OnInit, OnDestroy {
   private recipeService = inject(RecipeService);
 
   readonly errorMessage = this.recipeService.errorMessage;
+  readonly showInsufficientPopup = signal(false);
 
   currentFrame = 0;
   totalFrames = 316;
@@ -40,7 +43,63 @@ export class Loading implements OnInit, OnDestroy {
       void this.router.navigate(['/generate'], { replaceUrl: true });
       return;
     }
+
+    if (!this.hasEnoughIngredients()) {
+      this.showInsufficientPopup.set(true);
+      return;
+    }
+
     this.startGeneration();
+  }
+
+  hasEnoughIngredients(): boolean {
+    const ingredients = this.recipeService.ingredients();
+    const portions = this.recipeService.preferences().portions;
+
+    if (!ingredients.length) return false;
+
+    if (portions >= 4 && ingredients.length < 2) {
+      return false;
+    }
+    if (portions >= 6 && ingredients.length < 3) {
+      return false;
+    }
+
+    const totalWeight = ingredients.reduce((sum, item) => {
+      const amount = Number(item.amount) || 0;
+      const unit = (item.unit || '').toLowerCase().trim();
+      if (unit === 'gram' || unit === 'g') return sum + amount;
+      if (unit === 'ml') return sum + amount;
+      if (unit === 'piece') return sum + amount * 80;
+      return sum + amount;
+    }, 0);
+
+    const minWeightPerPortion = 65;
+    if (portions >= 1 && totalWeight / portions < minWeightPerPortion) {
+      return false;
+    }
+
+    const onlyPieces = ingredients.every((item) => (item.unit || '').toLowerCase().trim() === 'piece');
+    const totalPieces = ingredients.reduce((sum, item) => {
+      return (item.unit || '').toLowerCase().trim() === 'piece' ? sum + (Number(item.amount) || 0) : sum;
+    }, 0);
+    if (onlyPieces && totalPieces < Math.ceil(portions / 2) && portions >= 3) {
+      return false;
+    }
+
+    return true;
+  }
+
+  closePopup(): void {
+    this.showInsufficientPopup.set(false);
+    void this.router.navigate(['/preferences']);
+  }
+
+  @HostListener('document:keydown.escape')
+  onEscape(): void {
+    if (this.showInsufficientPopup()) {
+      this.closePopup();
+    }
   }
 
   startAnimation(): void {

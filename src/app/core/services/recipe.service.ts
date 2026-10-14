@@ -262,11 +262,15 @@ export class RecipeService {
         if (error instanceof TimeoutError) {
           message = 'Recipe generation took too long. Please try again.';
         } else if (error instanceof HttpErrorResponse) {
-          message = error.status === 0 || error.status >= 500
-            ? 'The recipe service is unavailable. Please try again shortly.'
-            : error.status === 404
-              ? 'The recipe service could not be found. Please try again shortly.'
+          if (error.status === 404) {
+            message = typeof error.error === 'string' && error.error.includes('Cannot POST')
+              ? 'Recipe requests are not being forwarded. Please restart the app server and try again.'
+              : 'The recipe workflow could not be reached. Please check that it is active and its webhook address is correct.';
+          } else {
+            message = error.status === 0 || error.status >= 500
+              ? 'The recipe service is unavailable. Please try again shortly.'
               : 'The recipe request failed. Please try again.';
+          }
         } else if (error instanceof Error) {
           message = error.message;
         }

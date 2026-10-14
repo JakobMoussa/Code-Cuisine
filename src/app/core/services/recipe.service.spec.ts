@@ -168,4 +168,24 @@ describe('Recipe generation', () => {
     expect(state.recipes()).toEqual([]);
   });
 
+  it('identifies a missing development proxy instead of suggesting a blind retry', () => {
+    service.generateRecipes().subscribe({ error: () => {} });
+    http.expectOne(endpoint).flush('<pre>Cannot POST /api/n8n/generate-recipes</pre>', {
+      status: 404, statusText: 'Not Found',
+    });
+    expect(state.error()).toContain('restart the app server');
+    expect(state.loading()).toBe(false);
+    expect(state.recipes()).toEqual([]);
+  });
+
+  it('distinguishes an unregistered n8n webhook from an inactive development proxy', () => {
+    service.generateRecipes().subscribe({ error: () => {} });
+    http.expectOne(endpoint).flush({ code: 404, message: 'The requested webhook is not registered.' }, {
+      status: 404, statusText: 'Not Found',
+    });
+    expect(state.error()).toContain('workflow');
+    expect(state.error()).toContain('webhook address');
+    expect(state.loading()).toBe(false);
+  });
+
 });

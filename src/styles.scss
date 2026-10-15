@@ -99,16 +99,39 @@ html {
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: clip;
 }
 
 body {
   font-family: var(--font-primary);
   font-weight: 500;
   color: var(--color-background-green) !important;
-  background-color: var(--color-white);
+  background-color: #396039;
   line-height: 1.6;
   min-height: 100vh;
-  overflow-x: hidden;
+  overflow-x: clip;
+}
+
+body:has(.generate-page),
+body:has(.preferences-page),
+body:has(.cookbook-page),
+body:has(.recipe-detail-page),
+body:has(.german-page),
+body:has(.italian-page),
+body:has(.indian-page),
+body:has(.japanese-page),
+body:has(.gourmet-page),
+body:has(.fusion-page) {
+  background-color: var(--color-white);
+}
+
+app-root {
+  display: block;
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  min-height: 100vh;
+  overflow-x: clip;
 }
 
 a {

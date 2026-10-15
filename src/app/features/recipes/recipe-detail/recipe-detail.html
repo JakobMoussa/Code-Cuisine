@@ -28,7 +28,8 @@
             <span class="recipe-detail__person-label">Coocking person: {{ recipe.cookingPersons }}</span>
             @for (chef of chefs; track chef) {
             <span class="recipe-detail__chef-pill" [class.chef-1]="chef === 1" [class.chef-2]="chef !== 1">
-              <img [src]="chef === 1 ? '/assets/koch.svg' : '/assets/cook.svg'" [alt]="'Chef ' + chef" class="recipe-detail__chef-icon" />
+              <img [src]="chef === 1 ? '/assets/koch.svg' : '/assets/cook.svg'" [alt]="'Chef ' + chef"
+                class="recipe-detail__chef-icon" />
               Chef {{ chef }}
             </span>
             }
@@ -74,7 +75,10 @@
       <section class="recipe-detail__section">
         <div class="recipe-detail__section-banner">
           <div class="recipe-detail__banner-deco deco-right">
-            <img src="/assets/Hero Directions.png" alt="Directions deco" class="deco-right" />
+            <picture>
+              <source media="(max-width: 425px)" srcset="/assets/ingredients-mob.svg" />
+              <img src="/assets/direction-mob.svg" alt="Directions deco" class="deco-right" />
+            </picture>
             <h2 class="recipe-detail__section-title">Ingredients</h2>
           </div>
         </div>
@@ -111,7 +115,10 @@
       <section class="recipe-detail__section">
         <div class="recipe-detail__section-banner">
           <div class="recipe-detail__banner-deco deco-right">
-            <img src="/assets/Hero Ingredients.png" alt="Ingredients deco" class="deco-right" />
+            <picture>
+              <source media="(max-width: 425px)" srcset="/assets/directions-mob.png" />
+              <img src="/assets/ingredients-mob.svg" alt="Ingredients deco" class="deco-right" />
+            </picture>
             <h2 class="recipe-detail__section-title">Directions</h2>
           </div>
         </div>

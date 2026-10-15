@@ -470,3 +470,31 @@
     }
   }
 }
+
+@media (max-width: 425px) {
+
+  .generate {
+    &__header {
+      text-align: start;
+      display: grid;
+    }
+
+    &__title {
+      font-size: 32px;
+    }
+
+    &__desc {
+      font-size: 18px;
+      font-weight: 600;
+      color: #10310B;
+    }
+
+    &__label {
+      font-size: 18px;
+    }
+
+    &__list-titl {
+      font-size: 18px;
+    }
+  }
+}

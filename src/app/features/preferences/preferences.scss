@@ -207,7 +207,7 @@
   }
 
   &__pill-subtitle {
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 500;
     color: #10310B;
     opacity: 0.75;
@@ -252,4 +252,36 @@
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+@media (max-width: 425px) {
+  .preferences__top-nav span {
+    display: none;
+  }
+
+  .preferences {
+
+    &__top-nav {
+      padding: 0 50px 0 20px;
+    }
+
+    &__title {
+      font-size: 24px;
+      text-align: start;
+    }
+
+    &__steppers {
+      justify-content: start;
+    }
+
+    &__submit-btn {
+      padding: 14px 16px;
+      font-size: 16px;
+    }
+
+    &__stepper-group {
+      align-items: flex-start;
+    }
+  }
+
 }

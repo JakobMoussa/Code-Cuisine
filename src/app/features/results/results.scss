@@ -9,9 +9,19 @@
     flex: 1;
     display: flex;
     justify-content: center;
-    padding: 24px 0px 48px 0px;
+    padding: 24px 50px 48px 50px;
     margin: 68px 0;
 
+    @media (max-width: 768px) {
+        margin: 36px 0;
+        padding: 20px 30px 40px 30px;
+    }
+
+    @media (max-width: 480px) {
+        margin: 24px 0;
+        padding: 16px 30px 36px 30px;
+        font-size: 32px;
+    }
 
     &__container {
         width: 100%;
@@ -19,6 +29,14 @@
         display: flex;
         flex-direction: column;
         gap: 85px;
+
+        @media (max-width: 992px) {
+            gap: 56px;
+        }
+
+        @media (max-width: 480px) {
+            gap: 40px;
+        }
     }
 
     &__hero {
@@ -27,8 +45,14 @@
         gap: 40px;
         align-items: center;
 
+        @media (max-width: 1200px) {
+            grid-template-columns: 1fr 460px;
+            gap: 32px;
+        }
+
         @media (max-width: 992px) {
             grid-template-columns: 1fr;
+            gap: 28px;
         }
     }
 
@@ -45,6 +69,27 @@
         color: #FAF0E6;
         margin-bottom: 16px;
         line-height: 1.15;
+
+        @media (max-width: 992px) {
+            font-size: 42px;
+        }
+
+        @media (max-width: 768px) {
+            font-size: 34px;
+        }
+
+        @media (max-width: 480px) {
+            font-size: 28px;
+            margin-bottom: 12px;
+        }
+    }
+
+    &__title-desktop {
+        display: inline;
+    }
+
+    &__title-mobile {
+        display: none;
     }
 
     &__subtitle {
@@ -54,12 +99,31 @@
         color: #E2EBE2;
         line-height: 1.5;
         margin-bottom: 24px;
+
+        @media (max-width: 992px) {
+            font-size: 20px;
+        }
+
+        @media (max-width: 480px) {
+            font-size: 18px;
+            margin-bottom: 18px;
+        }
+    }
+
+    &__subtitle-break {
+        @media (max-width: 600px) {
+            display: none;
+        }
     }
 
     &__tags {
         display: flex;
         gap: 12px;
         flex-wrap: wrap;
+
+        @media (max-width: 480px) {
+            gap: 8px;
+        }
     }
 
     &__tag {
@@ -73,6 +137,11 @@
         font-family: 'Quicksand';
         font-size: 16px;
         font-weight: 600;
+
+        @media (max-width: 480px) {
+            font-size: 14px;
+            padding: 4px 10px;
+        }
     }
 
     &__hero-image-wrapper {
@@ -81,11 +150,16 @@
         border-radius: 20px;
         overflow: hidden;
         box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+
+        @media (max-width: 480px) {
+            height: 180px;
+            border-radius: 16px;
+        }
     }
 
     &__hero-image {
-        width: 574px;
-        height: 222px;
+        width: 100%;
+        height: 100%;
         object-fit: cover;
         object-position: center;
     }
@@ -95,12 +169,14 @@
         grid-template-columns: repeat(3, 1fr);
         gap: 24px;
 
-        @media (max-width: 900px) {
+        @media (max-width: 1024px) {
             grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
         }
 
-        @media (max-width: 600px) {
+        @media (max-width: 700px) {
             grid-template-columns: 1fr;
+            gap: 16px;
         }
     }
 
@@ -112,9 +188,17 @@
         flex-direction: column;
         justify-content: space-between;
         min-height: 338px;
-        min-width: 411px;
+        min-width: 0;
+        width: 100%;
+        box-sizing: border-box;
         box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
         transition: transform var(--transition-base, 250ms ease), box-shadow var(--transition-base, 250ms ease);
+
+        @media (max-width: 480px) {
+            padding: 22px 18px;
+            min-height: 280px;
+            border-radius: 18px;
+        }
 
         &:hover {
             transform: translateY(-4px);
@@ -140,6 +224,11 @@
         flex-shrink: 0;
         width: 40px;
         height: 28px;
+
+        @media (max-width: 480px) {
+            width: 32px;
+            height: 22px;
+        }
     }
 
     &__card-label {
@@ -155,6 +244,10 @@
         font-weight: 600;
         color: #10310B;
         line-height: 1.25;
+
+        @media (max-width: 768px) {
+            font-size: 26px;
+        }
     }
 
     &__card-time {
@@ -188,7 +281,13 @@
         font-weight: 700;
         padding: 10px 32px;
         text-decoration: none;
+        border-radius: var(--radius-sm, 6px);
         transition: background-color var(--transition-fast, 150ms ease), transform var(--transition-fast, 150ms ease);
+
+        @media (max-width: 480px) {
+            font-size: 18px;
+            padding: 8px 24px;
+        }
 
         &:hover {
             background-color: #FAE0C6;
@@ -200,6 +299,10 @@
         display: flex;
         justify-content: flex-end;
         margin-top: 8px;
+
+        @media (max-width: 600px) {
+            justify-content: center;
+        }
     }
 
     &__generate-link {
@@ -211,9 +314,13 @@
         display: inline-flex;
         align-items: center;
         padding: 8px 20px;
-
         gap: 6px;
         transition: opacity var(--transition-fast, 150ms ease), transform var(--transition-fast, 150ms ease);
+
+        @media (max-width: 480px) {
+            font-size: 16px;
+            padding: 8px 12px;
+        }
 
         &:hover {
             opacity: 0.85;
@@ -225,5 +332,51 @@
     &__arrow-icon {
         width: 24px;
         margin-left: 10px;
+    }
+
+    @media (max-width: 425px) {
+        .results {
+            padding: 16px 30px 36px 30px !important;
+        }
+
+        &__hero {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 16px;
+        }
+
+        &__hero-content {
+            display: contents;
+        }
+
+        &__title {
+            order: 1;
+            margin-bottom: 0;
+            font-size: 32px;
+        }
+
+        &__title-desktop {
+            display: none;
+        }
+
+        &__title-mobile {
+            display: inline;
+        }
+
+        &__hero-image-wrapper {
+            order: 2;
+            height: 180px;
+            margin: 4px 0 8px 0;
+        }
+
+        &__subtitle {
+            order: 3;
+            margin-bottom: 0;
+        }
+
+        &__tags {
+            order: 4;
+        }
     }
 }

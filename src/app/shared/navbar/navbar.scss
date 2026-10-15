@@ -22,3 +22,27 @@
     width: auto;
   }
 }
+
+@media (max-width: 1000px) {
+  .navbar {
+    padding: 40px;
+  }
+}
+
+@media (max-width: 770px) {
+  .navbar {
+    padding: 28px;
+  }
+}
+
+@media (max-width: 680px) {
+  .navbar {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 425px) {
+  .navbar__logo-img {
+    height: 32px;
+  }
+}

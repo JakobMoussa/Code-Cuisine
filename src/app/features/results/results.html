@@ -6,9 +6,12 @@
 
             <section class="results__hero">
                 <div class="results__hero-content">
-                    <h1 class="results__title">The recipe results</h1>
+                    <h1 class="results__title">
+                        <span class="results__title-desktop">The recipe results</span>
+                        <span class="results__title-mobile">Generated recipes</span>
+                    </h1>
                     <p class="results__subtitle">
-                        We took what you have and let our AI do the thinking.<br />
+                        We took what you have and let our AI do the thinking.<br class="results__subtitle-break" />
                         Here are 3 easy recipes you can make right now!
                     </p>
                     <div class="results__tags">
@@ -28,7 +31,7 @@
                 <article class="results__card">
                     <div class="results__card-top">
                         <div class="results__card-header">
-                            <img class="results__cloche-icon" src="/assets/icon.svg">
+                            <img class="results__cloche-icon" src="/assets/icon.svg" alt="Cloche">
                             <span class="results__card-label">{{ recipe.label }}</span>
                         </div>
 

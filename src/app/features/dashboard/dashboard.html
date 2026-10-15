@@ -3,8 +3,8 @@
 
   <div class="hero__content">
     <div class="hero__text">
-      <p class="hero__subtitle">AI-Powered recipe generator</p>
-      <h1 class="hero__title">Code à Cuisine</h1>
+      <p class="hero__subtitle">AI-Powered<br class="hero__title-break" /> recipe generator</p>
+      <h1 class="hero__title">Code à <br class="hero__title-break" />Cuisine</h1>
 
       <a routerLink="/generate" class="hero__cta" id="cta-get-started">
         Get started
@@ -12,12 +12,15 @@
     </div>
 
     <div class="hero__visual">
-      <img src="/assets/Visuals.svg" alt="plates of food" class="hero__plates" />
+      <picture>
+        <source media="(max-width: 425px)" srcset="/assets/Visuals.svg" />
+        <img src="/assets/visuals-wide.png" alt="plates of food" class="hero__plates" />
+      </picture>
     </div>
   </div>
 
   <div class="hero__footer">
-    <p class="hero__footer-text">Hungry for inspiration?</p>
+    <p class="hero__footer-text">Hungry for <br class="hero__title-break" />inspiration?</p>
     <a routerLink="/cookbook" class="hero__footer-link" id="link-go-to-cookbook">
       Go to cookbook
       <img src="/assets/arrow.svg" alt="Arrow" class="hero__footer-arrow" />

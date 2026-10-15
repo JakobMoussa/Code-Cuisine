@@ -259,6 +259,10 @@
   align-items: center;
   width: 100%;
 
+  picture {
+    display: contents;
+  }
+
   img {
     height: 48px;
     width: auto;
@@ -490,4 +494,111 @@
 .recipe-detail__arrow-icon {
   width: 24px;
   rotate: 180deg;
+}
+
+@media (max-width: 980px) {
+  .recipe-detail__ingredients-grid {
+    padding: 0 100px;
+  }
+
+  .recipe-detail__step-title {
+    font-size: 20px;
+  }
+
+  .recipe-detail__steps-grid {
+    gap: 20px;
+    padding: 0px 0px;
+  }
+
+  .recipe-detail__outer-card {
+    padding: 36px 20px;
+  }
+
+  .recipe-detail {
+    padding: 0 15px;
+  }
+}
+
+@media (max-width: 425px) {
+  .recipe-detail__ingredients-grid {
+    padding: 0;
+  }
+
+  .recipe-detail__step-title {
+    font-size: 18px;
+  }
+
+  .recipe-detail__hero-card {
+    padding: 20px 20px;
+  }
+
+  .recipe-detail__outer-card {
+    padding: 10px 8px;
+  }
+
+  .recipe-detail__title {
+    font-size: 24px;
+  }
+
+  .recipe-detail__nutrition-label {
+    font-size: 18px;
+  }
+
+  .recipe-detail__nutrition-value {
+    font-size: 18px;
+  }
+
+  .recipe-detail__tags {
+    order: 2;
+  }
+
+  .recipe-detail__nutrition {
+    order: 1;
+  }
+
+  .recipe-detail__list {
+    padding-left: 20px;
+  }
+
+  .recipe-detail__section-title {
+    font-size: 24px;
+  }
+
+  .recipe-detail__finish-prompt {
+    justify-content: flex-start;
+  }
+
+  .recipe-detail__promo-text {
+    font-size: 16px;
+    font-weight: 500;
+    justify-content: flex-start;
+  }
+
+  .recipe-detail__promo-btn {
+    font-size: 16px;
+    padding: 10px 16px;
+  }
+
+  .recipe-detail__cookbook-promo {
+    justify-content: flex-start;
+    padding: 10px 10px;
+  }
+
+  .recipe-detail__generate-link {
+    display: none;
+  }
+
+  .recipe-detail-page {
+    padding-bottom: 0;
+  }
+
+  .recipe-detail__banner-deco img.deco-right {
+    height: 90px;
+    width: auto;
+    max-width: 100%;
+  }
+
+  .recipe-detail__section-title {
+    display: none;
+  }
 }

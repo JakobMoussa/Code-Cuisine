@@ -59,7 +59,6 @@ export interface GenerateRecipeRequest {
   preferences: UserPreferences;
 }
 
-// Keep the existing public type names available without duplicating models.
 export type RecipePreferences = UserPreferences;
 export type GeneratedRecipe = RecipeDetails;
 

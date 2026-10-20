@@ -9,6 +9,7 @@ import {
   UserPreferences,
   RecipeDetails,
   RecipeResult,
+  GenerateRecipeRequest,
 } from './recipe-state.service';
 
 export type {
@@ -190,25 +191,22 @@ export class RecipeService {
     }));
   });
 
-  readonly resultTags = computed<string[]>(() => {
-    const prefs = this.state.generatedPreferences() ?? this.preferences();
+  private formatTimeLabel(cookingTime?: string): string {
+    const timeLabels: Record<string, string> = { quick: 'Quick', medium: 'Medium', complex: 'Complex' };
+    return cookingTime ? (timeLabels[cookingTime] ?? cookingTime) : '';
+  }
+
+  private buildResultTags(prefs: UserPreferences): string[] {
     const tags: string[] = [];
     if (prefs.cuisine) tags.push(prefs.cuisine);
-    if (prefs.cookingTime) {
-      const timeLabel =
-        prefs.cookingTime === 'quick'
-          ? 'Quick'
-          : prefs.cookingTime === 'medium'
-            ? 'Medium'
-            : prefs.cookingTime === 'complex'
-              ? 'Complex'
-              : prefs.cookingTime;
-      tags.push(timeLabel);
-    }
-    if (prefs.diet && prefs.diet !== 'No preferences') {
-      tags.push(prefs.diet);
-    }
+    if (prefs.cookingTime) tags.push(this.formatTimeLabel(prefs.cookingTime));
+    if (prefs.diet && prefs.diet !== 'No preferences') tags.push(prefs.diet);
     return tags.length > 0 ? tags : ['Italian', 'Quick'];
+  }
+
+  readonly resultTags = computed<string[]>(() => {
+    const prefs = this.state.generatedPreferences() ?? this.preferences();
+    return this.buildResultTags(prefs);
   });
 
   setPreferences(pref: Partial<UserPreferences>): void {
@@ -239,44 +237,60 @@ export class RecipeService {
     return this.recipes();
   }
 
-  generateRecipes(): Observable<RecipeDetails[]> {
-    return defer(() => {
-      this.isLoading.set(true);
-      this.errorMessage.set(null);
-      this.generatedRecipes.set([]);
-      this.state.generatedPreferences.set(null);
+  private getHttpErrorMessage(error: HttpErrorResponse): string {
+    if (error.status === 404) {
+      return typeof error.error === 'string' && error.error.includes('Cannot POST')
+        ? 'Recipe requests are not being forwarded. Please restart the app server and try again.'
+        : 'The recipe workflow could not be reached. Please check that it is active and its webhook address is correct.';
+    }
+    return error.status === 0 || error.status >= 500
+      ? 'The recipe service is unavailable. Please try again shortly.'
+      : 'The recipe request failed. Please try again.';
+  }
 
-      const request = {
-        ingredients: this.ingredients().map((ingredient) => ({ ...ingredient })),
-        preferences: { ...this.preferences() },
-      };
-      return this.generator.generateRecipes(request).pipe(
-        tap((recipes) => {
-          this.generatedRecipes.set(recipes);
-          this.state.generatedPreferences.set(request.preferences);
-        }),
-      );
-    }).pipe(
-      catchError((error: unknown) => {
-        let message = 'Could not generate recipes. Please try again.';
-        if (error instanceof TimeoutError) {
-          message = 'Recipe generation took too long. Please try again.';
-        } else if (error instanceof HttpErrorResponse) {
-          if (error.status === 404) {
-            message = typeof error.error === 'string' && error.error.includes('Cannot POST')
-              ? 'Recipe requests are not being forwarded. Please restart the app server and try again.'
-              : 'The recipe workflow could not be reached. Please check that it is active and its webhook address is correct.';
-          } else {
-            message = error.status === 0 || error.status >= 500
-              ? 'The recipe service is unavailable. Please try again shortly.'
-              : 'The recipe request failed. Please try again.';
-          }
-        } else if (error instanceof Error) {
-          message = error.message;
-        }
-        this.errorMessage.set(message);
-        return throwError(() => new Error(message));
+  private resolveErrorMessage(error: unknown): string {
+    if (error instanceof TimeoutError) {
+      return 'Recipe generation took too long. Please try again.';
+    }
+    if (error instanceof HttpErrorResponse) {
+      return this.getHttpErrorMessage(error);
+    }
+    if (error instanceof Error) {
+      return error.message;
+    }
+    return 'Could not generate recipes. Please try again.';
+  }
+
+  private prepareGenerationRequest(): GenerateRecipeRequest {
+    return {
+      ingredients: this.ingredients().map((ingredient) => ({ ...ingredient })),
+      preferences: { ...this.preferences() },
+    };
+  }
+
+  private executeRecipeGeneration(): Observable<RecipeDetails[]> {
+    this.isLoading.set(true);
+    this.errorMessage.set(null);
+    this.generatedRecipes.set([]);
+    this.state.generatedPreferences.set(null);
+    const request = this.prepareGenerationRequest();
+    return this.generator.generateRecipes(request).pipe(
+      tap((recipes) => {
+        this.generatedRecipes.set(recipes);
+        this.state.generatedPreferences.set(request.preferences);
       }),
+    );
+  }
+
+  private handleGenerationError(error: unknown): Observable<never> {
+    const message = this.resolveErrorMessage(error);
+    this.errorMessage.set(message);
+    return throwError(() => new Error(message));
+  }
+
+  generateRecipes(): Observable<RecipeDetails[]> {
+    return defer(() => this.executeRecipeGeneration()).pipe(
+      catchError((error: unknown) => this.handleGenerationError(error)),
       finalize(() => this.isLoading.set(false)),
     );
   }

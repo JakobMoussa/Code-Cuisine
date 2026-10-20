@@ -45,21 +45,18 @@ export class Ingredients {
 
   readonly hasIngredients = computed(() => this.ingredients().length > 0);
 
-  addIngredient(): void {
-    const name = this.ingredientName().trim();
-    if (!name || !Number.isFinite(this.ingredientAmount()) || this.ingredientAmount() <= 0) return;
-
-    this.ingredients.update((list) => [
-      ...list,
-      {
-        name,
-        amount: this.ingredientAmount(),
-        unit: this.ingredientUnit(),
-      },
-    ]);
-
+  private resetIngredientInputs(): void {
     this.ingredientName.set('');
     this.ingredientAmount.set(100);
+  }
+
+  addIngredient(): void {
+    const name = this.ingredientName().trim();
+    const amount = this.ingredientAmount();
+    if (!name || !Number.isFinite(amount) || amount <= 0) return;
+
+    this.ingredients.update((list) => [...list, { name, amount, unit: this.ingredientUnit() }]);
+    this.resetIngredientInputs();
   }
 
   removeIngredient(index: number): void {

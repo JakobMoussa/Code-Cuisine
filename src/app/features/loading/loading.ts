@@ -10,7 +10,7 @@ import {
 import { Router, RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Navbar } from '../../shared/navbar/navbar';
-import { RecipeService } from '../../core/services/recipe.service';
+import { RecipeService, Ingredient } from '../../core/services/recipe.service';
 
 @Component({
   selector: 'app-loading',
@@ -52,42 +52,38 @@ export class Loading implements OnInit, OnDestroy {
     this.startGeneration();
   }
 
+  private hasMinimumIngredientCount(count: number, portions: number): boolean {
+    if (portions >= 6 && count < 3) return false;
+    if (portions >= 4 && count < 2) return false;
+    return count > 0;
+  }
+
+  private getIngredientWeight(item: Ingredient): number {
+    const amount = Number(item.amount) || 0;
+    const unit = (item.unit || '').toLowerCase().trim();
+    return unit === 'piece' ? amount * 80 : amount;
+  }
+
+  private hasSufficientWeight(ingredients: Ingredient[], portions: number): boolean {
+    const totalWeight = ingredients.reduce((sum, item) => sum + this.getIngredientWeight(item), 0);
+    return portions < 1 || (totalWeight / portions) >= 65;
+  }
+
+  private hasSufficientPieces(ingredients: Ingredient[], portions: number): boolean {
+    const isPiece = (item: Ingredient) => (item.unit || '').toLowerCase().trim() === 'piece';
+    if (!ingredients.every(isPiece)) return true;
+    const totalPieces = ingredients.reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
+    return portions < 3 || totalPieces >= Math.ceil(portions / 2);
+  }
+
   hasEnoughIngredients(): boolean {
     const ingredients = this.recipeService.ingredients();
     const portions = this.recipeService.preferences().portions;
-
-    if (!ingredients.length) return false;
-
-    if (portions >= 4 && ingredients.length < 2) {
-      return false;
-    }
-    if (portions >= 6 && ingredients.length < 3) {
-      return false;
-    }
-
-    const totalWeight = ingredients.reduce((sum, item) => {
-      const amount = Number(item.amount) || 0;
-      const unit = (item.unit || '').toLowerCase().trim();
-      if (unit === 'gram' || unit === 'g') return sum + amount;
-      if (unit === 'ml') return sum + amount;
-      if (unit === 'piece') return sum + amount * 80;
-      return sum + amount;
-    }, 0);
-
-    const minWeightPerPortion = 65;
-    if (portions >= 1 && totalWeight / portions < minWeightPerPortion) {
-      return false;
-    }
-
-    const onlyPieces = ingredients.every((item) => (item.unit || '').toLowerCase().trim() === 'piece');
-    const totalPieces = ingredients.reduce((sum, item) => {
-      return (item.unit || '').toLowerCase().trim() === 'piece' ? sum + (Number(item.amount) || 0) : sum;
-    }, 0);
-    if (onlyPieces && totalPieces < Math.ceil(portions / 2) && portions >= 3) {
-      return false;
-    }
-
-    return true;
+    return (
+      this.hasMinimumIngredientCount(ingredients.length, portions) &&
+      this.hasSufficientWeight(ingredients, portions) &&
+      this.hasSufficientPieces(ingredients, portions)
+    );
   }
 
   closePopup(): void {

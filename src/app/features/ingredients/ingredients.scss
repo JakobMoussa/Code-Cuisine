@@ -115,8 +115,6 @@
       box-shadow var(--transition-base),
       background-color var(--transition-base);
 
-    -moz-appearance: textfield;
-
     &::-webkit-outer-spin-button,
     &::-webkit-inner-spin-button {
       -webkit-appearance: none;
@@ -446,6 +444,24 @@
   to {
     opacity: 1;
     transform: scale(1) translateX(0);
+  }
+}
+
+@media (max-width: 980px) {
+  .generate {
+    max-width: 900px;
+  }
+}
+
+@media (max-width: 949px) {
+  .generate {
+    max-width: 850px;
+  }
+}
+
+@media (max-width: 880px) {
+  .generate {
+    max-width: 750px;
   }
 }
 

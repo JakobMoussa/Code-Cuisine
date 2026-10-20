@@ -139,7 +139,6 @@
   cursor: pointer;
 
   &:hover {
-    background-color: #FAF0E6B2;
     transform: translateX(3px);
   }
 
@@ -284,5 +283,53 @@
       opacity: 0.5;
       cursor: default;
     }
+  }
+}
+
+@media (max-width: 499px) {
+  .indian-page {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .indian-header {
+    order: 1;
+  }
+
+  .indian-main {
+    order: 2;
+  }
+
+  .indian-header__right {
+    order: 3;
+    justify-content: center;
+    margin-top: 32px;
+  }
+
+  .indian-header__generate-btn {
+    margin-right: 0;
+    margin-bottom: 0;
+    font-size: 16px;
+  }
+
+  .indian-banner {
+    margin-bottom: 20px;
+
+    &__image {
+      max-width: 100%;
+      height: auto;
+    }
+
+    &__title {
+      font-size: 22px;
+    }
+  }
+
+  .indian-header__back-text {
+    display: none;
+  }
+
+  .recipe-row:nth-child(even) {
+    background-color: #FAF0E6B2;
   }
 }

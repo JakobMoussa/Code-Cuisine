@@ -187,3 +187,9 @@ ol {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--color-green-deep);
 }
+
+@media (max-width: 499px) {
+  .recipe-row:nth-child(even) {
+    background-color: #FAF0E6B2;
+  }
+}

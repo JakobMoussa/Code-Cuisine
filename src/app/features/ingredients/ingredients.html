@@ -10,7 +10,7 @@
     </header>
 
     <div class="generate__workspace">
-      <div class="generate__input-panel" id="input-panel">
+      <div class="generate__input-panel" id="input-panel" [class.is-dropdown-open]="isOpen()">
         <div class="generate__input-row">
           <div class="generate__field">
             <label for="ingredient-name" class="generate__label">Ingredient</label>

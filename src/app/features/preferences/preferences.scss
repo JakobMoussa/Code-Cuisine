@@ -254,6 +254,24 @@
   }
 }
 
+@media (max-width:499px) {
+  .preferences__stepper-group {
+    align-items: flex-start;
+  }
+
+  .preferences__steppers {
+    justify-content: flex-start;
+  }
+
+  .preferences__title {
+    text-align: start;
+  }
+
+  .preferences__top-nav {
+    padding: 0 50px 0 20px;
+  }
+}
+
 @media (max-width: 425px) {
   .preferences__top-nav span {
     display: none;

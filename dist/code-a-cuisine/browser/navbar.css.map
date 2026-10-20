@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/shared/navbar/navbar.scss"],
+  "sourcesContent": [".navbar {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  padding: var(--space-lg) var(--space-2xl);\n  position: relative;\n  z-index: 10;\n\n  &__logo {\n    display: flex;\n    align-items: center;\n    gap: var(--space-sm);\n    transition: opacity var(--transition-fast);\n\n    &:hover {\n      opacity: 0.8;\n    }\n  }\n\n  &__logo-img {\n    height: 52px;\n    width: auto;\n  }\n}\n\n@media (max-width: 1000px) {\n  .navbar {\n    padding: 40px;\n  }\n}\n\n@media (max-width: 770px) {\n  .navbar {\n    padding: 28px;\n  }\n}\n\n@media (max-width: 680px) {\n  .navbar {\n    padding: 20px;\n  }\n}\n\n@media (max-width: 425px) {\n  .navbar__logo-img {\n    height: 32px;\n  }\n}"],
+  "mappings": ";AAAA,CAAA;AACE,WAAA;AACA,eAAA;AACA,mBAAA;AACA,WAAA,IAAA,YAAA,IAAA;AACA,YAAA;AACA,WAAA;;AAEA,CAAA;AACE,WAAA;AACA,eAAA;AACA,OAAA,IAAA;AACA,cAAA,QAAA,IAAA;;AAEA,CANF,YAME;AACE,WAAA;;AAIJ,CAAA;AACE,UAAA;AACA,SAAA;;AAIJ,QAAA,WAAA;AACE,GA1BF;AA2BI,aAAA;;;AAIJ,QAAA,WAAA;AACE,GAhCF;AAiCI,aAAA;;;AAIJ,QAAA,WAAA;AACE,GAtCF;AAuCI,aAAA;;;AAIJ,QAAA,WAAA;AACE,GAzBA;AA0BE,YAAA;;;",
+  "names": []
+}

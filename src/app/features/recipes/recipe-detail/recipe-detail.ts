@@ -20,6 +20,8 @@ export class RecipeDetail implements OnInit {
   recipe?: RecipeDetails;
   chefs: number[] = [];
   isFavorite = false;
+  showIngredients = false;
+  showDirections = false;
 
   ngOnInit(): void {
     this.route.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
@@ -27,6 +29,8 @@ export class RecipeDetail implements OnInit {
       this.recipe = this.recipeService.getRecipeById(id);
       this.chefs = Array.from({ length: this.recipe?.cookingPersons ?? 0 }, (_, index) => index + 1);
       this.isFavorite = false;
+      this.showIngredients = false;
+      this.showDirections = false;
       this.cdr.markForCheck();
       if (!this.recipe) void this.router.navigate(['/generate'], { replaceUrl: true });
     });
@@ -41,5 +45,13 @@ export class RecipeDetail implements OnInit {
         this.recipe.likes--;
       }
     }
+  }
+
+  toggleIngredients(): void {
+    this.showIngredients = !this.showIngredients;
+  }
+
+  toggleDirections(): void {
+    this.showDirections = !this.showDirections;
   }
 }

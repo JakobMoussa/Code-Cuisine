@@ -471,12 +471,33 @@
   }
 }
 
+@media (max-width: 499px) {
+  .generate {
+    &__action {
+      justify-content: center;
+    }
+
+    &__input-panel {
+      transition: padding-bottom var(--transition-base, 250ms ease);
+
+      &.is-dropdown-open,
+      &:has(.generate__select-options:not(.generate__select-options--chip)) {
+        padding-bottom: 115px;
+      }
+    }
+  }
+}
+
 @media (max-width: 425px) {
 
   .generate {
     &__header {
       text-align: start;
       display: grid;
+    }
+
+    &__action {
+      justify-content: center;
     }
 
     &__title {
@@ -498,3 +519,5 @@
     }
   }
 }
+
+@media (max-width: 375px) {}

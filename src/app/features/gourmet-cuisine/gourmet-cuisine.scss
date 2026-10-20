@@ -285,4 +285,53 @@
       cursor: default;
     }
   }
+ }
+
+@media (max-width: 499px) {
+  .gourmet-page {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .gourmet-header {
+    order: 1;
+  }
+
+  .gourmet-main {
+    order: 2;
+  }
+
+  .gourmet-header__right {
+    order: 3;
+    justify-content: center;
+    margin-top: 32px;
+  }
+
+  .gourmet-header__generate-btn {
+    margin-right: 0;
+    margin-bottom: 0;
+    font-size: 16px;
+  }
+
+  .gourmet-banner {
+    margin-bottom: 20px;
+
+    &__image {
+      max-width: 100%;
+      height: auto;
+    }
+
+    &__title {
+      font-size: 22px;
+    }
+  }
+
+  .gourmet-header__back-text {
+    display: none;
+  }
+
+  .recipe-row:nth-child(even) {
+    background-color: #FAF0E6B2;
+  }
 }
+

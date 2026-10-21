@@ -1,17 +1,21 @@
 # Code à Cuisine
 
-Angular recipe UI connected to the local n8n / Google Gemini workflow.
+AI-Powered Recipe Generator built with Angular, connected to an n8n / Google Gemini workflow.
+
+## 🌐 Live Demo
+
+Die Anwendung ist live erreichbar unter:  
+👉 **[https://jakob-moussa.developerakademie.net/code-a-cuisine/](https://jakob-moussa.developerakademie.net/code-a-cuisine/)**
+
+---
 
 ## Local development
 
 Run `npm start`, then open the URL printed by Angular (normally http://localhost:4200).
-Keep n8n running with the existing production webhook active at
-`http://localhost:5678/webhook/generate-recipes`.
+Keep n8n running with the production webhook active at
+`https://workflow-code.app.n8n.cloud/webhook/generate-recipes` (or local instance).
 
-The browser posts to `/api/n8n/generate-recipes`. The development proxy in
-`proxy.conf.json`, enabled in `angular.json`, forwards it to n8n's `/webhook/generate-recipes`.
-Restart an already running Angular server after changing the proxy configuration.
-See [Angular's proxy documentation](https://angular.dev/tools/cli/serve#proxying-to-a-backend-server).
+The browser posts to the configured `environment.n8nWebhookUrl`.
 Gemini credentials remain in n8n; no frontend API key is needed.
 
 ## Generation flow
@@ -50,10 +54,15 @@ The response is `{ "recipes": [...] }` with exactly three recipe objects contain
 `amount`; steps have `number`, `title`, `description`, and `chef`. Missing nutrition
 is displayed as a dash, and incomplete recipes show the retry state.
 
+## Build & Deployment
+
+- **Production Build:**
+  ```bash
+  npm run build -- --base-href /code-a-cuisine/
+  ```
+- Den Inhalt aus `dist/code-a-cuisine/browser/` direkt per FTP / FileZilla in den Remote-Ordner `code-a-cuisine/` auf dem Server hochladen.
+
 ## Verification
 
 - `npm run build` — production build and Angular template checks.
 - `npm test -- --watch=false` — unit and routed generation-flow tests.
-
-For production hosting, configure the hosting server to forward `/api/n8n/*` to n8n.
-The Angular development proxy is only used by `ng serve`.

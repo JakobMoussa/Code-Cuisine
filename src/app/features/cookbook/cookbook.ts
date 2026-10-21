@@ -54,37 +54,37 @@ export class Cookbook {
       id: 'italian',
       name: 'Italian cuisine',
       emoji: '🤌',
-      image: '/assets/1.recipe.png',
+      image: 'assets/1.recipe.png',
     },
     {
       id: 'german',
       name: 'German cuisine',
       emoji: '🥨',
-      image: '/assets/2.recipe.png',
+      image: 'assets/2.recipe.png',
     },
     {
       id: 'japanese',
       name: 'Japanese cuisine',
       emoji: '🥢',
-      image: '/assets/3.recipe.png',
+      image: 'assets/3.recipe.png',
     },
     {
       id: 'gourmet',
       name: 'Gourmet cuisine',
       emoji: '🍷',
-      image: '/assets/4.recipe.png',
+      image: 'assets/4.recipe.png',
     },
     {
       id: 'indian',
       name: 'Indian cuisine',
       emoji: '🍱',
-      image: '/assets/5.recipe.png',
+      image: 'assets/5.recipe.png',
     },
     {
       id: 'fusion',
       name: 'Fusion cuisine',
       emoji: '🍱',
-      image: '/assets/6.recipe.png',
+      image: 'assets/6.recipe.png',
     },
   ];
 }

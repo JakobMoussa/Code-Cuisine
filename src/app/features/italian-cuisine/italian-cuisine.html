@@ -2,11 +2,11 @@
     <header class="italian-header">
         <div class="italian-header__left">
             <a routerLink="/" class="italian-header__logo-link" id="italian-logo">
-                <img src="/assets/logo-green.svg" alt="Code à Cuisine Logo" class="italian-header__logo" />
+                <img src="assets/logo-green.svg" alt="Code à Cuisine Logo" class="italian-header__logo" />
             </a>
             <a routerLink="/cookbook" class="italian-header__back-btn" id="italian-back-btn">
                 <span class="italian-header__back-arrow">
-                    <img class="back-arrow" src="/assets/back-arrow.svg" alt="arrow">
+                    <img class="back-arrow" src="assets/back-arrow.svg" alt="arrow">
                 </span>
                 <span class="italian-header__back-text">Cookbook</span>
             </a>
@@ -20,8 +20,8 @@
 
     <main class="italian-main">
         <section class="italian-banner" id="italian-banner-section">
-            <img src="/assets/Italian-food.png" alt="Italian food banner" class="italian-banner__image" />
-            <img src="/assets/italian-cuisine Mob.svg" alt="Ingredients deco" class="italian-cuisine-mob" />
+            <img src="assets/Italian-food.png" alt="Italian food banner" class="italian-banner__image" />
+            <img src="assets/italian-cuisine Mob.svg" alt="Ingredients deco" class="italian-cuisine-mob" />
 
             <h1 class="italian-banner__title">Italian cuisine</h1>
         </section>
@@ -31,7 +31,7 @@
             <article class="recipe-row" [routerLink]="['/recipe', recipe.id]">
                 <div class="recipe-row__left">
                     <div class="recipe-row__time">
-                        <img src="/assets/schedule.svg" alt="Clock" class="recipe-row__time-icon" />
+                        <img src="assets/schedule.svg" alt="Clock" class="recipe-row__time-icon" />
                         <span>Cooking time: {{ recipe.cookingTime }}</span>
                     </div>
                     <div class="recipe-row__title-group">
@@ -45,7 +45,7 @@
                     <span class="recipe-row__tag">{{ tag }}</span>
                     }
                     <span class="recipe-row__likes">
-                        <img src="/assets/smallheart.svg" alt="Heart" class="recipe-row__heart-icon" />
+                        <img src="assets/smallheart.svg" alt="Heart" class="recipe-row__heart-icon" />
                         <span>{{ recipe.likes }}</span>
                     </span>
                 </div>

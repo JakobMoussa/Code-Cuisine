@@ -1,10 +1,10 @@
 <div class="cookbook-page">
     <header class="cookbook-header">
         <a routerLink="/" class="cookbook-header__logo-link" id="cookbook-logo">
-            <img src="/assets/logo-green.svg" alt="Code à Cuisine Logo" class="cookbook-header__logo" />
+            <img src="assets/logo-green.svg" alt="Code à Cuisine Logo" class="cookbook-header__logo" />
         </a>
         <a routerLink="/" class="cookbook-header__back-btn" id="cookbook-back-btn">
-            <span class="cookbook-header__back-arrow"><img class="back-arrow" src="/assets/back-arrow.svg"
+            <span class="cookbook-header__back-arrow"><img class="back-arrow" src="assets/back-arrow.svg"
                     alt="arrow"></span>
             <span class="cookbook-header__back-text">Back</span>
         </a>
@@ -23,7 +23,7 @@
             <div class="cookbook-hero__right">
                 <div class="cookbook-hero__recipes-header">
                     <h2 class="cookbook-hero__recipes-title">Most liked recipes</h2>
-                    <img class="cookbook-hero__heart-icon" src="/assets/heart.svg">
+                    <img class="cookbook-hero__heart-icon" src="assets/heart.svg">
                 </div>
 
                 <div class="cookbook-hero__cards-scroll" id="cookbook-cards-scroll">
@@ -31,11 +31,11 @@
                     <article class="recipe-card" [routerLink]="['/recipe', recipe.id]" style="cursor: pointer;">
                         <div class="recipe-card__meta">
                             <div class="recipe-card__time">
-                                <img src="/assets/schedule.svg" alt="Clock" class="recipe-card__time-icon" />
+                                <img src="assets/schedule.svg" alt="Clock" class="recipe-card__time-icon" />
                                 <span>Cooking time: {{ recipe.cookingTime }}</span>
                             </div>
                             <div class="recipe-card__badge">
-                                <img class="recipe-card__heart-icon" src="/assets/smallheart.svg" alt="Heart">
+                                <img class="recipe-card__heart-icon" src="assets/smallheart.svg" alt="Heart">
                                 <span>{{ recipe.likes }}</span>
                             </div>
                         </div>
@@ -66,7 +66,7 @@
         <footer>
             <div class="footer__section">
                 <span class="footer__text">Generate new recipie</span>
-                <img class="footer__back-arrow" src="/assets/back-arrow.svg" alt="Back Arrow">
+                <img class="footer__back-arrow" src="assets/back-arrow.svg" alt="Back Arrow">
             </div>
         </footer>
     </main>

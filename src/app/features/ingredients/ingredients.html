@@ -28,7 +28,7 @@
                 <button type="button" class="generate__select-trigger" (click)="toggleDropdown()"
                   aria-label="Select unit">
                   <span>{{ ingredientUnit() }}</span>
-                  <img src="/assets/arrow_drop_down.svg" alt="" class="generate__select-arrow" />
+                  <img src="assets/arrow_drop_down.svg" alt="" class="generate__select-arrow" />
                 </button>
                 @if (isOpen()) {
                 <div class="generate__select-options">
@@ -46,7 +46,7 @@
 
           <button class="generate__add-btn" id="btn-add-ingredient" (click)="addIngredient()"
             [disabled]="!ingredientName()" aria-label="Add ingredient">
-            <img src="/assets/add-btn.svg" alt="Add" class="generate__add-icon" />
+            <img src="assets/add-btn.svg" alt="Add" class="generate__add-icon" />
           </button>
         </div>
       </div>
@@ -61,7 +61,7 @@
             @if (editingIndex() === $index) {
             <span class="generate__chip generate__chip--editing">
               <div class="generate__chip-left">
-                <img src="/assets/point.svg" alt="Point" class="generate__list_point" />
+                <img src="assets/point.svg" alt="Point" class="generate__list_point" />
                 <input type="number" class="generate__number-input generate__number-input--chip" min="1"
                   [ngModel]="editAmount()" (ngModelChange)="editAmount.set($event)"
                   (keydown)="onEditKeydown($event, $index)" />
@@ -70,7 +70,7 @@
                   <button type="button" class="generate__select-trigger generate__select-trigger--chip"
                     (click)="toggleEditDropdown()" aria-label="Select unit">
                     <span>{{ editUnit() }}</span>
-                    <img src="/assets/arrow_drop_down.svg" alt="" class="generate__select-arrow" />
+                    <img src="assets/arrow_drop_down.svg" alt="" class="generate__select-arrow" />
                   </button>
                   @if (editDropdownOpen()) {
                   <div class="generate__select-options generate__select-options--chip">
@@ -90,29 +90,29 @@
               <div class="generate__chip-actions">
                 <button type="button" class="generate__chip-btn generate__chip-btn--save" (click)="saveEdit($index)"
                   aria-label="Save changes">
-                  <img src="/assets/check.svg" alt="Check" class="generate__chip-btn-icon" />
+                  <img src="assets/check.svg" alt="Check" class="generate__chip-btn-icon" />
                 </button>
                 <button type="button" class="generate__chip-btn" (click)="removeIngredient($index)"
                   [attr.aria-label]="'Remove ' + item.name">
-                  <img src="/assets/delete.svg" alt="Delete" class="generate__delete-icon" />
+                  <img src="assets/delete.svg" alt="Delete" class="generate__delete-icon" />
                 </button>
               </div>
             </span>
             } @else {
             <span class="generate__chip">
               <div class="generate__chip-left">
-                <img src="/assets/point.svg" alt="Point" class="generate__list_point" />
+                <img src="assets/point.svg" alt="Point" class="generate__list_point" />
                 <span class="generate__chip-amount">{{ item.amount }}{{ unitDisplay(item.unit) }}</span>
                 <span class="generate__chip-text">{{ item.name }}</span>
               </div>
               <div class="generate__chip-actions">
                 <button type="button" class="generate__chip-btn" (click)="startEdit($index)"
                   [attr.aria-label]="'Edit ' + item.name">
-                  <img src="/assets/edit.svg" alt="Edit" class="generate__edit-icon" />
+                  <img src="assets/edit.svg" alt="Edit" class="generate__edit-icon" />
                 </button>
                 <button type="button" class="generate__chip-btn" (click)="removeIngredient($index)"
                   [attr.aria-label]="'Remove ' + item.name">
-                  <img src="/assets/delete.svg" alt="Delete" class="generate__delete-icon" />
+                  <img src="assets/delete.svg" alt="Delete" class="generate__delete-icon" />
                 </button>
               </div>
             </span>

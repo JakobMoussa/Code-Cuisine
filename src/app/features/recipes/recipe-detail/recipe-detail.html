@@ -2,10 +2,10 @@
   <header class="recipe-detail__navbar">
     <div class="recipe-detail__header-container">
       <a routerLink="/" class="recipe-detail__logo-link">
-        <img src="/assets/logo-green.svg" alt="Code à Cuisine Logo" class="recipe-detail__logo" />
+        <img src="assets/logo-green.svg" alt="Code à Cuisine Logo" class="recipe-detail__logo" />
       </a>
       <a routerLink="/results" class="recipe-detail__back-link">
-        <img src="/assets/back-arrow.svg" alt="Back" class="recipe-detail__back-icon" />
+        <img src="assets/back-arrow.svg" alt="Back" class="recipe-detail__back-icon" />
         <span>Recipe results</span>
       </a>
     </div>
@@ -18,7 +18,7 @@
       <div class="recipe-detail__hero-card">
         <div class="recipe-detail__hero-left">
           <div class="recipe-detail__time-row">
-            <img src="/assets/clock.svg" alt="Clock" class="recipe-detail__clock-icon" />
+            <img src="assets/clock.svg" alt="Clock" class="recipe-detail__clock-icon" />
             <span>Coocking time: {{ recipe.cookingTime }}</span>
           </div>
 
@@ -28,7 +28,7 @@
             <span class="recipe-detail__person-label">Coocking person: {{ recipe.cookingPersons }}</span>
             @for (chef of chefs; track chef) {
             <span class="recipe-detail__chef-pill" [class.chef-1]="chef === 1" [class.chef-2]="chef !== 1">
-              <img [src]="chef === 1 ? '/assets/koch.svg' : '/assets/cook.svg'" [alt]="'Chef ' + chef"
+              <img [src]="chef === 1 ? 'assets/koch.svg' : 'assets/cook.svg'" [alt]="'Chef ' + chef"
                 class="recipe-detail__chef-icon" />
               Chef {{ chef }}
             </span>
@@ -42,7 +42,7 @@
             <span class="recipe-detail__tag">{{ tag }}</span>
             }
             <button type="button" class="recipe-detail__like-btn" (click)="toggleFavorite()">
-              <img [src]="isFavorite ? '/assets/green-heart.svg' : '/assets/heart.svg'" alt="Heart"
+              <img [src]="isFavorite ? 'assets/green-heart.svg' : 'assets/heart.svg'" alt="Heart"
                 class="recipe-detail__like-icon" />
               <span>{{ recipe.likes }}</span>
             </button>
@@ -75,8 +75,8 @@
       <section class="recipe-detail__section">
         <div class="recipe-detail__section-banner">
           <div class="recipe-detail__banner-deco deco-right">
-            <img src="/assets/Hero Directions.png" alt="Ingredients deco" class="recipe-detail__deco-hero deco-right" />
-            <img src="/assets/ingredients-mob.svg" alt="Ingredients deco" class="recipe-detail__deco-mob deco-right" (click)="toggleIngredients()" />
+            <img src="assets/Hero Directions.png" alt="Ingredients deco" class="recipe-detail__deco-hero deco-right" />
+            <img src="assets/ingredients-mob.svg" alt="Ingredients deco" class="recipe-detail__deco-mob deco-right" (click)="toggleIngredients()" />
             <h2 class="recipe-detail__section-title">Ingredients</h2>
           </div>
         </div>
@@ -111,7 +111,7 @@
 
         <button type="button" class="recipe-detail__toggle-ingredients-btn" (click)="toggleIngredients()">
           <span>{{ showIngredients ? 'Hide ingredients' : 'Show ingredients' }}</span>
-          <img src="/assets/arrow_drop_down.svg" alt="" class="recipe-detail__toggle-arrow"
+          <img src="assets/arrow_drop_down.svg" alt="" class="recipe-detail__toggle-arrow"
             [class.is-open]="showIngredients" />
         </button>
       </section>
@@ -119,8 +119,8 @@
       <section class="recipe-detail__section">
         <div class="recipe-detail__section-banner">
           <div class="recipe-detail__banner-deco deco-right">
-            <img src="/assets/Hero Ingredients.png" alt="Directions deco" class="recipe-detail__deco-hero deco-right" />
-            <img src="/assets/directions-mob.svg" alt="Directions deco" class="recipe-detail__deco-mob deco-right" (click)="toggleDirections()" />
+            <img src="assets/Hero Ingredients.png" alt="Directions deco" class="recipe-detail__deco-hero deco-right" />
+            <img src="assets/directions-mob.svg" alt="Directions deco" class="recipe-detail__deco-mob deco-right" (click)="toggleDirections()" />
             <h2 class="recipe-detail__section-title">Directions</h2>
           </div>
         </div>
@@ -136,9 +136,9 @@
               <span class="recipe-detail__chef-pill" [class.chef-1]="step.chef === 'Chef 1'"
                 [class.chef-2]="step.chef !== 'Chef 1'">
                 @if (step.chef === 'Chef 1') {
-                <img src="/assets/koch.svg" [alt]="step.chef" class="recipe-detail__chef-icon" />
+                <img src="assets/koch.svg" [alt]="step.chef" class="recipe-detail__chef-icon" />
                 } @else {
-                <img src="/assets/cook.svg" [alt]="step.chef" class="recipe-detail__chef-icon" />
+                <img src="assets/cook.svg" [alt]="step.chef" class="recipe-detail__chef-icon" />
                 }
                 {{ step.chef }}
               </span>
@@ -150,7 +150,7 @@
 
         <button type="button" class="recipe-detail__toggle-directions-btn" (click)="toggleDirections()">
           <span>{{ showDirections ? 'Hide directions' : 'Show directions' }}</span>
-          <img src="/assets/arrow_drop_down.svg" alt="" class="recipe-detail__toggle-arrow"
+          <img src="assets/arrow_drop_down.svg" alt="" class="recipe-detail__toggle-arrow"
             [class.is-open]="showDirections" />
         </button>
       </section>
@@ -161,7 +161,7 @@
           <span class="recipe-detail__finish-sub">Give it a heart, so that the others know this is delicious.</span>
         </div>
         <button type="button" class="recipe-detail__heart-action-btn" (click)="toggleFavorite()">
-          <img [src]="isFavorite ? '/assets/green-heart.svg' : '/assets/heart.svg'" alt="Heart"
+          <img [src]="isFavorite ? 'assets/green-heart.svg' : 'assets/heart.svg'" alt="Heart"
             class="recipe-detail__large-heart" />
         </button>
       </div>
@@ -176,7 +176,7 @@
     <footer class="recipe-detail__footer">
       <a routerLink="/generate" class="recipe-detail__generate-link">
         Generate new recipie
-        <img src="/assets/back-arrow.svg" alt="Arrow" class="recipe-detail__arrow-icon" />
+        <img src="assets/back-arrow.svg" alt="Arrow" class="recipe-detail__arrow-icon" />
       </a>
     </footer>
 

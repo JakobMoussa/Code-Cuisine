@@ -35,7 +35,7 @@ export class Loading implements OnInit, OnDestroy {
 
   public get currentImage(): string {
     const frameNumber = String(this.currentFrame).padStart(5, '0');
-    return `/assets/loading_animations/Code_Cuisine_${frameNumber}.png`;
+    return `assets/loading_animations/Code_Cuisine_${frameNumber}.png`;
   }
 
   ngOnInit(): void {

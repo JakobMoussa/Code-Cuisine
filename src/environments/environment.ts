@@ -1,4 +1,4 @@
 export const environment = {
-  production: false,
-  n8nWebhookUrl: '/api/n8n/generate-recipes',
+  production: true,
+  n8nWebhookUrl: 'https://workflow-code.app.n8n.cloud/webhook/generate-recipes',
 };

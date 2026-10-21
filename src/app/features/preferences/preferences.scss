@@ -94,13 +94,19 @@
     cursor: pointer;
     transition: transform var(--transition-fast), opacity var(--transition-fast);
 
-    &:hover {
+    &:hover:not(:disabled) {
       opacity: 0.8;
       transform: scale(1.05);
     }
 
-    &:active {
+    &:active:not(:disabled) {
       transform: scale(0.95);
+    }
+
+    &:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+      pointer-events: none;
     }
   }
 

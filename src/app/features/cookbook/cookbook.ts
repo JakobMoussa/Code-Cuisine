@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { RecipeStateService } from '../../core/services/recipe-state.service';
 
 export interface Recipe {
   id: string;
@@ -22,32 +23,9 @@ export interface Cuisine {
   styleUrl: './cookbook.scss',
 })
 export class Cookbook {
-  mostLikedRecipes: Recipe[] = [
-    {
-      id: '1',
-      title: 'Pasta with spinach and cherry tomatoes',
-      cookingTime: '20min',
-      likes: 66,
-    },
-    {
-      id: '2',
-      title: 'Low Carb Vegan No-Bake Paleo Bars',
-      cookingTime: '35min',
-      likes: 57,
-    },
-    {
-      id: '3',
-      title: 'Schnitzel with Warm Potato Salad',
-      cookingTime: '45min',
-      likes: 42,
-    },
-    {
-      id: '4',
-      title: 'Gourmet Truffle Mushroom Risotto',
-      cookingTime: '30min',
-      likes: 89,
-    },
-  ];
+  private readonly state = inject(RecipeStateService);
+
+  readonly mostLikedRecipes = this.state.likedRecipes;
 
   cuisines: Cuisine[] = [
     {

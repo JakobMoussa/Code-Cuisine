@@ -181,16 +181,37 @@ export class Ingredients {
     this.isOpen.update((v) => !v);
   }
 
+  readonly maxServingAmount = computed(() => (this.ingredientUnit() === 'piece' ? 15 : 1000));
+  readonly maxEditAmount = computed(() => (this.editUnit() === 'piece' ? 15 : 1000));
+
   selectUnit(unit: string): void {
     this.ingredientUnit.set(unit);
     this.isOpen.set(false);
+    const max = unit === 'piece' ? 15 : 1000;
+    if (this.ingredientAmount() > max) {
+      this.ingredientAmount.set(unit === 'piece' ? 1 : max);
+    } else if (unit === 'piece' && this.ingredientAmount() === 100) {
+      this.ingredientAmount.set(1);
+    }
+  }
+
+  onAmountInput(value: number | null): void {
+    if (value === null) return;
+    const max = this.maxServingAmount();
+    if (value > max) {
+      this.ingredientAmount.set(max);
+    } else if (value < 1) {
+      this.ingredientAmount.set(1);
+    } else {
+      this.ingredientAmount.set(value);
+    }
   }
 
   readonly hasIngredients = computed(() => this.ingredients().length > 0);
 
   private resetIngredientInputs(): void {
     this.ingredientName.set('');
-    this.ingredientAmount.set(100);
+    this.ingredientAmount.set(this.ingredientUnit() === 'piece' ? 1 : 100);
   }
 
   addIngredient(): void {
@@ -241,6 +262,22 @@ export class Ingredients {
   selectEditUnit(unit: string): void {
     this.editUnit.set(unit);
     this.editDropdownOpen.set(false);
+    const max = unit === 'piece' ? 15 : 1000;
+    if (this.editAmount() > max) {
+      this.editAmount.set(unit === 'piece' ? 1 : max);
+    }
+  }
+
+  onEditAmountInput(value: number | null): void {
+    if (value === null) return;
+    const max = this.maxEditAmount();
+    if (value > max) {
+      this.editAmount.set(max);
+    } else if (value < 1) {
+      this.editAmount.set(1);
+    } else {
+      this.editAmount.set(value);
+    }
   }
 
   readonly isSuggestionsOpen = signal(false);

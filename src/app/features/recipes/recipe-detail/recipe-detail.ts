@@ -28,7 +28,7 @@ export class RecipeDetail implements OnInit {
       const id = params.get('id') || '1';
       this.recipe = this.recipeService.getRecipeById(id);
       this.chefs = Array.from({ length: this.recipe?.cookingPersons ?? 0 }, (_, index) => index + 1);
-      this.isFavorite = false;
+      this.isFavorite = this.recipe ? this.recipeService.isRecipeLiked(this.recipe.id) : false;
       this.showIngredients = false;
       this.showDirections = false;
       this.cdr.markForCheck();
@@ -37,14 +37,14 @@ export class RecipeDetail implements OnInit {
   }
 
   toggleFavorite(): void {
-    this.isFavorite = !this.isFavorite;
-    if (this.recipe) {
-      if (this.isFavorite) {
-        this.recipe.likes++;
-      } else {
-        this.recipe.likes--;
-      }
+    if (!this.recipe) return;
+    if (this.isFavorite) {
+      this.recipe.likes = Math.max(0, this.recipe.likes - 1);
+    } else {
+      this.recipe.likes++;
     }
+    this.isFavorite = this.recipeService.toggleLikeRecipe(this.recipe);
+    this.cdr.markForCheck();
   }
 
   toggleIngredients(): void {

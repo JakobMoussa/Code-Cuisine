@@ -233,6 +233,16 @@ export class RecipeService {
       ?? this.defaultRecipes.find((recipe) => recipe.id === id);
   }
 
+  readonly likedRecipes = this.state.likedRecipes;
+
+  isRecipeLiked(id: string): boolean {
+    return this.state.isRecipeLiked(id);
+  }
+
+  toggleLikeRecipe(recipe: RecipeDetails): boolean {
+    return this.state.toggleLikeRecipe(recipe);
+  }
+
   getAllRecipes(): RecipeDetails[] {
     return this.recipes();
   }

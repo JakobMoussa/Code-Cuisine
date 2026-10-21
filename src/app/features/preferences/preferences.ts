@@ -47,7 +47,9 @@ export class Preferences {
   readonly selectedDiet = computed(() => this.state.preferences().diet);
 
   incrementPortions(): void {
-    this.state.setPreferences({ portions: this.portions() + 1 });
+    if (this.portions() < 6) {
+      this.state.setPreferences({ portions: this.portions() + 1 });
+    }
   }
 
   decrementPortions(): void {
@@ -55,7 +57,9 @@ export class Preferences {
   }
 
   incrementPersons(): void {
-    this.state.setPreferences({ cookingPersons: this.persons() + 1 });
+    if (this.persons() < 3) {
+      this.state.setPreferences({ cookingPersons: this.persons() + 1 });
+    }
   }
 
   decrementPersons(): void {

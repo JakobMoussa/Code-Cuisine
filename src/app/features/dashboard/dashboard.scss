@@ -73,12 +73,6 @@
     &:hover {
       font-weight: bold;
       background-color: var(--color-cream);
-      transform: translateY(5px);
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
-    }
-
-    &:active {
-      transform: translateY(0);
     }
   }
 
@@ -535,9 +529,21 @@
 
 
 
-@media (max-width: 4000px) {
+@media (min-width: 2560px) and (max-width: 4000px) {
+  .hero {
+    height: 100vh;
+    height: 100dvh;
+    min-height: 100vh;
+    max-height: 100vh;
+    overflow: hidden;
+  }
+
   .hero__content {
     align-items: flex-start;
+    height: calc(100vh - 84px);
+    height: calc(100dvh - 84px);
+    min-height: unset;
+    box-sizing: border-box;
   }
 
   .hero__text {

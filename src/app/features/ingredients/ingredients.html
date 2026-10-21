@@ -12,10 +12,23 @@
     <div class="generate__workspace">
       <div class="generate__input-panel" id="input-panel" [class.is-dropdown-open]="isOpen()">
         <div class="generate__input-row">
-          <div class="generate__field">
+          <div class="generate__field generate__field--ingredient">
             <label for="ingredient-name" class="generate__label">Ingredient</label>
-            <input id="ingredient-name" type="text" class="generate__text-input" [ngModel]="ingredientName()"
-              (ngModelChange)="ingredientName.set($event)" (keydown)="onKeydown($event)" />
+            <div class="generate__input-wrapper">
+              <input id="ingredient-name" type="text" class="generate__text-input" [ngModel]="ingredientName()"
+                (ngModelChange)="ingredientName.set($event); isSuggestionsOpen.set(true)"
+                (focus)="isSuggestionsOpen.set(true)" (keydown)="onKeydown($event)" autocomplete="off" />
+
+              @if (isSuggestionsOpen() && filteredSuggestions().length > 0) {
+              <ul class="generate__suggestions-list">
+                @for (item of filteredSuggestions(); track item) {
+                <li class="generate__suggestion-item" (mousedown)="selectSuggestion(item)">
+                  {{ item }}
+                </li>
+                }
+              </ul>
+              }
+            </div>
           </div>
 
           <div class="generate__field generate__field--serving">

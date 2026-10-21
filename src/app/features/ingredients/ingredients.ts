@@ -24,6 +24,149 @@ export class Ingredients {
 
   readonly units = ['ml', 'piece', 'gram'];
 
+  readonly commonIngredients = [
+    'Bacon',
+    'Beef',
+    'Beef tenderloin',
+    'Chicken breast',
+    'Chicken',
+    'Chicken wings',
+    'Duck breast',
+    'Ground beef',
+    'Pork',
+    'Ground turkey',
+    'Ham',
+    'Lamb chops',
+    'Lamb shank',
+    'Pancetta',
+    'Pastrami',
+    'Pork chops',
+    'Pork loin',
+    'Prosciutto',
+    'Salami',
+    'Sausage',
+    'Steak',
+    'Turkey breast',
+    'Veal cutlet',
+
+    'Anchovies',
+    'Calamari',
+    'Cod fish',
+    'Meat',
+    'Halibut',
+    'Lobster',
+    'Mussels',
+    'Salmon fillet',
+    'Sardines',
+    'Scallops',
+    'Sea bass',
+    'Shrimp',
+    'Trout',
+    'Tuna steak',
+
+    'Artichoke',
+    'Asparagus',
+    'Avocado',
+    'Bell pepper',
+    'Broccoli',
+    'Brussels sprouts',
+    'Cabbage',
+    'Carrots',
+    'Cauliflower',
+    'Celery',
+    'Chili pepper',
+    'Corn',
+    'Cucumber',
+    'Eggplant',
+    'Garlic',
+    'Green beans',
+    'Kale',
+    'Leek',
+    'Lettuce',
+    'Mushrooms (Champignon)',
+    'Onion',
+    'Paprika',
+    'Peas',
+    'Potatoes',
+    'Butternut',
+    'Radish',
+    'Spring onion',
+    'Shallots',
+    'Spinach',
+    'Sweet potatoes',
+    'Tomatoes',
+    'Tomato paste',
+    'Zucchini',
+    'Salat',
+    'Pesto',
+
+    'Cheddar',
+    'Cheese',
+    'Eggs',
+    'Feta cheese',
+    'Gorgonzola',
+    'Gouda',
+    'Heavy cream',
+    'Milk',
+    'Mozzarella',
+    'Oat milk',
+    'Parmesan',
+    'Ricotta',
+    'Sour cream',
+    'Tofu',
+    'Yogurt (Greek)',
+
+    'Basmati rice',
+    'Bread / Toast',
+    'Breadcrumbs',
+    'Brown rice',
+    'Couscous',
+    'Flour',
+    'Gnocchi',
+    'Jasmine rice',
+    'Noodles',
+    'Oats',
+    'Pasta',
+    'Pasta (Penne)',
+    'Pasta (Spaghetti)',
+    'Quinoa',
+    'Rice',
+    'Tortilla wraps',
+
+    'Basil (Fresh)',
+    'Bay leaves',
+    'Chili flakes',
+    'Cilantro / Fresh coriander',
+    'Cinnamon',
+    'Cumin',
+    'Curry powder',
+    'Dill',
+    'Ginger (Fresh)',
+    'Nutmeg',
+    'Oregano',
+    'Parsley',
+    'Pepper (Black)',
+    'Rosemary',
+    'Salt',
+    'Thyme',
+
+    'Balsamic vinegar',
+    'Oil',
+    'Butter',
+    'Coconut milk',
+    'Dijon mustard',
+    'Honey',
+    'Mayonnaise',
+    'Olive oil',
+    'Pesto (Green)',
+    'Pesto (Red)',
+    'Sesame oil',
+    'Soy sauce',
+    'Sugar',
+    'Vegetable broth',
+    'Worcestershire sauce',
+  ];
+
   readonly editingIndex = signal<number | null>(null);
   readonly editAmount = signal(100);
   readonly editUnit = signal('gram');
@@ -100,10 +243,28 @@ export class Ingredients {
     this.editDropdownOpen.set(false);
   }
 
+  readonly isSuggestionsOpen = signal(false);
+
+  readonly filteredSuggestions = computed(() => {
+    const query = this.ingredientName().trim().toLowerCase();
+    if (query.length < 1) return [];
+    return this.commonIngredients
+      .filter((item) => item.toLowerCase().includes(query))
+      .slice(0, 5);
+  });
+
+  selectSuggestion(name: string): void {
+    this.ingredientName.set(name);
+    this.isSuggestionsOpen.set(false);
+  }
+
   onKeydown(event: KeyboardEvent): void {
     if (event.key === 'Enter') {
       event.preventDefault();
+      this.isSuggestionsOpen.set(false);
       this.addIngredient();
+    } else if (event.key === 'Escape') {
+      this.isSuggestionsOpen.set(false);
     }
   }
 

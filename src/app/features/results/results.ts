@@ -5,6 +5,9 @@ import { RecipeService, RecipeResult } from '../../core/services/recipe.service'
 
 export type { RecipeResult };
 
+/**
+ * Results page component presenting generated recipe summary cards.
+ */
 @Component({
   selector: 'app-results',
   imports: [Navbar, RouterLink],
@@ -17,6 +20,10 @@ export class Results implements OnInit {
 
   readonly recipes = this.recipeService.resultsCards;
   readonly tags = this.recipeService.resultTags;
+
+  /**
+   * Angular lifecycle hook. Redirects to ingredient entry if no generated recipes exist.
+   */
   ngOnInit(): void {
     if (!this.recipes().length) {
       void this.router.navigate(['/generate'], { replaceUrl: true });

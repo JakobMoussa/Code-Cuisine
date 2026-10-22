@@ -2,6 +2,9 @@ import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { RecipeStateService } from '../../core/services/recipe-state.service';
 
+/**
+ * Represents a saved or favorite recipe displayed in the cookbook.
+ */
 export interface Recipe {
   id: string;
   title: string;
@@ -9,6 +12,9 @@ export interface Recipe {
   likes: number;
 }
 
+/**
+ * Represents an international cuisine category item.
+ */
 export interface Cuisine {
   id: string;
   name: string;
@@ -16,6 +22,9 @@ export interface Cuisine {
   image: string;
 }
 
+/**
+ * Cookbook component for browsing favorited recipes and cuisine categories.
+ */
 @Component({
   selector: 'app-cookbook',
   imports: [RouterLink],

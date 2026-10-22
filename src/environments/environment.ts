@@ -1,5 +1,14 @@
+/**
+ * @fileoverview Application environment configuration containing API endpoints and Firebase credentials.
+ */
+
+/**
+ * Global environment configuration object.
+ */
 export const environment = {
+  /** Indicates whether the application is running in production mode */
   production: true,
+  /** Webhook URL for the n8n recipe generation workflow */
   n8nWebhookUrl: 'https://workflow-code.app.n8n.cloud/webhook/generate-recipes',
   firebase: {
     apiKey: 'AIzaSyAn4_6QmT21iiwA9ywVwPuBTGldFnbueh4',

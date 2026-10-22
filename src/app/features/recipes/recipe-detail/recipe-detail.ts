@@ -3,6 +3,9 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RecipeService, RecipeDetails } from '../../../core/services/recipe.service';
 
+/**
+ * Recipe detail component presenting complete instructions and ingredient lists for a single recipe.
+ */
 @Component({
   selector: 'app-recipe-detail',
   standalone: true,
@@ -23,6 +26,9 @@ export class RecipeDetail implements OnInit {
   showIngredients = false;
   showDirections = false;
 
+  /**
+   * Angular lifecycle hook. Subscribes to route parameter changes and loads the recipe.
+   */
   ngOnInit(): void {
     this.route.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(async (params) => {
       const id = params.get('id') || '1';
@@ -42,6 +48,9 @@ export class RecipeDetail implements OnInit {
     });
   }
 
+  /**
+   * Toggles the favorite status of the active recipe and adjusts its like count.
+   */
   toggleFavorite(): void {
     if (!this.recipe) return;
     if (this.isFavorite) {
@@ -53,10 +62,16 @@ export class RecipeDetail implements OnInit {
     this.cdr.markForCheck();
   }
 
+  /**
+   * Toggles the visibility of the ingredients accordion section.
+   */
   toggleIngredients(): void {
     this.showIngredients = !this.showIngredients;
   }
 
+  /**
+   * Toggles the visibility of the cooking directions accordion section.
+   */
   toggleDirections(): void {
     this.showDirections = !this.showDirections;
   }

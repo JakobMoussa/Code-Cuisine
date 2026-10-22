@@ -35,8 +35,8 @@
             <label for="serving-size" class="generate__label">Serving size</label>
             <div class="generate__serving-row">
               <input id="serving-size" type="number" class="generate__number-input" min="1"
-                [max]="maxServingAmount()" [ngModel]="ingredientAmount()"
-                (ngModelChange)="onAmountInput($event)" (keydown)="onKeydown($event)" />
+                [max]="maxServingAmount()" [value]="ingredientAmount()"
+                (input)="onAmountInput($event)" (blur)="onAmountBlur($event)" (keydown)="onKeydown($event)" />
               <div class="generate__custom-select" [class.is-open]="isOpen()">
                 <button type="button" class="generate__select-trigger" (click)="toggleDropdown()"
                   aria-label="Select unit">
@@ -76,8 +76,8 @@
               <div class="generate__chip-left">
                 <img src="assets/point.svg" alt="Point" class="generate__list_point" />
                 <input type="number" class="generate__number-input generate__number-input--chip" min="1"
-                  [max]="maxEditAmount()" [ngModel]="editAmount()"
-                  (ngModelChange)="onEditAmountInput($event)"
+                  [max]="maxEditAmount()" [value]="editAmount()"
+                  (input)="onEditAmountInput($event)" (blur)="onEditAmountBlur($event)"
                   (keydown)="onEditKeydown($event, $index)" />
 
                 <div class="generate__custom-select generate__custom-select--chip" [class.is-open]="editDropdownOpen()">

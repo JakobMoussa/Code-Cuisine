@@ -1,7 +1,18 @@
+/**
+ * @fileoverview Main recipe orchestration service.
+ * Manages ingredients, user preferences, recipe generation calls via webhook,
+ * recipe caching, likes management, and synchronization with Firestore.
+ */
+
+// Angular core and HTTP modules
 import { Injectable, inject, computed } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
+
+// RxJS operators and observables
 import { Observable, TimeoutError, defer, throwError } from 'rxjs';
 import { catchError, finalize, tap } from 'rxjs/operators';
+
+// Service dependencies
 import { RecipeGeneratorService } from './recipe-generator.service';
 import { RecipeFirestoreService } from './recipe-firestore.service';
 import {
@@ -13,23 +24,36 @@ import {
   GenerateRecipeRequest,
 } from './recipe-state.service';
 
+// Type re-exports for consumer convenience
 export type {
   Ingredient, UserPreferences, IngredientItem, RecipeStep, RecipeNutrition,
   RecipeDetails, RecipeResult, GenerateRecipeRequest,
 } from './recipe-state.service';
 
+/**
+ * Main application service coordinating recipe generation, storage, and retrieval.
+ */
 @Injectable({ providedIn: 'root' })
 export class RecipeService {
+  /** Internal shared state service */
   private readonly state = inject(RecipeStateService);
+  /** Service for AI generation via n8n webhook */
   private readonly generator = inject(RecipeGeneratorService);
+  /** Service for cloud persistence via Google Cloud Firestore */
   private readonly firestore = inject(RecipeFirestoreService);
 
+  /** Signal containing current user ingredients */
   readonly ingredients = this.state.ingredients;
+  /** Signal containing active user preferences */
   readonly preferences = this.state.preferences;
+  /** Signal containing generated recipes */
   readonly generatedRecipes = this.state.recipes;
+  /** Signal indicating whether recipe generation is in flight */
   readonly isLoading = this.state.loading;
+  /** Signal holding generation error message */
   readonly errorMessage = this.state.error;
 
+  /** Default fallback recipes provided when no dynamic generation has occurred */
   private readonly defaultRecipes: RecipeDetails[] = [
     {
       id: '1',
@@ -180,10 +204,12 @@ export class RecipeService {
     },
   ];
 
+  /** Computed signal providing generated recipes if available, otherwise default fallbacks */
   readonly recipes = computed(() =>
     this.generatedRecipes().length ? this.generatedRecipes() : this.defaultRecipes
   );
 
+  /** Computed summary cards formatted for the results overview page */
   readonly resultsCards = computed<RecipeResult[]>(() => {
     return this.generatedRecipes().map((r, index) => ({
       id: r.id,
@@ -193,11 +219,23 @@ export class RecipeService {
     }));
   });
 
+  /**
+   * Formats raw cooking time key into a user-friendly label.
+   *
+   * @param cookingTime - Key identifier for time ('quick', 'medium', 'complex').
+   * @returns Formatted label string.
+   */
   private formatTimeLabel(cookingTime?: string): string {
     const timeLabels: Record<string, string> = { quick: 'Quick', medium: 'Medium', complex: 'Complex' };
     return cookingTime ? (timeLabels[cookingTime] ?? cookingTime) : '';
   }
 
+  /**
+   * Builds an array of tag strings reflecting selected user preferences.
+   *
+   * @param prefs - Active user preferences.
+   * @returns Array of tag labels.
+   */
   private buildResultTags(prefs: UserPreferences): string[] {
     const tags: string[] = [];
     if (prefs.cuisine) tags.push(prefs.cuisine);
@@ -206,11 +244,17 @@ export class RecipeService {
     return tags.length > 0 ? tags : ['Italian', 'Quick'];
   }
 
+  /** Computed signal of tags characterizing the active recipe results */
   readonly resultTags = computed<string[]>(() => {
     const prefs = this.state.generatedPreferences() ?? this.preferences();
     return this.buildResultTags(prefs);
   });
 
+  /**
+   * Updates user preferences partially in the shared state.
+   *
+   * @param pref - Partial user preferences object.
+   */
   setPreferences(pref: Partial<UserPreferences>): void {
     this.preferences.update((current) => ({
       ...current,
@@ -218,26 +262,54 @@ export class RecipeService {
     }));
   }
 
+  /**
+   * Sets the full ingredients list in the state.
+   *
+   * @param list - Array of ingredients.
+   */
   setIngredients(list: Ingredient[]): void {
     this.ingredients.set(list);
   }
 
+  /**
+   * Appends an ingredient to the current list.
+   *
+   * @param item - The ingredient to add.
+   */
   addIngredient(item: Ingredient): void {
     this.ingredients.update((list) => [...list, item]);
   }
 
+  /**
+   * Removes an ingredient at the specified index.
+   *
+   * @param index - Zero-based index of the ingredient to remove.
+   */
   removeIngredient(index: number): void {
     this.ingredients.update((list) => list.filter((_, i) => i !== index));
   }
 
+  /** In-memory cache for recipes loaded asynchronously from Firestore */
   private readonly cachedRecipes = new Map<string, RecipeDetails>();
 
+  /**
+   * Synchronously looks up a recipe by ID across generated, default, and cached sets.
+   *
+   * @param id - The recipe identifier.
+   * @returns The matching RecipeDetails or undefined.
+   */
   getRecipeById(id: string): RecipeDetails | undefined {
     return this.generatedRecipes().find((recipe) => recipe.id === id)
       ?? this.defaultRecipes.find((recipe) => recipe.id === id)
       ?? this.cachedRecipes.get(id);
   }
 
+  /**
+   * Asynchronously finds a recipe by ID, fetching from Firestore and caching if not available locally.
+   *
+   * @param id - The recipe identifier.
+   * @returns A promise resolving to RecipeDetails or undefined.
+   */
   async findRecipeAsync(id: string): Promise<RecipeDetails | undefined> {
     const existing = this.getRecipeById(id);
     if (existing) return existing;
@@ -249,26 +321,56 @@ export class RecipeService {
     return undefined;
   }
 
+  /**
+   * Fetches recipes for a cuisine from Firestore and updates the local cache.
+   *
+   * @param cuisine - Target cuisine name.
+   * @returns A promise resolving to recipes for that cuisine.
+   */
   async getRecipesForCuisine(cuisine: string): Promise<RecipeDetails[]> {
     const fromDb = await this.firestore.getRecipesByCuisine(cuisine);
     fromDb.forEach((r) => this.cachedRecipes.set(r.id, r));
     return fromDb;
   }
 
+  /** Signal holding all liked recipes */
   readonly likedRecipes = this.state.likedRecipes;
 
+  /**
+   * Checks whether a given recipe ID is currently liked.
+   *
+   * @param id - The recipe ID to check.
+   * @returns True if liked, otherwise false.
+   */
   isRecipeLiked(id: string): boolean {
     return this.state.isRecipeLiked(id);
   }
 
+  /**
+   * Toggles the like status of a recipe.
+   *
+   * @param recipe - The recipe to like or unlike.
+   * @returns True if currently liked after toggle, false otherwise.
+   */
   toggleLikeRecipe(recipe: RecipeDetails): boolean {
     return this.state.toggleLikeRecipe(recipe);
   }
 
+  /**
+   * Returns all recipes currently active (generated or defaults).
+   *
+   * @returns Array of recipes.
+   */
   getAllRecipes(): RecipeDetails[] {
     return this.recipes();
   }
 
+  /**
+   * Formats an HTTP error response into an understandable user-facing message.
+   *
+   * @param error - The HttpErrorResponse object.
+   * @returns Readable error string.
+   */
   private getHttpErrorMessage(error: HttpErrorResponse): string {
     if (error.status === 404) {
       return typeof error.error === 'string' && error.error.includes('Cannot POST')
@@ -280,6 +382,12 @@ export class RecipeService {
       : 'The recipe request failed. Please try again.';
   }
 
+  /**
+   * Resolves various error types into a friendly error message string.
+   *
+   * @param error - Unknown error caught in execution.
+   * @returns Resolved message string.
+   */
   private resolveErrorMessage(error: unknown): string {
     if (error instanceof TimeoutError) {
       return 'Recipe generation took too long. Please try again.';
@@ -293,6 +401,11 @@ export class RecipeService {
     return 'Could not generate recipes. Please try again.';
   }
 
+  /**
+   * Constructs the generation request payload from current state signals.
+   *
+   * @returns The prepared GenerateRecipeRequest object.
+   */
   private prepareGenerationRequest(): GenerateRecipeRequest {
     return {
       ingredients: this.ingredients().map((ingredient) => ({ ...ingredient })),
@@ -300,6 +413,11 @@ export class RecipeService {
     };
   }
 
+  /**
+   * Dispatches generation call to the generator service and writes results to state and Firestore.
+   *
+   * @returns Observable emitting the generated recipes.
+   */
   private executeRecipeGeneration(): Observable<RecipeDetails[]> {
     this.isLoading.set(true);
     this.errorMessage.set(null);
@@ -315,26 +433,48 @@ export class RecipeService {
         this.generatedRecipes.set(recipes);
         this.state.generatedPreferences.set(request.preferences);
         this.firestore.saveGeneratedRecipes(recipes, cuisine).catch((err) => {
-          console.error('Konnte Rezepte nicht in Firestore speichern:', err);
+          console.error('Could not save recipes to Firestore:', err);
         });
       }),
     );
   }
 
+  /**
+   * Fetches all saved recipes from Firestore.
+   *
+   * @returns Promise resolving to the list of recipes.
+   */
   getSavedFirestoreRecipes(): Promise<RecipeDetails[]> {
     return this.firestore.getSavedRecipes();
   }
 
+  /**
+   * Saves a single recipe directly to Firestore.
+   *
+   * @param recipe - The recipe to save.
+   * @returns Promise resolving to the created document ID.
+   */
   saveRecipeToFirestore(recipe: RecipeDetails): Promise<string> {
     return this.firestore.saveRecipe(recipe);
   }
 
+  /**
+   * Handles generation failure, sets the error state, and rethrows.
+   *
+   * @param error - Caught error during generation.
+   * @returns Error observable.
+   */
   private handleGenerationError(error: unknown): Observable<never> {
     const message = this.resolveErrorMessage(error);
     this.errorMessage.set(message);
     return throwError(() => new Error(message));
   }
 
+  /**
+   * Initiates the recipe generation pipeline as an Observable.
+   *
+   * @returns Observable emitting generated recipes array.
+   */
   generateRecipes(): Observable<RecipeDetails[]> {
     return defer(() => this.executeRecipeGeneration()).pipe(
       catchError((error: unknown) => this.handleGenerationError(error)),

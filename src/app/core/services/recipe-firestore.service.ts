@@ -1,4 +1,12 @@
+/**
+ * @fileoverview Recipe Firestore persistence service.
+ * Manages storage, retrieval, and deletion of recipe documents using Firebase Firestore.
+ */
+
+// Angular core modules
 import { Injectable } from '@angular/core';
+
+// Firebase core and Firestore modules
 import { initializeApp, getApps, getApp } from 'firebase/app';
 import {
   getFirestore,
@@ -13,39 +21,63 @@ import {
   serverTimestamp,
   Firestore,
 } from 'firebase/firestore';
+
+// Environment and type imports
 import { environment } from '../../../environments/environment';
 import { RecipeDetails } from './recipe-state.service';
 
+/**
+ * Extended RecipeDetails interface containing Firestore-specific metadata.
+ */
 export interface StoredRecipe extends RecipeDetails {
+  /** Firestore document identifier */
   firestoreId?: string;
+  /** Server timestamp indicating when document was created */
   createdAt?: unknown;
 }
 
+/**
+ * Service providing database operations against Google Cloud Firestore.
+ */
 @Injectable({ providedIn: 'root' })
 export class RecipeFirestoreService {
+  /** Internal cached Firestore database instance */
   private db: Firestore | null = null;
+  /** Firestore collection name storing recipes */
   private readonly collectionName = 'recipes';
 
+  /**
+   * Initializes or returns the active Cloud Firestore database instance lazily.
+   *
+   * @returns The Firestore instance or null if unconfigured or initialization fails.
+   */
   private getDb(): Firestore | null {
     if (this.db) return this.db;
     try {
       if (!environment.firebase?.apiKey) {
-        console.warn('Firebase-Konfiguration fehlt in environment.ts');
+        console.warn('Firebase configuration missing in environment.ts');
         return null;
       }
       const app = getApps().length ? getApp() : initializeApp(environment.firebase);
       this.db = getFirestore(app);
       return this.db;
     } catch (err) {
-      console.error('Fehler bei der Firebase-Initialisierung:', err);
+      console.error('Error during Firebase initialization:', err);
       return null;
     }
   }
 
+  /**
+   * Persists a single recipe to Firestore.
+   *
+   * @param recipe - The recipe details object to save.
+   * @param cuisine - Optional cuisine override.
+   * @returns The generated Firestore document ID or empty string on failure.
+   */
   async saveRecipe(recipe: RecipeDetails, cuisine = ''): Promise<string> {
     const db = this.getDb();
     if (!db) {
-      console.warn('Firestore nicht bereit – Rezept wird nicht online gespeichert.');
+      console.warn('Firestore is not ready - recipe will not be saved online.');
       return '';
     }
     const resolvedCuisine = (cuisine || recipe.cuisine || '').toLowerCase().trim();
@@ -66,6 +98,13 @@ export class RecipeFirestoreService {
     return docRef.id;
   }
 
+  /**
+   * Saves a list of generated recipes sequentially to Firestore.
+   *
+   * @param recipes - Array of recipe details to persist.
+   * @param cuisine - Optional cuisine label.
+   * @returns Array of created Firestore document IDs.
+   */
   async saveGeneratedRecipes(recipes: RecipeDetails[], cuisine = ''): Promise<string[]> {
     const savedIds: string[] = [];
     for (const recipe of recipes) {
@@ -73,12 +112,17 @@ export class RecipeFirestoreService {
         const id = await this.saveRecipe(recipe, cuisine);
         if (id) savedIds.push(id);
       } catch (err) {
-        console.error('Fehler beim Speichern des Rezepts in Firestore:', recipe.title, err);
+        console.error('Error saving recipe to Firestore:', recipe.title, err);
       }
     }
     return savedIds;
   }
 
+  /**
+   * Retrieves all stored recipes from Firestore ordered by creation timestamp descending.
+   *
+   * @returns A promise resolving to an array of saved recipes.
+   */
   async getSavedRecipes(): Promise<RecipeDetails[]> {
     const db = this.getDb();
     if (!db) return [];
@@ -90,11 +134,17 @@ export class RecipeFirestoreService {
       const snapshot = await getDocs(q);
       return snapshot.docs.map((docSnap) => this.mapDocToRecipe(docSnap));
     } catch (err) {
-      console.error('Fehler beim Laden der Rezepte aus Firestore:', err);
+      console.error('Error loading recipes from Firestore:', err);
       return [];
     }
   }
 
+  /**
+   * Retrieves all recipes matching a specific cuisine type.
+   *
+   * @param cuisine - Target cuisine name (e.g. 'japanese', 'italian').
+   * @returns A promise resolving to matching recipes.
+   */
   async getRecipesByCuisine(cuisine: string): Promise<RecipeDetails[]> {
     const db = this.getDb();
     if (!db) return [];
@@ -103,11 +153,17 @@ export class RecipeFirestoreService {
       const all = await this.getSavedRecipes();
       return all.filter((r) => (r.cuisine || '').toLowerCase().trim() === targetCuisine);
     } catch (err) {
-      console.error('Fehler beim Laden der Rezepte für Cuisine:', cuisine, err);
+      console.error('Error loading recipes for cuisine:', cuisine, err);
       return [];
     }
   }
 
+  /**
+   * Fetches a single recipe by its unique Firestore document ID.
+   *
+   * @param id - Document ID in the recipes collection.
+   * @returns The recipe details or null if not found.
+   */
   async getRecipeById(id: string): Promise<RecipeDetails | null> {
     const db = this.getDb();
     if (!db) return null;
@@ -117,11 +173,16 @@ export class RecipeFirestoreService {
       if (!docSnap.exists()) return null;
       return this.mapDocToRecipe(docSnap);
     } catch (err) {
-      console.error('Fehler beim Laden des Rezepts aus Firestore:', err);
+      console.error('Error loading recipe from Firestore:', err);
       return null;
     }
   }
 
+  /**
+   * Deletes a recipe document from Firestore.
+   *
+   * @param id - Document ID to delete.
+   */
   async deleteRecipe(id: string): Promise<void> {
     const db = this.getDb();
     if (!db) return;
@@ -129,6 +190,12 @@ export class RecipeFirestoreService {
     await deleteDoc(docRef);
   }
 
+  /**
+   * Maps a raw Firestore snapshot document to the typed RecipeDetails object.
+   *
+   * @param docSnap - Firestore document snapshot.
+   * @returns Formatted RecipeDetails object.
+   */
   private mapDocToRecipe(docSnap: { id: string; data: () => Record<string, unknown> }): RecipeDetails {
     const data = docSnap.data();
     return {

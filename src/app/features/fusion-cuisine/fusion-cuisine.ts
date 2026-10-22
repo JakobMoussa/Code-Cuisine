@@ -2,6 +2,9 @@ import { ChangeDetectorRef, Component, OnInit, computed, inject, signal } from '
 import { RouterLink } from '@angular/router';
 import { RecipeService } from '../../core/services/recipe.service';
 
+/**
+ * Represents a recipe item in the cuisine listing.
+ */
 export interface RecipeItem {
   id: string;
   number: number;
@@ -11,6 +14,9 @@ export interface RecipeItem {
   likes: number;
 }
 
+/**
+ * Fusion cuisine component displaying curated dishes and generated recipes with pagination.
+ */
 @Component({
   selector: 'app-fusion-cuisine',
   standalone: true,
@@ -146,10 +152,16 @@ export class FusionCuisine implements OnInit {
     },
   ];
 
+  /**
+   * Initializes the component and triggers loading of generated recipes.
+   */
   async ngOnInit(): Promise<void> {
     await this.loadGeneratedRecipes();
   }
 
+  /**
+   * Fetches generated recipes from Firestore for this cuisine.
+   */
   async loadGeneratedRecipes(): Promise<void> {
     this.isLoadingPage2.set(true);
     try {
@@ -163,13 +175,18 @@ export class FusionCuisine implements OnInit {
         likes: recipe.likes,
       }));
     } catch (err) {
-      console.error('Fehler beim Laden der Fusion-Rezepte:', err);
+      console.error('Error loading Fusion recipes:', err);
     } finally {
       this.isLoadingPage2.set(false);
       this.cdr.markForCheck();
     }
   }
 
+  /**
+   * Switches the active pagination page.
+   *
+   * @param page - Target page index.
+   */
   setPage(page: number): void {
     this.currentPage.set(page);
     window.scrollTo({ top: 0, behavior: 'smooth' });

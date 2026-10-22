@@ -1,5 +1,15 @@
+/**
+ * @fileoverview Central routing configuration for Code-à-Cuisine application.
+ * Defines lazy-loaded routes for all features including dashboard, generator,
+ * preferences, cookbook, recipe details, and international cuisine pages.
+ */
+
+// Angular router module
 import { Routes } from '@angular/router';
 
+/**
+ * Array of route configurations defining navigation targets and lazy-loaded components.
+ */
 export const routes: Routes = [
   {
     path: '',

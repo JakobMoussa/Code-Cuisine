@@ -230,9 +230,29 @@ export class RecipeService {
     this.ingredients.update((list) => list.filter((_, i) => i !== index));
   }
 
+  private readonly cachedRecipes = new Map<string, RecipeDetails>();
+
   getRecipeById(id: string): RecipeDetails | undefined {
     return this.generatedRecipes().find((recipe) => recipe.id === id)
-      ?? this.defaultRecipes.find((recipe) => recipe.id === id);
+      ?? this.defaultRecipes.find((recipe) => recipe.id === id)
+      ?? this.cachedRecipes.get(id);
+  }
+
+  async findRecipeAsync(id: string): Promise<RecipeDetails | undefined> {
+    const existing = this.getRecipeById(id);
+    if (existing) return existing;
+    const fromFirestore = await this.firestore.getRecipeById(id);
+    if (fromFirestore) {
+      this.cachedRecipes.set(fromFirestore.id, fromFirestore);
+      return fromFirestore;
+    }
+    return undefined;
+  }
+
+  async getRecipesForCuisine(cuisine: string): Promise<RecipeDetails[]> {
+    const fromDb = await this.firestore.getRecipesByCuisine(cuisine);
+    fromDb.forEach((r) => this.cachedRecipes.set(r.id, r));
+    return fromDb;
   }
 
   readonly likedRecipes = this.state.likedRecipes;
@@ -288,9 +308,13 @@ export class RecipeService {
     const request = this.prepareGenerationRequest();
     return this.generator.generateRecipes(request).pipe(
       tap((recipes) => {
+        const cuisine = request.preferences.cuisine;
+        recipes.forEach((r) => {
+          r.cuisine = cuisine;
+        });
         this.generatedRecipes.set(recipes);
         this.state.generatedPreferences.set(request.preferences);
-        this.firestore.saveGeneratedRecipes(recipes).catch((err) => {
+        this.firestore.saveGeneratedRecipes(recipes, cuisine).catch((err) => {
           console.error('Konnte Rezepte nicht in Firestore speichern:', err);
         });
       }),

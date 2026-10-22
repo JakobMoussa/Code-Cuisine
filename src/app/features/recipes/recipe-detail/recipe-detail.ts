@@ -24,15 +24,21 @@ export class RecipeDetail implements OnInit {
   showDirections = false;
 
   ngOnInit(): void {
-    this.route.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
+    this.route.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(async (params) => {
       const id = params.get('id') || '1';
       this.recipe = this.recipeService.getRecipeById(id);
-      this.chefs = Array.from({ length: this.recipe?.cookingPersons ?? 0 }, (_, index) => index + 1);
-      this.isFavorite = this.recipe ? this.recipeService.isRecipeLiked(this.recipe.id) : false;
-      this.showIngredients = false;
-      this.showDirections = false;
-      this.cdr.markForCheck();
-      if (!this.recipe) void this.router.navigate(['/generate'], { replaceUrl: true });
+      if (!this.recipe) {
+        this.recipe = await this.recipeService.findRecipeAsync(id);
+      }
+      if (this.recipe) {
+        this.chefs = Array.from({ length: this.recipe.cookingPersons ?? 0 }, (_, index) => index + 1);
+        this.isFavorite = this.recipeService.isRecipeLiked(this.recipe.id);
+        this.showIngredients = false;
+        this.showDirections = false;
+        this.cdr.markForCheck();
+      } else {
+        void this.router.navigate(['/generate'], { replaceUrl: true });
+      }
     });
   }
 

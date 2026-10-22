@@ -37,6 +37,7 @@ export interface RecipeDetails {
   id: string;
   label?: string;
   title: string;
+  cuisine?: string;
   cookingTime: string;
   cookingPersons: number;
   tags: string[];

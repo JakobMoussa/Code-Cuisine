@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { RecipeService } from '../../core/services/recipe.service';
 
 export interface RecipeItem {
   id: string;
@@ -17,8 +18,20 @@ export interface RecipeItem {
   templateUrl: './gourmet-cuisine.html',
   styleUrl: './gourmet-cuisine.scss',
 })
-export class GourmetCuisine {
-  recipes: RecipeItem[] = [
+export class GourmetCuisine implements OnInit {
+  private readonly recipeService = inject(RecipeService);
+  private readonly cdr = inject(ChangeDetectorRef);
+
+  readonly currentPage = signal<number>(1);
+  readonly isLoadingPage2 = signal<boolean>(false);
+
+  generatedRecipes: RecipeItem[] = [];
+
+  readonly displayedRecipes = computed(() => {
+    return this.currentPage() === 1 ? this.recipesPage1 : this.generatedRecipes;
+  });
+
+  recipesPage1: RecipeItem[] = [
     {
       id: '1',
       number: 1,
@@ -132,4 +145,33 @@ export class GourmetCuisine {
       likes: 99,
     },
   ];
+
+  async ngOnInit(): Promise<void> {
+    await this.loadGeneratedRecipes();
+  }
+
+  async loadGeneratedRecipes(): Promise<void> {
+    this.isLoadingPage2.set(true);
+    try {
+      const list = await this.recipeService.getRecipesForCuisine('gourmet');
+      this.generatedRecipes = list.map((recipe, index) => ({
+        id: recipe.id,
+        number: this.recipesPage1.length + index + 1,
+        title: recipe.title,
+        cookingTime: recipe.cookingTime,
+        tags: recipe.tags.length ? recipe.tags : ['Generated'],
+        likes: recipe.likes,
+      }));
+    } catch (err) {
+      console.error('Fehler beim Laden der Gourmet-Rezepte:', err);
+    } finally {
+      this.isLoadingPage2.set(false);
+      this.cdr.markForCheck();
+    }
+  }
+
+  setPage(page: number): void {
+    this.currentPage.set(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
 }

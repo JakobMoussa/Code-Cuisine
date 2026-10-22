@@ -25,8 +25,25 @@
         </section>
 
         <section class="gourmet-recipes" id="gourmet-recipes-section">
-            @for (recipe of recipes; track recipe.number) {
-            <article class="recipe-row" [routerLink]="['/recipe', recipe.id]">
+            @if (currentPage() === 2 && isLoadingPage2()) {
+            <div class="gourmet-recipes__loading" style="text-align: center; padding: 40px; color: #1e5515; font-size: 18px; font-weight: 600;">
+                Loading generated recipes...
+            </div>
+            } @else if (currentPage() === 2 && displayedRecipes().length === 0) {
+            <div class="gourmet-recipes__empty" style="text-align: center; padding: 50px 20px; color: #4a6348;">
+                <p style="font-size: 20px; font-weight: 700; color: #1e5515; margin-bottom: 10px;">
+                    Noch keine generierten Rezepte für die Gourmet-Küche vorhanden.
+                </p>
+                <p style="margin-bottom: 24px; font-size: 16px;">
+                    Generiere dein erstes Gourmet-Rezept, um es hier auf Seite 2 zu speichern!
+                </p>
+                <a routerLink="/generate" class="gourmet-header__generate-btn" style="display: inline-block;">
+                    Generate a recipe
+                </a>
+            </div>
+            } @else {
+            @for (recipe of displayedRecipes(); track recipe.id) {
+            <article class="recipe-row" [routerLink]="['/recipe', recipe.id]" style="cursor: pointer;">
                 <div class="recipe-row__left">
                     <div class="recipe-row__time">
                         <img src="assets/schedule.svg" alt="Clock" class="recipe-row__time-icon" />
@@ -49,16 +66,30 @@
                 </div>
             </article>
             }
+            }
         </section>
 
         <nav class="gourmet-pagination" aria-label="Recipes pagination">
-            <span class="gourmet-pagination__arrow gourmet-pagination__arrow--disabled">&lt;</span>
-            <span class="gourmet-pagination__item gourmet-pagination__item--active">1</span>
-            <span class="gourmet-pagination__item">2</span>
-            <span class="gourmet-pagination__item">3</span>
-            <span class="gourmet-pagination__ellipsis">...</span>
-            <span class="gourmet-pagination__item">8</span>
-            <span class="gourmet-pagination__arrow">&gt;</span>
+            <span
+                class="gourmet-pagination__arrow"
+                [class.gourmet-pagination__arrow--disabled]="currentPage() === 1"
+                (click)="currentPage() > 1 && setPage(currentPage() - 1)"
+            >&lt;</span>
+            <span
+                class="gourmet-pagination__item"
+                [class.gourmet-pagination__item--active]="currentPage() === 1"
+                (click)="setPage(1)"
+            >1</span>
+            <span
+                class="gourmet-pagination__item"
+                [class.gourmet-pagination__item--active]="currentPage() === 2"
+                (click)="setPage(2)"
+            >2</span>
+            <span
+                class="gourmet-pagination__arrow"
+                [class.gourmet-pagination__arrow--disabled]="currentPage() === 2"
+                (click)="currentPage() < 2 && setPage(currentPage() + 1)"
+            >&gt;</span>
         </nav>
     </main>
 </div>

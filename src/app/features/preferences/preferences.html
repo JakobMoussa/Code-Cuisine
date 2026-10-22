@@ -18,7 +18,7 @@
         <label class="preferences__stepper-label">How many portions you need?</label>
         <div class="preferences__stepper-control">
           <button type="button" class="preferences__stepper-btn" (click)="decrementPortions()"
-            [disabled]="portions() <= 1" aria-label="Decrease portions">
+            aria-label="Decrease portions">
             <img src="assets/minus-box.svg" alt="Minus" class="preferences__stepper-icon" />
           </button>
           <div class="preferences__stepper-value">
@@ -26,7 +26,7 @@
             <span class="preferences__stepper-text">Portions</span>
           </div>
           <button type="button" class="preferences__stepper-btn" (click)="incrementPortions()"
-            [disabled]="portions() >= 6" aria-label="Increase portions">
+            aria-label="Increase portions">
             <img src="assets/plus-box.svg" alt="Plus" class="preferences__stepper-icon" />
           </button>
         </div>
@@ -36,7 +36,7 @@
         <label class="preferences__stepper-label">How many are cooking?</label>
         <div class="preferences__stepper-control">
           <button type="button" class="preferences__stepper-btn" (click)="decrementPersons()"
-            [disabled]="persons() <= 1" aria-label="Decrease cooking persons">
+            aria-label="Decrease cooking persons">
             <img src="assets/minus-box.svg" alt="Minus" class="preferences__stepper-icon" />
           </button>
           <div class="preferences__stepper-value">
@@ -44,7 +44,7 @@
             <span class="preferences__stepper-text">{{ persons() === 1 ? 'Person' : 'Persons' }}</span>
           </div>
           <button type="button" class="preferences__stepper-btn" (click)="incrementPersons()"
-            [disabled]="persons() >= 3" aria-label="Increase cooking persons">
+            aria-label="Increase cooking persons">
             <img src="assets/plus-box.svg" alt="Plus" class="preferences__stepper-icon" />
           </button>
         </div>

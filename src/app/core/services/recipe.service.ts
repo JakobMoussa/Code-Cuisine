@@ -3,6 +3,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Observable, TimeoutError, defer, throwError } from 'rxjs';
 import { catchError, finalize, tap } from 'rxjs/operators';
 import { RecipeGeneratorService } from './recipe-generator.service';
+import { RecipeFirestoreService } from './recipe-firestore.service';
 import {
   RecipeStateService,
   Ingredient,
@@ -21,6 +22,7 @@ export type {
 export class RecipeService {
   private readonly state = inject(RecipeStateService);
   private readonly generator = inject(RecipeGeneratorService);
+  private readonly firestore = inject(RecipeFirestoreService);
 
   readonly ingredients = this.state.ingredients;
   readonly preferences = this.state.preferences;
@@ -288,8 +290,19 @@ export class RecipeService {
       tap((recipes) => {
         this.generatedRecipes.set(recipes);
         this.state.generatedPreferences.set(request.preferences);
+        this.firestore.saveGeneratedRecipes(recipes).catch((err) => {
+          console.error('Konnte Rezepte nicht in Firestore speichern:', err);
+        });
       }),
     );
+  }
+
+  getSavedFirestoreRecipes(): Promise<RecipeDetails[]> {
+    return this.firestore.getSavedRecipes();
+  }
+
+  saveRecipeToFirestore(recipe: RecipeDetails): Promise<string> {
+    return this.firestore.saveRecipe(recipe);
   }
 
   private handleGenerationError(error: unknown): Observable<never> {

@@ -246,16 +246,16 @@
 
 @media (max-width: 900px) {
   .hero {
-    &__content {
-      flex-direction: column;
-      padding: var(--space-xl);
-    }
+    // &__content {
+    //   flex-direction: column;
+    //   padding: var(--space-xl);
+    // }
 
-    &__text {
-      padding-left: 0;
-      max-width: 100%;
-      order: 1;
-    }
+    // &__text {
+    //   padding-left: 0;
+    //   max-width: 100%;
+    //   order: 1;
+    // }
 
     &__visual {
       max-width: 80%;
@@ -423,38 +423,90 @@
       font-weight: 600;
     }
 
-    &__plates {
-      width: 450px;
-      height: 1100px;
-      margin-left: 237px;
-    }
-
     &__text {
       margin-top: 50px !important;
     }
   }
 }
 
-@media (max-width: 425px) {
+@media (max-width: 499px) {
+  .hero__plates {
+    height: 100%;
+    max-height: 100vh;
+    width: auto;
+    max-width: none;
+    margin: 0;
+    object-fit: cover;
+    object-position: left center;
+    transform: translateX(40%);
+    filter: drop-shadow(0 8px 30px rgba(0, 0, 0, 0.25));
+  }
+
   .hero__content {
-    padding: 20px;
+    min-height: unset;
+    height: auto;
+    padding: 24px 20px 0 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    z-index: 1;
+  }
+
+  .hero__footer {
+    padding: 0 0 32px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    z-index: 2;
+    position: absolute;
+    bottom: 0;
+  }
+}
+
+@media (max-width: 425px) {
+  .hero {
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    overflow-x: clip;
+    position: relative;
+  }
+
+  .hero__content {
+    min-height: unset;
+    height: auto;
+    padding: 24px 20px 0 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    z-index: 1;
   }
 
   .hero__text {
-    margin-top: 24px;
-    z-index: 1;
+    max-width: 65%;
+    margin-top: 20px;
+    z-index: 2;
   }
 
   .hero__subtitle {
     font-size: 20px;
     font-weight: 600;
     line-height: 1.3;
+    color: var(--color-cream-dark);
+    margin-bottom: 8px;
   }
 
   .hero__title {
-    font-size: 50px;
-    line-height: 1.1;
-    margin-bottom: var(--space-lg);
+    font-size: 64px;
+    font-weight: 700;
+    line-height: 1.08;
+    color: var(--color-cream);
+    margin-bottom: 24px;
   }
 
   .hero__title-break {
@@ -464,12 +516,14 @@
   .hero__cta {
     padding: 8px 22px;
     font-size: 16px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
   }
 
   .hero__visual {
     position: absolute;
     top: 0;
     right: 0;
+    bottom: 0;
     height: 100%;
     width: auto;
     max-width: none;
@@ -478,55 +532,78 @@
     align-items: center;
     justify-content: flex-end;
     pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
   }
 
   .hero__plates {
-    height: 92vh;
-    max-height: 810px;
-    min-height: 100%;
+    height: 100%;
+    max-height: 100vh;
     width: auto;
     max-width: none;
     margin: 0;
-    transform: translateX(54%);
-    filter: drop-shadow(0 8px 40px rgba(0, 0, 0, 0.2));
+    object-fit: cover;
+    object-position: left center;
+    transform: translateX(60%);
+    filter: drop-shadow(0 8px 30px rgba(0, 0, 0, 0.25));
   }
 
   .hero__footer {
     padding: 0 0 32px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
     z-index: 2;
+    position: absolute;
+    bottom: 0;
   }
 
   .hero__footer-text {
     font-size: 24px;
     line-height: 1.2;
+    font-weight: 700;
+    color: var(--color-cream);
   }
 
   .hero__footer-link {
     font-size: 18px;
     padding: 0;
+    color: var(--color-cream);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .hero__footer-arrow {
+    width: 16px;
+    height: auto;
   }
 }
 
-@media (max-width: 375px) {
-  .hero {
-    &__title {
-      font-size: 64px;
-    }
+@media (max-width: 360px) {
+  .hero__text {
+    max-width: 60%;
+  }
 
-    &__subtitle {
-      font-size: 24px;
-    }
+  .hero__title {
+    font-size: 42px;
+  }
 
-    &__plates {
-      transform: translateX(62%);
-    }
+  .hero__subtitle {
+    font-size: 18px;
+  }
 
-    &__content {
-      padding: 14px;
-    }
+  .hero__plates {
+    transform: translateX(62%);
   }
 }
 
+@media (max-width: 330px) {
+  .hero__plates {
+    transform: translateX(64%);
+  }
+}
 
 
 @media (min-width: 2560px) and (max-width: 4000px) {

@@ -139,7 +139,7 @@
         font-weight: 600;
 
         @media (max-width: 480px) {
-            font-size: 14px;
+            font-size: 16px;
             padding: 4px 10px;
         }
     }
@@ -339,6 +339,10 @@
             padding: 16px 30px 36px 30px !important;
         }
 
+        &__tag {
+            font-size: 18px;
+        }
+
         &__hero {
             display: flex;
             flex-direction: column;
@@ -354,6 +358,22 @@
             order: 1;
             margin-bottom: 0;
             font-size: 32px;
+        }
+
+        &__card-title {
+            font-size: 24px;
+        }
+
+        &__card-time {
+            font-size: 18px;
+        }
+
+        &__view-btn {
+            font-size: 16px;
+        }
+
+        &__generate-link {
+            font-size: 18px;
         }
 
         &__title-desktop {

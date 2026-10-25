@@ -3,19 +3,20 @@
 }
 
 .preferences-page {
-  min-height: 100vh;
+  max-height: 100vh;
   background-color: var(--color-white);
 }
 
 .preferences {
-  max-width: 880px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   margin: 0 auto;
-  padding: 0 var(--space-md) var(--space-3xl);
 
   &__top-nav {
     display: flex;
     align-items: center;
-    margin-bottom: var(--space-lg);
     padding: 0 50px 0 50px;
   }
 
@@ -41,7 +42,7 @@
 
   &__header {
     text-align: center;
-    margin-bottom: var(--space-2xl);
+    margin-bottom: 40px;
     opacity: 0;
     animation: fadeSlideUp 0.5s ease forwards;
   }
@@ -57,7 +58,7 @@
     display: flex;
     justify-content: center;
     gap: var(--space-3xl);
-    margin-bottom: var(--space-2xl);
+    margin-bottom: 20px;
     opacity: 0;
     animation: fadeSlideUp 0.5s ease forwards;
     animation-delay: 0.1s;
@@ -138,13 +139,15 @@
   }
 
   &__card {
+    max-width: 721px;
+    height: 412px;
     background-color: #DCE5D8;
     border-radius: var(--radius-xl);
     padding: 32px 24px 32px 24px;
     display: flex;
     flex-direction: column;
-    gap: var(--space-2xl);
-    margin-bottom: var(--space-2xl);
+    gap: 25px;
+    margin-bottom: 20px;
     opacity: 0;
     animation: fadeSlideUp 0.5s ease forwards;
     animation-delay: 0.2s;
@@ -260,14 +263,22 @@
   }
 }
 
-@media (max-width:499px) {
-  .preferences__stepper-group {
-    align-items: flex-start;
-  }
+@media (max-width:780px) {
+  .preferences {
 
-  .preferences__steppers {
-    justify-content: flex-start;
+    &__card {
+      width: 85%;
+      height: auto;
+    }
   }
+}
+
+
+
+@media (max-width:499px) {
+  // .preferences__stepper-group {
+  //   align-items: flex-start;
+  // }
 
   .preferences__title {
     text-align: start;
@@ -278,6 +289,16 @@
   }
 }
 
+@media (max-width: 450px) {
+  .preferences__stepper {
+    align-items: flex-start;
+  }
+
+  .preferences__stepper-group {
+    padding-left: 30px;
+  }
+}
+
 @media (max-width: 425px) {
   .preferences__top-nav span {
     display: none;
@@ -285,17 +306,32 @@
 
   .preferences {
 
+    &__header {
+      margin-bottom: 18px;
+    }
+
+    &__stepper-label {
+      font-size: 16px;
+    }
+
+    &__stepper-text {
+      font-size: 18px;
+    }
+
     &__top-nav {
       padding: 0 50px 0 20px;
     }
 
     &__title {
+      margin-top: 30px;
       font-size: 24px;
       text-align: start;
+      font-weight: 600;
     }
 
     &__steppers {
       justify-content: start;
+      gap: 20px;
     }
 
     &__submit-btn {

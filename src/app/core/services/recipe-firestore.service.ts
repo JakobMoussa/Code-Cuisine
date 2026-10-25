@@ -22,6 +22,8 @@ import {
   orderBy,
   serverTimestamp,
   Firestore,
+  DocumentReference,
+  DocumentSnapshot,
 } from 'firebase/firestore';
 
 // Environment and type imports
@@ -144,52 +146,67 @@ export class RecipeFirestoreService {
   }
 
   /**
+   * Prepares the Firestore document payload for a liked recipe.
+   */
+  private buildLikedRecipePayload(recipe: RecipeDetails, likes: number): Record<string, unknown> {
+    return {
+      title: recipe.title ?? '',
+      cookingTime: recipe.cookingTime ?? '',
+      cookingPersons: recipe.cookingPersons ?? 1,
+      tags: recipe.tags ?? [],
+      likes,
+      nutrition: recipe.nutrition ?? { calories: '', protein: '', fat: '', carbs: '' },
+      yourIngredients: recipe.yourIngredients ?? [],
+      extraIngredients: recipe.extraIngredients ?? [],
+      steps: recipe.steps ?? [],
+      cuisine: (recipe.cuisine || '').toLowerCase().trim(),
+      createdAt: serverTimestamp(),
+      source: 'user_liked',
+    };
+  }
+
+  /**
+   * Increments or decrements like count on an existing Firestore document.
+   */
+  private async updateExistingLikes(
+    ref: DocumentReference,
+    snap: DocumentSnapshot,
+    fallback: number,
+    delta: number,
+  ): Promise<number> {
+    const raw = snap.data()?.['likes'];
+    const current = typeof raw === 'number' ? raw : fallback;
+    const newLikes = Math.max(0, current + delta);
+    await updateDoc(ref, { likes: newLikes, updatedAt: serverTimestamp() });
+    return newLikes;
+  }
+
+  /**
+   * Initializes a new Firestore document for a seed recipe with updated likes.
+   */
+  private async createMissingRecipeLikes(
+    ref: DocumentReference,
+    recipe: RecipeDetails,
+    delta: number,
+  ): Promise<number> {
+    const initialLikes = Math.max(0, (recipe.likes ?? 0) + delta);
+    const data = this.buildLikedRecipePayload(recipe, initialLikes);
+    await setDoc(ref, data);
+    return initialLikes;
+  }
+
+  /**
    * Atomically updates a recipe's like count in Firestore.
-   * If the recipe does not exist in Firestore yet (e.g. default seed recipe), it is initialized.
-   *
-   * @param recipe - The target recipe details.
-   * @param delta - Amount to increment (+1) or decrement (-1).
-   * @returns The updated like count or null on error.
    */
   async updateRecipeLikes(recipe: RecipeDetails, delta: number): Promise<number | null> {
     const db = this.getDb();
-    if (!db) {
-      console.warn('Firestore is not ready - likes cannot be saved online.');
-      return null;
-    }
+    if (!db) return null;
     try {
-      const docRef = doc(db, this.collectionName, recipe.id);
-      const docSnap = await getDoc(docRef);
-
-      if (docSnap.exists()) {
-        const currentLikes = typeof docSnap.data()?.['likes'] === 'number'
-          ? (docSnap.data()?.['likes'] as number)
-          : (recipe.likes ?? 0);
-        const newLikes = Math.max(0, currentLikes + delta);
-
-        await updateDoc(docRef, {
-          likes: newLikes,
-          updatedAt: serverTimestamp(),
-        });
-        return newLikes;
-      } else {
-        const initialLikes = Math.max(0, (recipe.likes ?? 0) + delta);
-        await setDoc(docRef, {
-          title: recipe.title ?? '',
-          cookingTime: recipe.cookingTime ?? '',
-          cookingPersons: recipe.cookingPersons ?? 1,
-          tags: recipe.tags ?? [],
-          likes: initialLikes,
-          nutrition: recipe.nutrition ?? { calories: '', protein: '', fat: '', carbs: '' },
-          yourIngredients: recipe.yourIngredients ?? [],
-          extraIngredients: recipe.extraIngredients ?? [],
-          steps: recipe.steps ?? [],
-          cuisine: (recipe.cuisine || '').toLowerCase().trim(),
-          createdAt: serverTimestamp(),
-          source: 'user_liked',
-        });
-        return initialLikes;
-      }
+      const ref = doc(db, this.collectionName, recipe.id);
+      const snap = await getDoc(ref);
+      return snap.exists()
+        ? await this.updateExistingLikes(ref, snap, recipe.likes ?? 0, delta)
+        : await this.createMissingRecipeLikes(ref, recipe, delta);
     } catch (err) {
       console.error('Error updating likes in Firestore:', err);
       return null;

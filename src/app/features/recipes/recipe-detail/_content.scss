@@ -117,11 +117,10 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 28px;
-  padding: 0 100px;
 
-  @media (max-width: 768px) {
-    grid-template-columns: 1fr;
-  }
+  // @media (max-width: 768px) {
+  //   grid-template-columns: 1fr;
+  // }
 }
 
 .recipe-detail__step-card {
@@ -132,8 +131,9 @@
 
 .recipe-detail__step-header {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
+  gap: 12px;
 }
 
 .recipe-detail__step-title {
@@ -144,6 +144,8 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  flex: 1;
+  min-width: 0;
 }
 
 .recipe-detail__step-number {

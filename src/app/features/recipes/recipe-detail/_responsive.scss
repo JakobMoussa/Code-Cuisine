@@ -1,18 +1,22 @@
-@media (max-width: 1700px) {
-  .recipe-detail__steps-grid {
-    padding: 0 50px;
-  }
-}
+// @media (max-width: 1700px) {
+//   .recipe-detail__steps-grid {
+//     padding: 0 50px;
+//   }
+// }
 
-@media (max-width: 1250px) {
-  .recipe-detail__steps-grid {
-    padding: 0 40px;
+@media (max-width: 1295px) {
+  .recipe-detail__step-title {
+    font-size: 22px;
   }
 }
 
 @media (min-width: 1150px) and (max-width: 1249px) {
   .recipe-detail__steps-grid {
-    padding: 0 40px;
+    padding: 0 20px;
+  }
+
+  .recipe-detail__step-title {
+    font-size: 19px;
   }
 
   .recipe-detail__chef-pill {
@@ -38,7 +42,7 @@
   }
 
   .recipe-detail__step-title {
-    font-size: 22px;
+    font-size: 18px;
   }
 }
 
@@ -58,6 +62,14 @@
 
   .recipe-detail__chef-pill {
     font-size: 16px;
+  }
+
+  .recipe-detail__steps-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .recipe-detail__ingredients-grid {
+    padding: 0 120px;
   }
 }
 
@@ -86,9 +98,32 @@
   .recipe-detail__step-desc {
     font-size: 16px;
   }
+
+  .recipe-detail__steps-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .recipe-detail__ingredients-grid {
+    padding: 0 100px;
+  }
+}
+
+@media (min-width: 700px) and (max-width: 800px) {
+  .recipe-detail__steps-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .recipe-detail__ingredients-grid {
+    padding: 0 80px;
+  }
 }
 
 @media (min-width: 499px) and (max-width: 710px) {
+
+  .recipe-detail__ingredients-grid {
+    padding: 0 40px;
+  }
+
   .recipe-detail__ingredients-grid {
     padding: 0;
     align-self: center;
@@ -103,7 +138,7 @@
   }
 
   .recipe-detail__step-title {
-    font-size: 20px;
+    font-size: 18px;
   }
 
   .recipe-detail {
@@ -111,6 +146,20 @@
   }
 
   .recipe-detail__chef-pill.chef-1 {
+    font-size: 18px;
+  }
+
+  .recipe-detail__steps-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (min-width: 425px) and (max-width:516px) {
+  .recipe-detail__step-title {
+    font-size: 16px;
+  }
+
+  .recipe-detail__chef-pill {
     font-size: 16px;
   }
 }
@@ -148,6 +197,10 @@
   .recipe-detail__step-desc {
     font-size: 16px;
   }
+
+  .recipe-detail__steps-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 499px) {
@@ -170,6 +223,35 @@
 
   .recipe-detail__ingredients-grid {
     padding: 0;
+  }
+
+  .recipe-detail__step-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .recipe-detail__step-title {
+    flex: 1;
+    min-width: 0;
+    font-size: 16px;
+    gap: 8px;
+  }
+
+  .recipe-detail__chef-pill {
+    white-space: nowrap;
+    flex-shrink: 0;
+    font-size: 16px !important;
+    padding: 3px 8px;
+    gap: 5px;
+    border-radius: 6px;
+  }
+
+  .recipe-detail__chef-icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
   }
 
   .recipe-detail__toggle-ingredients-btn,
@@ -390,6 +472,10 @@
     width: auto;
     max-width: 100%;
   }
+
+  .recipe-detail__steps-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 360px) {
@@ -398,12 +484,12 @@
   }
 
   .recipe-detail__chef-pill {
-    font-size: 14px;
+    font-size: 16px;
   }
 
   .recipe-detail__chef-icon {
-    width: 18px;
-    height: 18px;
+    width: 20px;
+    height: 20px;
   }
 
   .recipe-detail__list-item {
@@ -412,6 +498,10 @@
 
   .recipe-detail__group-title {
     font-size: 18px;
+  }
+
+  .recipe-detail__steps-grid {
+    grid-template-columns: 1fr;
   }
 }
 

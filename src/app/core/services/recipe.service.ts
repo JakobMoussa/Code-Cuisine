@@ -163,7 +163,66 @@ export class RecipeService {
     {
       id: '3',
       label: 'Recipe 3',
+      title: 'Funghi salami pizza',
+      cuisine: 'italian',
+      cookingTime: '16min',
+      cookingPersons: 2,
+      tags: ['Quick', 'Italian'],
+      likes: 42,
+      nutrition: {
+        calories: '680 kcal',
+        protein: '24g',
+        fat: '28g',
+        carbs: '78g',
+      },
+      yourIngredients: [
+        { amount: '1 piece', name: 'Fresh pizza dough' },
+        { amount: '150g', name: 'Fresh mushrooms (Champignons / Funghi)' },
+        { amount: '80g', name: 'Italian salami (thinly sliced)' },
+        { amount: '150g', name: 'Mozzarella cheese' },
+      ],
+      extraIngredients: [
+        { amount: '100ml', name: 'Tomato passata sauce' },
+        { amount: '1 tbsp', name: 'Extra virgin olive oil' },
+        { amount: '1 tsp', name: 'Dried oregano & sea salt' },
+        { amount: 'Fresh', name: 'Basil leaves' },
+      ],
+      steps: [
+        {
+          number: 1,
+          title: 'Preheat oven & prep ingredients',
+          chef: 'Chef 1',
+          description:
+            'Preheat your oven to 230°C (450°F). Clean and finely slice the fresh mushrooms (Funghi). Cut the mozzarella into small cubes and set out the salami slices.',
+        },
+        {
+          number: 2,
+          title: 'Roll out the dough & season the sauce',
+          chef: 'Chef 2',
+          description:
+            'Roll out the pizza dough on parchment paper or a baking tray into a round base. Stir the oregano, a pinch of sea salt, and a splash of olive oil into the tomato sauce.',
+        },
+        {
+          number: 3,
+          title: 'Assemble toppings',
+          chef: 'Chef 1',
+          description:
+            'Spread the tomato sauce evenly over the dough, leaving a 1cm crust edge. Distribute the mozzarella, layer the salami slices across the top, and scatter the sliced mushrooms.',
+        },
+        {
+          number: 4,
+          title: 'Bake to crispy perfection',
+          chef: 'Chef 2',
+          description:
+            'Transfer to the hot oven and bake for 12–15 minutes until the crust is golden, crispy, and the mozzarella is bubbling. Garnish with fresh basil, slice into wedges, and serve hot.',
+        },
+      ],
+    },
+    {
+      id: '4',
+      label: 'Recipe 4',
       title: 'Pasta alla Trapanese (Sicilian Tomato Pesto)',
+      cuisine: 'italian',
       cookingTime: '20min',
       cookingPersons: 4,
       tags: ['Vegetarian', 'Italian'],
@@ -312,20 +371,77 @@ export class RecipeService {
   }
 
   /**
-   * Asynchronously finds a recipe by ID, fetching from Firestore and caching if not available locally.
+   * Asynchronously finds a recipe by ID, fetching from Firestore and falling back to memory.
    *
    * @param id - The recipe identifier.
    * @returns A promise resolving to RecipeDetails or undefined.
    */
   async findRecipeAsync(id: string): Promise<RecipeDetails | undefined> {
-    const existing = this.getRecipeById(id);
-    if (existing) return existing;
     const fromFirestore = await this.firestore.getRecipeById(id);
     if (fromFirestore) {
-      this.cachedRecipes.set(fromFirestore.id, fromFirestore);
-      return fromFirestore;
+      const defaultR = this.defaultRecipes.find((r) => r.id === id);
+      const recipeToUse: RecipeDetails = defaultR
+        ? { ...defaultR, likes: fromFirestore.likes }
+        : fromFirestore;
+      this.cachedRecipes.set(recipeToUse.id, recipeToUse);
+      this.updateRecipeLikesInMemory(id, fromFirestore.likes);
+      return recipeToUse;
     }
-    return undefined;
+    return this.getRecipeById(id);
+  }
+
+  /**
+   * Fetches fresh recipe data directly from Firestore backend.
+   *
+   * @param id - Target recipe identifier.
+   * @returns Promise resolving to RecipeDetails or null.
+   */
+  async fetchRecipeFromBackend(id: string): Promise<RecipeDetails | null> {
+    const fromFirestore = await this.firestore.getRecipeById(id);
+    if (fromFirestore) {
+      const defaultR = this.defaultRecipes.find((r) => r.id === id);
+      const recipeToUse: RecipeDetails = defaultR
+        ? { ...defaultR, likes: fromFirestore.likes }
+        : fromFirestore;
+      this.cachedRecipes.set(recipeToUse.id, recipeToUse);
+      this.updateRecipeLikesInMemory(id, fromFirestore.likes);
+      return recipeToUse;
+    }
+    return null;
+  }
+
+  /**
+   * Fetches most liked recipes from Firestore backend.
+   *
+   * @param limitCount - Maximum number of recipes.
+   * @returns Promise resolving to array of top liked RecipeDetails.
+   */
+  getMostLikedRecipes(limitCount = 10): Promise<RecipeDetails[]> {
+    return this.firestore.getMostLikedRecipes(limitCount);
+  }
+
+  /**
+   * Updates like counters across all in-memory recipe collections.
+   *
+   * @param id - Target recipe ID.
+   * @param likes - Updated like count.
+   */
+  updateRecipeLikesInMemory(id: string, likes: number): void {
+    const generated = this.generatedRecipes();
+    const foundGen = generated.find((r) => r.id === id);
+    if (foundGen) {
+      foundGen.likes = likes;
+      this.generatedRecipes.set([...generated]);
+    }
+    const defaultR = this.defaultRecipes.find((r) => r.id === id);
+    if (defaultR) {
+      defaultR.likes = likes;
+    }
+    const cached = this.cachedRecipes.get(id);
+    if (cached) {
+      cached.likes = likes;
+    }
+    this.state.updateRecipeLikesInList(id, likes);
   }
 
   /**
@@ -354,13 +470,28 @@ export class RecipeService {
   }
 
   /**
-   * Toggles the like status of a recipe.
+   * Toggles the like status of a recipe and saves it to Firestore.
    *
    * @param recipe - The recipe to like or unlike.
-   * @returns True if currently liked after toggle, false otherwise.
+   * @param isLiked - Optional explicit like flag.
+   * @returns Promise resolving to the updated likes count.
    */
-  toggleLikeRecipe(recipe: RecipeDetails): boolean {
-    return this.state.toggleLikeRecipe(recipe);
+  async toggleLikeRecipe(recipe: RecipeDetails, isLiked?: boolean): Promise<number> {
+    const desiredState = typeof isLiked === 'boolean'
+      ? isLiked
+      : !this.isRecipeLiked(recipe.id);
+
+    this.state.setRecipeLiked(recipe, desiredState);
+
+    const delta = desiredState ? 1 : -1;
+    const updatedLikes = await this.firestore.updateRecipeLikes(recipe, delta);
+    const finalLikes = typeof updatedLikes === 'number'
+      ? updatedLikes
+      : Math.max(0, recipe.likes);
+
+    recipe.likes = finalLikes;
+    this.updateRecipeLikesInMemory(recipe.id, finalLikes);
+    return finalLikes;
   }
 
   /**
@@ -436,6 +567,7 @@ export class RecipeService {
         const cuisine = request.preferences.cuisine;
         recipes.forEach((r) => {
           r.cuisine = cuisine;
+          r.id = this.firestore.generateRecipeId();
         });
         this.generatedRecipes.set(recipes);
         this.state.generatedPreferences.set(request.preferences);

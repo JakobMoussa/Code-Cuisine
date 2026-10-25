@@ -2,7 +2,7 @@
   background-color: #FAF5F0;
   border: 3px solid #FAF0E6;
   border-radius: 28px;
-  padding: 36px 40px;
+  padding: 36px 35px;
   display: flex;
   flex-direction: column;
   gap: 40px;
@@ -67,12 +67,14 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 2px 4px;
+  padding: 3px 8px;
   border-radius: 6px;
   font-family: 'Quicksand', sans-serif;
   font-size: 18px;
   font-weight: 500;
   color: #10310B;
+  white-space: nowrap;
+  flex-shrink: 0;
 
   &.chef-1 {
     background-color: #D7DFD7;

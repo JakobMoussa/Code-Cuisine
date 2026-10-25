@@ -177,8 +177,8 @@ export class RecipeStateService {
     },
     {
       id: '3',
-      title: 'Schnitzel with Warm Potato Salad',
-      cookingTime: '45min',
+      title: 'Funghi salami pizza',
+      cookingTime: '16min',
       likes: 42,
     },
     {
@@ -205,28 +205,64 @@ export class RecipeStateService {
     this.ingredients.set([]);
   }
 
+  /** Local storage key storing user's favorited recipe identifiers */
+  private readonly storageKey = 'code_a_cuisine_user_liked_ids';
+
   /**
-   * Checks whether a recipe is currently marked as favorite.
+   * Loads the set of recipe IDs liked by the current user from localStorage.
+   *
+   * @returns Set of recipe IDs.
+   */
+  private loadUserLikedIds(): Set<string> {
+    if (typeof localStorage === 'undefined') return new Set();
+    try {
+      const stored = localStorage.getItem(this.storageKey);
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed)) return new Set(parsed);
+      }
+    } catch {
+      // Ignore localStorage read errors
+    }
+    return new Set();
+  }
+
+  /**
+   * Persists the set of liked recipe IDs to localStorage.
+   *
+   * @param ids - Set of liked recipe identifiers.
+   */
+  private saveUserLikedIds(ids: Set<string>): void {
+    if (typeof localStorage === 'undefined') return;
+    try {
+      localStorage.setItem(this.storageKey, JSON.stringify([...ids]));
+    } catch {
+      // Ignore localStorage write errors
+    }
+  }
+
+  /**
+   * Checks whether a recipe is currently marked as favorite by the active user.
    *
    * @param id - Unique identifier of the recipe.
    * @returns True if liked, otherwise false.
    */
   isRecipeLiked(id: string): boolean {
-    return this.likedRecipes().some((r) => r.id === id);
+    const likedIds = this.loadUserLikedIds();
+    return likedIds.has(id);
   }
 
   /**
-   * Toggles the favorite status of a recipe.
+   * Sets the favorite status of a recipe for the active user.
    *
-   * @param recipe - The recipe to like or unlike.
-   * @returns True if the recipe is now liked, false if removed from favorites.
+   * @param recipe - The target recipe.
+   * @param isLiked - Desired like status.
+   * @returns Boolean indicating favorite status.
    */
-  toggleLikeRecipe(recipe: RecipeDetails): boolean {
-    const isCurrentlyLiked = this.isRecipeLiked(recipe.id);
-    if (isCurrentlyLiked) {
-      this.likedRecipes.update((list) => list.filter((r) => r.id !== recipe.id));
-      return false;
-    } else {
+  setRecipeLiked(recipe: RecipeDetails, isLiked: boolean): boolean {
+    const likedIds = this.loadUserLikedIds();
+    if (isLiked) {
+      likedIds.add(recipe.id);
       this.likedRecipes.update((list) => [
         {
           id: recipe.id,
@@ -236,7 +272,34 @@ export class RecipeStateService {
         },
         ...list.filter((r) => r.id !== recipe.id),
       ]);
-      return true;
+    } else {
+      likedIds.delete(recipe.id);
+      this.likedRecipes.update((list) => list.filter((r) => r.id !== recipe.id));
     }
+    this.saveUserLikedIds(likedIds);
+    return isLiked;
+  }
+
+  /**
+   * Toggles the favorite status of a recipe for the active user.
+   *
+   * @param recipe - The recipe to like or unlike.
+   * @returns True if the recipe is now liked, false if removed from favorites.
+   */
+  toggleLikeRecipe(recipe: RecipeDetails): boolean {
+    const isCurrentlyLiked = this.isRecipeLiked(recipe.id);
+    return this.setRecipeLiked(recipe, !isCurrentlyLiked);
+  }
+
+  /**
+   * Updates the like count of a recipe within the internal likedRecipes list.
+   *
+   * @param id - Unique recipe identifier.
+   * @param likes - New likes count.
+   */
+  updateRecipeLikesInList(id: string, likes: number): void {
+    this.likedRecipes.update((list) =>
+      list.map((r) => (r.id === id ? { ...r, likes } : r))
+    );
   }
 }

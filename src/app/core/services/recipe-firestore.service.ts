@@ -16,6 +16,8 @@ import {
   getDoc,
   doc,
   deleteDoc,
+  setDoc,
+  updateDoc,
   query,
   orderBy,
   serverTimestamp,
@@ -68,6 +70,19 @@ export class RecipeFirestoreService {
   }
 
   /**
+   * Generates a unique Firestore document ID synchronously.
+   *
+   * @returns A unique document identifier string.
+   */
+  generateRecipeId(): string {
+    const db = this.getDb();
+    if (!db) {
+      return 'recipe_' + Date.now() + '_' + Math.random().toString(36).slice(2, 9);
+    }
+    return doc(collection(db, this.collectionName)).id;
+  }
+
+  /**
    * Persists a single recipe to Firestore.
    *
    * @param recipe - The recipe details object to save.
@@ -78,10 +93,16 @@ export class RecipeFirestoreService {
     const db = this.getDb();
     if (!db) {
       console.warn('Firestore is not ready - recipe will not be saved online.');
-      return '';
+      return recipe.id || '';
     }
     const resolvedCuisine = (cuisine || recipe.cuisine || '').toLowerCase().trim();
-    const docRef = await addDoc(collection(db, this.collectionName), {
+    const docId = recipe.id && !recipe.id.startsWith('generated-')
+      ? recipe.id
+      : doc(collection(db, this.collectionName)).id;
+    recipe.id = docId;
+
+    const docRef = doc(db, this.collectionName, docId);
+    await setDoc(docRef, {
       title: recipe.title ?? '',
       cookingTime: recipe.cookingTime ?? '',
       cookingPersons: recipe.cookingPersons ?? 1,
@@ -94,8 +115,9 @@ export class RecipeFirestoreService {
       cuisine: resolvedCuisine,
       createdAt: serverTimestamp(),
       source: 'ai_generated',
-    });
-    return docRef.id;
+    }, { merge: true });
+
+    return docId;
   }
 
   /**
@@ -110,12 +132,68 @@ export class RecipeFirestoreService {
     for (const recipe of recipes) {
       try {
         const id = await this.saveRecipe(recipe, cuisine);
-        if (id) savedIds.push(id);
+        if (id) {
+          recipe.id = id;
+          savedIds.push(id);
+        }
       } catch (err) {
         console.error('Error saving recipe to Firestore:', recipe.title, err);
       }
     }
     return savedIds;
+  }
+
+  /**
+   * Atomically updates a recipe's like count in Firestore.
+   * If the recipe does not exist in Firestore yet (e.g. default seed recipe), it is initialized.
+   *
+   * @param recipe - The target recipe details.
+   * @param delta - Amount to increment (+1) or decrement (-1).
+   * @returns The updated like count or null on error.
+   */
+  async updateRecipeLikes(recipe: RecipeDetails, delta: number): Promise<number | null> {
+    const db = this.getDb();
+    if (!db) {
+      console.warn('Firestore is not ready - likes cannot be saved online.');
+      return null;
+    }
+    try {
+      const docRef = doc(db, this.collectionName, recipe.id);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        const currentLikes = typeof docSnap.data()?.['likes'] === 'number'
+          ? (docSnap.data()?.['likes'] as number)
+          : (recipe.likes ?? 0);
+        const newLikes = Math.max(0, currentLikes + delta);
+
+        await updateDoc(docRef, {
+          likes: newLikes,
+          updatedAt: serverTimestamp(),
+        });
+        return newLikes;
+      } else {
+        const initialLikes = Math.max(0, (recipe.likes ?? 0) + delta);
+        await setDoc(docRef, {
+          title: recipe.title ?? '',
+          cookingTime: recipe.cookingTime ?? '',
+          cookingPersons: recipe.cookingPersons ?? 1,
+          tags: recipe.tags ?? [],
+          likes: initialLikes,
+          nutrition: recipe.nutrition ?? { calories: '', protein: '', fat: '', carbs: '' },
+          yourIngredients: recipe.yourIngredients ?? [],
+          extraIngredients: recipe.extraIngredients ?? [],
+          steps: recipe.steps ?? [],
+          cuisine: (recipe.cuisine || '').toLowerCase().trim(),
+          createdAt: serverTimestamp(),
+          source: 'user_liked',
+        });
+        return initialLikes;
+      }
+    } catch (err) {
+      console.error('Error updating likes in Firestore:', err);
+      return null;
+    }
   }
 
   /**
@@ -135,6 +213,25 @@ export class RecipeFirestoreService {
       return snapshot.docs.map((docSnap) => this.mapDocToRecipe(docSnap));
     } catch (err) {
       console.error('Error loading recipes from Firestore:', err);
+      return [];
+    }
+  }
+
+  /**
+   * Retrieves stored recipes sorted descending by their like count.
+   *
+   * @param limitCount - Maximum number of recipes to return.
+   * @returns A promise resolving to the most-liked recipes.
+   */
+  async getMostLikedRecipes(limitCount = 10): Promise<RecipeDetails[]> {
+    const db = this.getDb();
+    if (!db) return [];
+    try {
+      const all = await this.getSavedRecipes();
+      if (!all.length) return [];
+      return [...all].sort((a, b) => (b.likes ?? 0) - (a.likes ?? 0)).slice(0, limitCount);
+    } catch (err) {
+      console.error('Error loading most liked recipes from Firestore:', err);
       return [];
     }
   }

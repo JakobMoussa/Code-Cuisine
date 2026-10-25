@@ -3,8 +3,7 @@
 AI-Powered Recipe Generator built with Angular, connected to an n8n / Google Gemini workflow.
 
 ## 🌐 Live Demo
-
-Die Anwendung ist live erreichbar unter:  
+  
 👉 **[https://jakob-moussa.developerakademie.net/code-a-cuisine/](https://jakob-moussa.developerakademie.net/code-a-cuisine/)**
 
 ---
@@ -60,7 +59,6 @@ is displayed as a dash, and incomplete recipes show the retry state.
   ```bash
   npm run build -- --base-href /code-a-cuisine/
   ```
-- Den Inhalt aus `dist/code-a-cuisine/browser/` direkt per FTP / FileZilla in den Remote-Ordner `code-a-cuisine/` auf dem Server hochladen.
 
 ## Verification
 

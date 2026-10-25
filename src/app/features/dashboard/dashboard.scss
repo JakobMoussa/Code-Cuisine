@@ -1,22 +1,29 @@
 :host {
   display: block;
-  overflow-x: clip;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
 }
 
 .hero {
-  min-height: 100vh;
+  height: 100vh;
+  height: 100dvh;
+  max-height: 100vh;
+  max-height: 100dvh;
   background-color: var(--color-background-green);
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   position: relative;
-  overflow-x: clip;
+  overflow: hidden;
+  box-sizing: border-box;
 
   &__content {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    min-height: 100vh;
-    min-height: 100dvh;
+    flex: 1;
+    min-height: 0;
     padding: 0 var(--space-2xl);
     gap: var(--space-2xl);
     box-sizing: border-box;
@@ -30,7 +37,7 @@
     font-family: var(--font-primary);
     font-size: 48px;
     font-weight: 500;
-    color: var(--color-cream-dark);
+    color: #F5F5DC;
     margin-bottom: var(--space-sm);
     opacity: 0;
     animation: fadeSlideUp 0.7s ease forwards;
@@ -41,7 +48,7 @@
     font-family: var(--font-brand);
     font-size: 104px;
     font-weight: 700;
-    color: var(--color-cream);
+    color: #FAF0E6;
     line-height: 1.1;
     margin-bottom: var(--space-xl);
     opacity: 0;
@@ -96,7 +103,7 @@
   }
 
   &__plates {
-    width: 480px;
+    width: 420px;
     height: 100%;
     filter: drop-shadow(0 8px 40px rgba(0, 0, 0, 0.2));
   }
@@ -105,18 +112,20 @@
     display: flex;
     align-items: center;
     gap: var(--space-lg);
-    padding: var(--space-2xl) var(--space-2xl) var(--space-3xl);
+    padding: var(--space-xl) var(--space-2xl) var(--space-2xl);
     padding-left: calc(var(--space-2xl) + var(--space-xl));
     opacity: 0;
     animation: fadeSlideUp 0.7s ease forwards;
     animation-delay: 0.8s;
+    flex-shrink: 0;
+    z-index: 2;
   }
 
   &__footer-text {
     font-family: var(--font-primary);
     font-size: 32px;
     font-weight: 700;
-    color: var(--color-cream);
+    color: #FAF0E6;
   }
 
   &__footer-link {
@@ -126,7 +135,7 @@
     font-family: var(--font-primary);
     font-size: 20px;
     font-weight: 500;
-    color: var(--color-cream);
+    color: #FAF0E6;
     padding: 8px 20px;
     transition:
       background-color var(--transition-base),
@@ -467,12 +476,14 @@
 
 @media (max-width: 425px) {
   .hero {
-    min-height: 100vh;
-    min-height: 100dvh;
+    height: 100vh;
+    height: 100dvh;
+    max-height: 100vh;
+    max-height: 100dvh;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    overflow-x: clip;
+    overflow: hidden;
     position: relative;
   }
 

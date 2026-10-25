@@ -199,6 +199,13 @@ export class RecipeStateService {
   }
 
   /**
+   * Clears the user-entered ingredients list.
+   */
+  clearIngredients(): void {
+    this.ingredients.set([]);
+  }
+
+  /**
    * Checks whether a recipe is currently marked as favorite.
    *
    * @param id - Unique identifier of the recipe.

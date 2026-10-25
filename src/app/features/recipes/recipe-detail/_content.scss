@@ -1,0 +1,277 @@
+.recipe-detail__section {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.recipe-detail__section-banner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.recipe-detail__banner-deco {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+
+  picture {
+    display: contents;
+  }
+
+  img {
+    height: 48px;
+    width: auto;
+    object-fit: contain;
+
+    &.deco-right {
+      width: 1152px;
+      height: 148px;
+      max-width: 100%;
+      object-fit: contain;
+    }
+  }
+
+  .recipe-detail__deco-hero {
+    display: block;
+  }
+
+  .recipe-detail__deco-mob {
+    display: none;
+  }
+}
+
+.recipe-detail__section-title {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: 'Quicksand', sans-serif;
+  font-size: 32px;
+  font-weight: 600;
+  color: #1E5515;
+  margin: 0;
+  z-index: 2;
+  text-align: center;
+  pointer-events: none;
+}
+
+.recipe-detail__toggle-ingredients-btn,
+.recipe-detail__toggle-directions-btn {
+  display: none;
+}
+
+.recipe-detail__ingredients-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 0 180px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.recipe-detail__group-title {
+  font-family: 'Quicksand', sans-serif;
+  font-size: 24px;
+  font-weight: 600;
+  color: #008000;
+  margin-bottom: 16px;
+}
+
+.recipe-detail__list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.recipe-detail__list-item {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  font-family: 'Quicksand', sans-serif;
+  font-size: 20px;
+  font-weight: 500;
+  color: #10310B;
+}
+
+.recipe-detail__bullet {
+  color: #10310B;
+  font-weight: 700;
+}
+
+.recipe-detail__amount {
+  min-width: 60px;
+  font-weight: 700;
+  color: #10310B;
+}
+
+.recipe-detail__name {
+  color: #333;
+}
+
+.recipe-detail__steps-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+  padding: 0 100px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.recipe-detail__step-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.recipe-detail__step-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.recipe-detail__step-title {
+  font-family: 'Quicksand';
+  font-size: 24px;
+  font-weight: 500;
+  color: #10310B;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.recipe-detail__step-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #FAF0E6;
+  border-radius: 50%;
+  min-width: 36px;
+  min-height: 36px;
+}
+
+.recipe-detail__step-desc {
+  font-family: 'Quicksand', sans-serif;
+  font-size: 18px;
+  font-weight: 500;
+  color: #444;
+  line-height: 1.55;
+}
+
+.recipe-detail__finish-prompt {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 16px;
+  font-family: 'Quicksand';
+  font-size: 20px;
+  font-weight: 900;
+  color: #10310B;
+  flex-wrap: wrap;
+}
+
+.recipe-detail__finish-text {
+  display: contents;
+}
+
+.recipe-detail__finish-title {
+  font-weight: 900;
+}
+
+.recipe-detail__finish-sub {
+  font-weight: 500;
+  color: #555;
+  font-size: 16px;
+}
+
+.recipe-detail__heart-action-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  transition: transform 150ms ease;
+
+  &:hover {
+    transform: scale(1.15);
+  }
+}
+
+.recipe-detail__large-heart {
+  width: 24px;
+  height: 24px;
+}
+
+.recipe-detail__cookbook-promo {
+  background-color: #D6E0D6;
+  border-radius: 16px;
+  padding: 24px 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 50px;
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+    gap: 16px;
+    text-align: center;
+  }
+}
+
+.recipe-detail__promo-text {
+  font-family: 'Quicksand', sans-serif;
+  font-size: 24px;
+  font-weight: 600;
+  color: #10310B;
+}
+
+.recipe-detail__promo-btn {
+  background-color: #396039;
+  color: #FFFFFF;
+  font-family: 'Quicksand', sans-serif;
+  font-size: 24px;
+  font-weight: 600;
+  padding: 12px 36px;
+  text-decoration: none;
+  transition: background-color 150ms ease, transform 150ms ease;
+
+  &:hover {
+    background-color: #2D4C2D;
+    transform: translateY(-2px);
+  }
+}
+
+.recipe-detail__footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 8px;
+}
+
+.recipe-detail__generate-link {
+  font-family: 'Quicksand', sans-serif;
+  font-size: 20px;
+  font-weight: 500;
+  color: #396039;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: transform 150ms ease, opacity 150ms ease;
+
+  &:hover {
+    opacity: 0.85;
+    transform: translateX(4px);
+  }
+}
+
+.recipe-detail__arrow-icon {
+  width: 24px;
+  rotate: 180deg;
+}

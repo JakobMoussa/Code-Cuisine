@@ -15,9 +15,14 @@
           <div class="generate__field generate__field--ingredient">
             <label for="ingredient-name" class="generate__label">Ingredient</label>
             <div class="generate__input-wrapper">
-              <input id="ingredient-name" type="text" class="generate__text-input" [ngModel]="ingredientName()"
-                (ngModelChange)="ingredientName.set($event); isSuggestionsOpen.set(true)"
+              <input id="ingredient-name" type="text" class="generate__text-input"
+                [class.has-error]="ingredientError()" [ngModel]="ingredientName()"
+                (ngModelChange)="onIngredientChange($event)"
                 (focus)="isSuggestionsOpen.set(true)" (keydown)="onKeydown($event)" autocomplete="off" />
+
+              @if (ingredientError()) {
+              <p class="generate__validation-error" id="ingredient-validation-error">{{ ingredientError() }}</p>
+              }
 
               @if (isSuggestionsOpen() && filteredSuggestions().length > 0) {
               <ul class="generate__suggestions-list">

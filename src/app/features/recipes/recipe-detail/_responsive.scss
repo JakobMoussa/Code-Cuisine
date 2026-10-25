@@ -1,0 +1,423 @@
+@media (max-width: 1700px) {
+  .recipe-detail__steps-grid {
+    padding: 0 50px;
+  }
+}
+
+@media (max-width: 1250px) {
+  .recipe-detail__steps-grid {
+    padding: 0 40px;
+  }
+}
+
+@media (min-width: 1150px) and (max-width: 1249px) {
+  .recipe-detail__steps-grid {
+    padding: 0 40px;
+  }
+
+  .recipe-detail__chef-pill {
+    font-size: 16px;
+  }
+
+  .recipe-detail__outer-card {
+    padding: 30px 0px;
+  }
+}
+
+@media (min-width: 1050px) and (max-width: 1149px) {
+  .recipe-detail__steps-grid {
+    padding: 0 10px;
+  }
+
+  .recipe-detail__chef-pill {
+    font-size: 16px;
+  }
+
+  .recipe-detail__outer-card {
+    padding: 30px 0px;
+  }
+
+  .recipe-detail__step-title {
+    font-size: 22px;
+  }
+}
+
+@media (min-width: 900px) and (max-width: 1049px) {
+  .recipe-detail__steps-grid {
+    padding: 0 10px;
+    gap: 20px;
+  }
+
+  .recipe-detail__outer-card {
+    padding: 30px 10px;
+  }
+
+  .recipe-detail__step-title {
+    font-size: 18px;
+  }
+
+  .recipe-detail__chef-pill {
+    font-size: 16px;
+  }
+}
+
+@media (min-width: 760px) and (max-width: 899px) {
+  .recipe-detail {
+    padding: 0 12px;
+  }
+
+  .recipe-detail__steps-grid {
+    padding: 0 8px;
+    gap: 16px;
+  }
+
+  .recipe-detail__outer-card {
+    padding: 30px 8px;
+  }
+
+  .recipe-detail__step-title {
+    font-size: 16px;
+  }
+
+  .recipe-detail__chef-pill {
+    font-size: 16px;
+  }
+
+  .recipe-detail__step-desc {
+    font-size: 16px;
+  }
+}
+
+@media (min-width: 499px) and (max-width: 710px) {
+  .recipe-detail__ingredients-grid {
+    padding: 0;
+    align-self: center;
+  }
+
+  .recipe-detail__steps-grid {
+    padding: 0;
+  }
+
+  .recipe-detail__outer-card {
+    padding: 36px 15px;
+  }
+
+  .recipe-detail__step-title {
+    font-size: 20px;
+  }
+
+  .recipe-detail {
+    padding: 0 10px;
+  }
+
+  .recipe-detail__chef-pill.chef-1 {
+    font-size: 16px;
+  }
+}
+
+@media (min-width: 426px) and (max-width: 499px) {
+  .recipe-detail__ingredients-grid {
+    padding: 0;
+    align-self: center;
+  }
+
+  .recipe-detail__steps-grid {
+    padding: 0;
+  }
+
+  .recipe-detail__outer-card {
+    padding: 36px 15px;
+  }
+
+  .recipe-detail__step-title {
+    font-size: 16px;
+  }
+
+  .recipe-detail {
+    padding: 0 10px;
+  }
+
+  .recipe-detail__chef-pill.chef-1 {
+    font-size: 16px;
+  }
+
+  .recipe-detail__list-item {
+    font-size: 18px;
+  }
+
+  .recipe-detail__step-desc {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 499px) {
+  .recipe-detail__deco-hero {
+    display: none !important;
+  }
+
+  .recipe-detail__deco-mob {
+    display: block !important;
+    height: 90px;
+    width: auto;
+    max-width: 100%;
+    object-fit: contain;
+    cursor: pointer;
+  }
+
+  .recipe-detail__section-title {
+    display: none;
+  }
+
+  .recipe-detail__ingredients-grid {
+    padding: 0;
+  }
+
+  .recipe-detail__toggle-ingredients-btn,
+  .recipe-detail__toggle-directions-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    align-self: center;
+    border-radius: 999px;
+    padding: 8px 18px;
+    font-family: 'Quicksand', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: #10310B;
+    cursor: pointer;
+    transition: background-color 150ms ease, transform 150ms ease;
+
+    &:hover {
+      border: 1px solid #39603980;
+    }
+
+    &:active {
+      transform: scale(0.97);
+    }
+  }
+
+  .recipe-detail__toggle-arrow {
+    width: 14px;
+    height: 8px;
+    border-radius: 50%;
+    transform: rotate(180deg);
+    transition: transform 0.2s ease;
+
+    &.is-open {
+      transform: rotate(0deg);
+    }
+  }
+
+  .recipe-detail__ingredients-grid,
+  .recipe-detail__steps-grid {
+    &.is-collapsed {
+      display: none;
+    }
+  }
+
+  .recipe-detail__finish-prompt {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 20px;
+    padding: 20px;
+    margin-top: 24px;
+    gap: 16px;
+    background-color: transparent;
+  }
+
+  .recipe-detail__finish-text {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    text-align: left;
+    flex: 1;
+  }
+
+  .recipe-detail__finish-title {
+    font-family: 'Quicksand', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: #10310B;
+    line-height: 1.25;
+  }
+
+  .recipe-detail__finish-sub {
+    font-family: 'Quicksand', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    color: #10310B;
+    line-height: 1.35;
+  }
+
+  .recipe-detail__heart-action-btn {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+  }
+
+  .recipe-detail__large-heart {
+    width: 36px;
+    height: 36px;
+  }
+
+  .recipe-detail__cookbook-promo {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #D6E0D6;
+    border-radius: 20px;
+    padding: 16px 20px;
+    margin-top: 20px;
+    gap: 16px;
+    text-align: left;
+  }
+
+  .recipe-detail__promo-text {
+    font-family: 'Quicksand', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: #10310B;
+    line-height: 1.3;
+    max-width: 62%;
+    margin: 0;
+  }
+
+  .recipe-detail__promo-btn {
+    flex-shrink: 0;
+    background-color: #396039;
+    color: #FFFFFF;
+    font-family: 'Quicksand', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 12px 20px;
+    text-decoration: none;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  .recipe-detail__generate-link {
+    display: none;
+  }
+}
+
+@media (max-width: 425px) {
+  .recipe-detail__steps-grid {
+    padding: 0;
+  }
+
+  .recipe-detail__chef-pill {
+    font-size: 16px;
+  }
+
+  .recipe-detail {
+    padding: 0 16px;
+  }
+
+  .recipe-detail__step-desc {
+    font-size: 16px;
+  }
+
+  .recipe-detail__navbar {
+    padding: 20px 0px 50px 25px;
+  }
+
+  .recipe-detail__navbar span {
+    display: none;
+  }
+
+  .recipe-detail__ingredients-grid {
+    padding: 0;
+  }
+
+  .recipe-detail__step-title {
+    font-size: 16px;
+    gap: 5px;
+  }
+
+  .recipe-detail__hero-card {
+    padding: 20px 20px;
+  }
+
+  .recipe-detail__outer-card {
+    padding: 10px 8px;
+  }
+
+  .recipe-detail__title {
+    font-size: 24px;
+  }
+
+  .recipe-detail__nutrition-label {
+    font-size: 18px;
+  }
+
+  .recipe-detail__nutrition-value {
+    font-size: 18px;
+  }
+
+  .recipe-detail__tags {
+    order: 2;
+  }
+
+  .recipe-detail__nutrition {
+    order: 1;
+  }
+
+  .recipe-detail__list {
+    padding-left: 20px;
+  }
+
+  .recipe-detail__section-title {
+    font-size: 24px;
+    display: none;
+  }
+
+  .recipe-detail__generate-link {
+    display: none;
+  }
+
+  .recipe-detail-page {
+    padding-bottom: 0;
+  }
+
+  .recipe-detail__banner-deco img.deco-right {
+    height: 90px;
+    width: auto;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 360px) {
+  .recipe-detail {
+    padding: 0 5px;
+  }
+
+  .recipe-detail__chef-pill {
+    font-size: 14px;
+  }
+
+  .recipe-detail__chef-icon {
+    width: 18px;
+    height: 18px;
+  }
+
+  .recipe-detail__list-item {
+    font-size: 16px;
+  }
+
+  .recipe-detail__group-title {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 375px) {
+  .recipe-detail__nutrition-grid {
+    gap: 0;
+    align-items: center;
+  }
+}

@@ -6,6 +6,49 @@ import { RecipeStateService, Ingredient } from '../../core/services/recipe-state
 
 export type { Ingredient };
 
+const KNOWN_INGREDIENT_WORDS = new Set<string>([
+  'bacon', 'beef', 'tenderloin', 'chicken', 'breast', 'wings', 'duck', 'pork', 'turkey', 'ham',
+  'lamb', 'chops', 'shank', 'pancetta', 'pastrami', 'loin', 'prosciutto', 'salami', 'sausage',
+  'steak', 'veal', 'cutlet', 'anchovies', 'calamari', 'cod', 'fish', 'meat', 'halibut', 'lobster',
+  'mussels', 'salmon', 'fillet', 'sardines', 'scallops', 'bass', 'shrimp', 'prawns', 'prawn', 'trout', 'tuna',
+  'artichoke', 'asparagus', 'avocado', 'pepper', 'peppers', 'broccoli', 'brussels', 'sprouts',
+  'cabbage', 'carrot', 'carrots', 'cauliflower', 'celery', 'chili', 'corn', 'cucumber', 'eggplant',
+  'garlic', 'beans', 'bean', 'kale', 'leek', 'lettuce', 'mushroom', 'mushrooms', 'champignon',
+  'champignons', 'onion', 'onions', 'paprika', 'peas', 'pea', 'potato', 'potatoes', 'butternut',
+  'radish', 'shallot', 'shallots', 'spinach', 'sweet', 'tomato', 'tomatoes', 'paste', 'zucchini',
+  'salat', 'salad', 'pesto', 'cheddar', 'cheese', 'egg', 'eggs', 'feta', 'gorgonzola', 'gouda',
+  'cream', 'milk', 'mozzarella', 'oat', 'parmesan', 'ricotta', 'sour', 'tofu', 'yogurt', 'yoghurt',
+  'rice', 'bread', 'toast', 'breadcrumbs', 'couscous', 'flour', 'gnocchi', 'noodles', 'noodle',
+  'oats', 'pasta', 'penne', 'spaghetti', 'quinoa', 'tortilla', 'tortillas', 'wrap', 'wraps',
+  'basil', 'bay', 'leaf', 'leaves', 'cilantro', 'coriander', 'cinnamon', 'cumin', 'curry',
+  'powder', 'dill', 'ginger', 'nutmeg', 'oregano', 'parsley', 'rosemary', 'salt', 'thyme',
+  'vinegar', 'oil', 'butter', 'coconut', 'mustard', 'honey', 'mayonnaise', 'mayo', 'olive',
+  'sesame', 'soy', 'sauce', 'sugar', 'broth', 'worcestershire',
+  'apple', 'apples', 'banana', 'bananas', 'lemon', 'lemons', 'lime', 'limes', 'orange', 'oranges',
+  'pear', 'pears', 'peach', 'peaches', 'plum', 'plums', 'strawberry', 'strawberries', 'blueberry',
+  'blueberries', 'raspberry', 'raspberries', 'blackberry', 'blackberries', 'cherry', 'cherries',
+  'grape', 'grapes', 'mango', 'mangoes', 'pineapple', 'pineapples', 'watermelon', 'melon',
+  'fig', 'figs', 'date', 'dates', 'kiwi', 'kiwis', 'pomegranate', 'apricot', 'apricots',
+  'cranberry', 'cranberries', 'grapefruit', 'almond', 'almonds', 'walnut', 'walnuts', 'peanut',
+  'peanuts', 'cashew', 'cashews', 'pecan', 'pecans', 'pistachio', 'pistachios', 'hazelnut',
+  'hazelnuts', 'chia', 'flax', 'sunflower', 'pumpkin', 'chickpea', 'chickpeas', 'lentil',
+  'lentils', 'edamame', 'yeast', 'baking', 'soda', 'vanilla', 'extract', 'chocolate', 'cocoa',
+  'cacao', 'syrup', 'maple', 'cornstarch', 'starch', 'water', 'stock', 'ketchup', 'passata',
+  'sriracha', 'tabasco', 'apfel', 'aepfel', 'äpfel', 'banane', 'bananen', 'zitrone', 'zitronen',
+  'limette', 'limetten', 'erdbeere', 'erdbeeren', 'blaubeere', 'blaubeeren', 'himbeere', 'himbeeren',
+  'kirsche', 'kirschen', 'birne', 'birnen', 'pfirsich', 'kartoffel', 'kartoffeln', 'zwiebel',
+  'zwiebeln', 'knoblauch', 'moehre', 'moehren', 'möhre', 'möhren', 'karotte', 'karotten', 'gurke',
+  'gurken', 'brokkoli', 'blumenkohl', 'spinat', 'pilz', 'pilze', 'kuerbis', 'kürbis', 'lauch',
+  'haehnchen', 'hähnchen', 'huehnchen', 'hühnchen', 'rind', 'rindfleisch', 'schwein',
+  'schweinefleisch', 'hackfleisch', 'speck', 'schinken', 'wurst', 'lachs', 'thunfisch', 'garnele',
+  'garnelen', 'ei', 'eier', 'milch', 'butter', 'sahne', 'schlagsahne', 'kaese', 'käse',
+  'frischkaese', 'frischkäse', 'joghurt', 'quark', 'mehl', 'zucker', 'salz', 'pfeffer', 'hefe',
+  'backpulver', 'reis', 'nudeln', 'haferflocken', 'brot', 'oel', 'öl', 'olivenoel', 'olivenöl',
+  'rapsoel', 'rapsöl', 'essig', 'senf', 'sojasauce', 'tomatenmark', 'bruehe', 'brühe',
+  'gemuesebruehe', 'gemüsebrühe', 'basilikum', 'petersilie', 'schnittlauch', 'rosmarin',
+  'thymian', 'zimt', 'kurkuma', 'ingwer', 'fleisch', 'gemuese', 'gemüse', 'obst'
+]);
+
 /**
  * Ingredients page component managing user input for available pantry ingredients.
  */
@@ -22,6 +65,7 @@ export class Ingredients {
   readonly ingredientAmount = signal(100);
   readonly isOpen = signal(false);
   readonly ingredientUnit = signal('gram');
+  readonly ingredientError = signal<string | null>(null);
 
   readonly ingredients = this.state.ingredients;
 
@@ -251,10 +295,50 @@ export class Ingredients {
   readonly hasIngredients = computed(() => this.ingredients().length > 0);
 
   /**
+   * Checks whether a word is in the known ingredient dictionary (including singular/plural stems).
+   */
+  private isWordKnown(rawWord: string): boolean {
+    const word = rawWord.toLowerCase();
+    if (KNOWN_INGREDIENT_WORDS.has(word)) return true;
+    if (word.endsWith('s') && KNOWN_INGREDIENT_WORDS.has(word.slice(0, -1))) return true;
+    if (word.endsWith('es') && KNOWN_INGREDIENT_WORDS.has(word.slice(0, -2))) return true;
+    if (word.endsWith('n') && KNOWN_INGREDIENT_WORDS.has(word.slice(0, -1))) return true;
+    if (word.endsWith('en') && KNOWN_INGREDIENT_WORDS.has(word.slice(0, -2))) return true;
+    return false;
+  }
+
+  /**
+   * Validates whether an entered ingredient name represents a genuine food ingredient.
+   *
+   * @param name - The ingredient string entered by the user.
+   * @returns True if valid, false if random gibberish or invalid characters.
+   */
+  isValidIngredient(name: string): boolean {
+    const trimmed = name.trim();
+    if (trimmed.length < 2 || trimmed.length > 50) return false;
+    if (!/^[a-zA-ZäöüÄÖÜß\s\-\'\/()]+$/.test(trimmed)) return false;
+
+    const lowerTrimmed = trimmed.toLowerCase();
+    if (this.commonIngredients.some((item) => item.toLowerCase() === lowerTrimmed)) {
+      return true;
+    }
+
+    const words = trimmed
+      .replace(/[()\/,\-]/g, ' ')
+      .split(/\s+/)
+      .map((w) => w.trim().toLowerCase())
+      .filter((w) => w.length >= 2);
+
+    if (words.length === 0) return false;
+    return words.some((word) => this.isWordKnown(word));
+  }
+
+  /**
    * Resets input fields for ingredient name and amount.
    */
   private resetIngredientInputs(): void {
     this.ingredientName.set('');
+    this.ingredientError.set(null);
     this.ingredientAmount.set(this.ingredientUnit() === 'piece' ? 1 : 100);
   }
 
@@ -263,11 +347,17 @@ export class Ingredients {
    */
   addIngredient(): void {
     const name = this.ingredientName().trim();
+    if (!name || !this.isValidIngredient(name)) {
+      this.ingredientError.set('Please use the correct ingredients!');
+      return;
+    }
+
     let amount = this.ingredientAmount();
     const max = this.maxServingAmount();
     if (amount > max) amount = max;
-    if (!name || !Number.isFinite(amount) || amount <= 0) return;
+    if (!Number.isFinite(amount) || amount <= 0) return;
 
+    this.ingredientError.set(null);
     this.ingredients.update((list) => [...list, { name, amount, unit: this.ingredientUnit() }]);
     this.resetIngredientInputs();
   }
@@ -392,12 +482,24 @@ export class Ingredients {
   });
 
   /**
+   * Handles user typing in the ingredient name input, clearing any validation error.
+   *
+   * @param value - Current text in the input.
+   */
+  onIngredientChange(value: string): void {
+    this.ingredientName.set(value);
+    this.ingredientError.set(null);
+    this.isSuggestionsOpen.set(true);
+  }
+
+  /**
    * Applies an autocomplete suggestion to the ingredient name input.
    *
    * @param name - The suggested ingredient name.
    */
   selectSuggestion(name: string): void {
     this.ingredientName.set(name);
+    this.ingredientError.set(null);
     this.isSuggestionsOpen.set(false);
   }
 

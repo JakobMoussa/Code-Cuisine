@@ -289,6 +289,13 @@ export class RecipeService {
     this.ingredients.update((list) => list.filter((_, i) => i !== index));
   }
 
+  /**
+   * Clears all user-entered ingredients from the state.
+   */
+  clearIngredients(): void {
+    this.state.clearIngredients();
+  }
+
   /** In-memory cache for recipes loaded asynchronously from Firestore */
   private readonly cachedRecipes = new Map<string, RecipeDetails>();
 
@@ -435,6 +442,7 @@ export class RecipeService {
         this.firestore.saveGeneratedRecipes(recipes, cuisine).catch((err) => {
           console.error('Could not save recipes to Firestore:', err);
         });
+        this.clearIngredients();
       }),
     );
   }

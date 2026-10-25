@@ -134,6 +134,19 @@ app-root {
   overflow-x: clip;
 }
 
+html:has(.hero),
+body:has(.hero) {
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+body:has(.hero) app-root {
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+}
+
 a {
   color: inherit;
   text-decoration: none;

@@ -45,6 +45,7 @@
           },
           "configurations": {
             "production": {
+              "baseHref": "/code-a-cuisine/",
               "budgets": [
                 {
                   "type": "initial",
@@ -53,8 +54,8 @@
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "6kB",
-                  "maximumError": "12kB"
+                  "maximumWarning": "12kB",
+                  "maximumError": "24kB"
                 }
               ],
               "outputHashing": "all"

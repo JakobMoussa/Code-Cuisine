@@ -109,7 +109,7 @@ body {
   background-color: #396039;
   line-height: 1.6;
   min-height: 100vh;
-  overflow-x: clip;
+  // overflow-x: clip;
 }
 
 body:has(.generate-page),
@@ -138,13 +138,11 @@ html:has(.hero),
 body:has(.hero) {
   height: 100vh;
   height: 100dvh;
-  overflow: hidden;
 }
 
 body:has(.hero) app-root {
   height: 100vh;
   height: 100dvh;
-  overflow: hidden;
 }
 
 a {

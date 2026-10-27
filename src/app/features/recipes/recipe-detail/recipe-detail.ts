@@ -1,4 +1,5 @@
 import { ChangeDetectorRef, Component, DestroyRef, OnInit, inject } from '@angular/core';
+import { Location } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RecipeService, RecipeDetails } from '../../../core/services/recipe.service';
@@ -19,6 +20,7 @@ export class RecipeDetail implements OnInit {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private recipeService = inject(RecipeService);
+  private location = inject(Location);
 
   recipe?: RecipeDetails;
   chefs: number[] = [];
@@ -94,6 +96,17 @@ export class RecipeDetail implements OnInit {
         this.recipe.likes = Math.max(0, this.recipe.likes - 1);
       }
       this.cdr.markForCheck();
+    }
+  }
+
+  /**
+   * Navigates back to previous page or falls back to cookbook.
+   */
+  goBack(): void {
+    if (window.history.length > 1) {
+      this.location.back();
+    } else {
+      void this.router.navigate(['/cookbook']);
     }
   }
 

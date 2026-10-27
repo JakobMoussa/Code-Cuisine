@@ -206,3 +206,25 @@ ol {
     background-color: #FAF0E6B2;
   }
 }
+
+@media (min-width: 2160px) and (max-width: 4000px) {
+  app-root {
+    max-width: 1920px;
+  }
+
+  body:has(.hero) app-root,
+  app-dashboard,
+  .hero {
+    max-width: 1920px;
+  }
+
+  .cookbook-page,
+  .italian-page,
+  .german-page,
+  .japanese-page,
+  .indian-page,
+  .gourmet-page,
+  .fusion-page {
+    max-width: 1950px;
+  }
+}

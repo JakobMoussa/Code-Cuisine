@@ -15,6 +15,11 @@ import { catchError, finalize, tap } from 'rxjs/operators';
 // Service dependencies
 import { RecipeGeneratorService } from './recipe-generator.service';
 import { RecipeFirestoreService } from './recipe-firestore.service';
+import { GERMAN_RECIPES } from '../data/german-recipes.data';
+import { JAPANESE_RECIPES } from '../data/japanese-recipes.data';
+import { GOURMET_RECIPES } from '../data/gourmet-recipes.data';
+import { INDIAN_RECIPES } from '../data/indian-recipes.data';
+import { FUSION_RECIPES } from '../data/fusion-recipes.data';
 import {
   RecipeStateService,
   Ingredient,
@@ -263,6 +268,16 @@ export class RecipeService {
     },
   ];
 
+  /** All curated cookbook recipes across all cuisines */
+  private readonly allCuratedRecipes: RecipeDetails[] = [
+    ...this.defaultRecipes,
+    ...GERMAN_RECIPES,
+    ...JAPANESE_RECIPES,
+    ...GOURMET_RECIPES,
+    ...INDIAN_RECIPES,
+    ...FUSION_RECIPES,
+  ];
+
   /** Computed signal providing generated recipes if available, otherwise default fallbacks */
   readonly recipes = computed(() =>
     this.generatedRecipes().length ? this.generatedRecipes() : this.defaultRecipes
@@ -366,7 +381,7 @@ export class RecipeService {
    */
   getRecipeById(id: string): RecipeDetails | undefined {
     return this.generatedRecipes().find((recipe) => recipe.id === id)
-      ?? this.defaultRecipes.find((recipe) => recipe.id === id)
+      ?? this.allCuratedRecipes.find((recipe) => recipe.id === id)
       ?? this.cachedRecipes.get(id);
   }
 
@@ -379,7 +394,7 @@ export class RecipeService {
   async findRecipeAsync(id: string): Promise<RecipeDetails | undefined> {
     const fromFirestore = await this.firestore.getRecipeById(id);
     if (fromFirestore) {
-      const defaultR = this.defaultRecipes.find((r) => r.id === id);
+      const defaultR = this.allCuratedRecipes.find((r) => r.id === id);
       const recipeToUse: RecipeDetails = defaultR
         ? { ...defaultR, likes: fromFirestore.likes }
         : fromFirestore;
@@ -399,7 +414,7 @@ export class RecipeService {
   async fetchRecipeFromBackend(id: string): Promise<RecipeDetails | null> {
     const fromFirestore = await this.firestore.getRecipeById(id);
     if (fromFirestore) {
-      const defaultR = this.defaultRecipes.find((r) => r.id === id);
+      const defaultR = this.allCuratedRecipes.find((r) => r.id === id);
       const recipeToUse: RecipeDetails = defaultR
         ? { ...defaultR, likes: fromFirestore.likes }
         : fromFirestore;
@@ -433,9 +448,9 @@ export class RecipeService {
       foundGen.likes = likes;
       this.generatedRecipes.set([...generated]);
     }
-    const defaultR = this.defaultRecipes.find((r) => r.id === id);
-    if (defaultR) {
-      defaultR.likes = likes;
+    const curatedR = this.allCuratedRecipes.find((r) => r.id === id);
+    if (curatedR) {
+      curatedR.likes = likes;
     }
     const cached = this.cachedRecipes.get(id);
     if (cached) {
@@ -451,6 +466,11 @@ export class RecipeService {
    * @returns A promise resolving to recipes for that cuisine.
    */
   async getRecipesForCuisine(cuisine: string): Promise<RecipeDetails[]> {
+    const lower = cuisine.toLowerCase();
+    this.allCuratedRecipes
+      .filter((r) => r.cuisine?.toLowerCase() === lower)
+      .forEach((r) => this.cachedRecipes.set(r.id, r));
+
     const fromDb = await this.firestore.getRecipesByCuisine(cuisine);
     fromDb.forEach((r) => this.cachedRecipes.set(r.id, r));
     return fromDb;

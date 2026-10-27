@@ -49,15 +49,13 @@
         <section class="cookbook-cuisines" id="cookbook-cuisines-section">
             <div class="cookbook-cuisines__grid">
                 @for (cuisine of cuisines; track cuisine.id) {
-                <article class="cuisine-card">
+                <article class="cuisine-card" [routerLink]="['/cuisine', cuisine.id.toLowerCase()]" style="cursor: pointer;">
                     <h2 class="cuisine-card__title">
                         {{ cuisine.name }}
                         <span class="cuisine-card__emoji">{{ cuisine.emoji }}</span>
                     </h2>
                     <div class="cuisine-card__image-wrapper">
-                        <img [src]="cuisine.image" [alt]="cuisine.name" class="cuisine-card__image"
-                            [routerLink]="['/cuisine', cuisine.id.toLowerCase()]"
-                            style="cursor: pointer;" />
+                        <img [src]="cuisine.image" [alt]="cuisine.name" class="cuisine-card__image" />
                     </div>
                 </article>
                 }

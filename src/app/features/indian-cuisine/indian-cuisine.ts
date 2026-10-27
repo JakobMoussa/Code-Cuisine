@@ -39,7 +39,7 @@ export class IndianCuisine implements OnInit {
 
   recipesPage1: RecipeItem[] = [
     {
-      id: '1',
+      id: 'indian-1',
       number: 1,
       title: 'Butter Chicken',
       cookingTime: '40min',
@@ -47,7 +47,7 @@ export class IndianCuisine implements OnInit {
       likes: 95,
     },
     {
-      id: '2',
+      id: 'indian-2',
       number: 2,
       title: 'Chicken Tikka Masala',
       cookingTime: '45min',
@@ -55,7 +55,7 @@ export class IndianCuisine implements OnInit {
       likes: 92,
     },
     {
-      id: '3',
+      id: 'indian-3',
       number: 3,
       title: 'Palak Paneer',
       cookingTime: '35min',
@@ -63,7 +63,7 @@ export class IndianCuisine implements OnInit {
       likes: 78,
     },
     {
-      id: '4',
+      id: 'indian-4',
       number: 4,
       title: 'Chana Masala',
       cookingTime: '30min',
@@ -71,7 +71,7 @@ export class IndianCuisine implements OnInit {
       likes: 71,
     },
     {
-      id: '5',
+      id: 'indian-5',
       number: 5,
       title: 'Biryani',
       cookingTime: '60min',
@@ -79,7 +79,7 @@ export class IndianCuisine implements OnInit {
       likes: 98,
     },
     {
-      id: '6',
+      id: 'indian-6',
       number: 6,
       title: 'Dal Tadka',
       cookingTime: '25min',
@@ -87,7 +87,7 @@ export class IndianCuisine implements OnInit {
       likes: 69,
     },
     {
-      id: '7',
+      id: 'indian-7',
       number: 7,
       title: 'Samosas',
       cookingTime: '45min',
@@ -95,7 +95,7 @@ export class IndianCuisine implements OnInit {
       likes: 83,
     },
     {
-      id: '8',
+      id: 'indian-8',
       number: 8,
       title: 'Naan Bread with Garlic',
       cookingTime: '20min',
@@ -103,7 +103,7 @@ export class IndianCuisine implements OnInit {
       likes: 88,
     },
     {
-      id: '9',
+      id: 'indian-9',
       number: 9,
       title: 'Aloo Gobi',
       cookingTime: '30min',
@@ -111,7 +111,7 @@ export class IndianCuisine implements OnInit {
       likes: 62,
     },
     {
-      id: '10',
+      id: 'indian-10',
       number: 10,
       title: 'Rogan Josh',
       cookingTime: '75min',
@@ -119,7 +119,7 @@ export class IndianCuisine implements OnInit {
       likes: 76,
     },
     {
-      id: '11',
+      id: 'indian-11',
       number: 11,
       title: 'Malai Kofta',
       cookingTime: '50min',
@@ -127,7 +127,7 @@ export class IndianCuisine implements OnInit {
       likes: 74,
     },
     {
-      id: '12',
+      id: 'indian-12',
       number: 12,
       title: 'Vegetable Korma',
       cookingTime: '35min',
@@ -135,7 +135,7 @@ export class IndianCuisine implements OnInit {
       likes: 67,
     },
     {
-      id: '13',
+      id: 'indian-13',
       number: 13,
       title: 'Paneer Butter Masala',
       cookingTime: '35min',
@@ -143,7 +143,7 @@ export class IndianCuisine implements OnInit {
       likes: 84,
     },
     {
-      id: '14',
+      id: 'indian-14',
       number: 14,
       title: 'Chicken Vindaloo',
       cookingTime: '50min',

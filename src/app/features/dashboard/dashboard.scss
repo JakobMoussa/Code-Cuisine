@@ -103,8 +103,9 @@
   }
 
   &__plates {
-    width: 420px;
+    width: auto;
     height: 100%;
+    max-width: none;
     filter: drop-shadow(0 8px 40px rgba(0, 0, 0, 0.2));
   }
 
@@ -305,26 +306,6 @@
   }
 }
 
-@media (max-width: 840px) {
-  .hero {
-    &__subtitle {
-      font-size: 28px;
-    }
-
-    &__title {
-      font-size: 55px;
-    }
-
-    &__visual {
-      width: 350px;
-    }
-
-    &__footer-text {
-      font-size: 24px;
-    }
-  }
-}
-
 @media (max-width: 770px) {
   .hero {
     &__content {
@@ -351,131 +332,6 @@
 
 @media (max-width: 710px) {
   .hero {
-    &__content {
-      padding: 28px;
-    }
-
-    &__subtitle {
-      font-size: 24px;
-    }
-
-    &__title {
-      font-size: 45px;
-    }
-
-    &__visual {
-      width: 340px;
-    }
-
-    &__footer-text {
-      font-size: 24px;
-    }
-  }
-}
-
-@media (max-width: 680px) {
-  .hero {
-    &__content {
-      padding: 20px;
-    }
-
-    &__subtitle {
-      font-size: 20px;
-    }
-
-    &__title {
-      font-size: 32px;
-    }
-
-    &__visual {
-      width: 300px;
-    }
-
-    &__footer-text {
-      font-size: 20px;
-    }
-  }
-}
-
-@media (max-width: 570px) {
-
-  .hero {
-
-    &__plates {
-      margin-left: 40px;
-    }
-
-    &__visual {
-      width: 270px;
-    }
-
-    &__footer {
-      padding-left: 20px;
-    }
-  }
-}
-
-@media (max-width: 520px) {
-  .hero {
-    overflow-x: clip;
-
-    &__title {
-      font-size: 64px;
-    }
-
-    &__title-break {
-      display: block;
-    }
-
-    &__subtitle {
-      font-size: 24px;
-      font-weight: 600;
-    }
-
-    &__text {
-      margin-top: 50px !important;
-    }
-  }
-}
-
-@media (max-width: 499px) {
-  .hero__plates {
-    height: 100%;
-    max-height: 100vh;
-    width: auto;
-    max-width: none;
-    margin: 0;
-    object-fit: cover;
-    object-position: left center;
-    transform: translateX(40%);
-    filter: drop-shadow(0 8px 30px rgba(0, 0, 0, 0.25));
-  }
-
-  .hero__content {
-    min-height: unset;
-    height: auto;
-    padding: 24px 20px 0 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: flex-start;
-    z-index: 1;
-  }
-
-  .hero__footer {
-    padding: 0 0 32px 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
-    z-index: 2;
-    position: absolute;
-    bottom: 0;
-  }
-}
-
-@media (max-width: 425px) {
-  .hero {
     height: 100vh;
     height: 100dvh;
     max-height: 100vh;
@@ -490,7 +346,7 @@
   .hero__content {
     min-height: unset;
     height: auto;
-    padding: 24px 20px 0 20px;
+    padding: 24px 20px 0 50px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -555,12 +411,12 @@
     margin: 0;
     object-fit: cover;
     object-position: left center;
-    transform: translateX(60%);
+    transform: translateX(40%);
     filter: drop-shadow(0 8px 30px rgba(0, 0, 0, 0.25));
   }
 
   .hero__footer {
-    padding: 0 0 32px 20px;
+    padding: 0 0 32px 50px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -592,6 +448,32 @@
   }
 }
 
+@media (max-width:499px) {
+  .hero__content {
+    padding: 24px 20px 0 22px;
+  }
+
+  .hero__footer {
+    padding: 0 0 32px 22px;
+  }
+}
+
+@media (max-width: 460px) {
+  .hero__title {
+    font-size: 54px;
+  }
+
+  .hero__plates {
+    transform: translateX(50%);
+  }
+}
+
+@media (max-width: 425px) {
+  .hero__plates {
+    transform: translateX(60%);
+  }
+}
+
 @media (max-width: 360px) {
   .hero__text {
     max-width: 60%;
@@ -618,13 +500,22 @@
 
 
 @media (min-width: 2560px) and (max-width: 4000px) {
+  :host {
+    display: block;
+    width: 100%;
+  }
+
   .hero {
     height: 100vh;
     height: 100dvh;
     min-height: 100vh;
     max-height: 100vh;
     overflow: hidden;
+    width: 100%;
+    max-width: 1950px;
+    margin: 0 auto;
   }
+
 
   .hero__content {
     align-items: flex-start;
@@ -636,6 +527,14 @@
 
   .hero__text {
     margin-top: 150px;
+  }
+
+  .hero__subtitle {
+    font-size: 45px;
+  }
+
+  .hero__title {
+    font-size: 90px;
   }
 
   .hero__footer {
